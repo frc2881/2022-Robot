@@ -24,18 +24,18 @@ public class RobotContainer {
     () -> -getDriverLeftY(),
     () -> getDriverRightX());
 
-  public RobotContainer() {
+  /*public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
 
     drive.setDefaultCommand(driveWithJoysticks);
-  }
+  }*/
 
-  private void configureButtonBindings() {
+  /*private void configureButtonBindings() {
     new JoystickButton(driverController, Button.kBumperRight.value)
             .whenPressed(() -> drive.setMaxOutput(0.5))
             .whenReleased(() -> drive.setMaxOutput(1));
-  }
+  }*/
 
   private double getDriverLeftX() {
     return(driverController.getRawAxis(0));

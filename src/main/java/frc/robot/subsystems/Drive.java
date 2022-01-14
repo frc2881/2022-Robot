@@ -26,11 +26,11 @@ public class Drive extends SubsystemBase {
             leftRear.setIdleMode(IdleMode.kBrake);
         
         rightFront = new CANSparkMax(3, MotorType.kBrushless);
-            rightFront.setInverted(false);
+            rightFront.setInverted(true);
             rightFront.setIdleMode(IdleMode.kBrake);
 
         rightRear = new CANSparkMax(4, MotorType.kBrushless);
-            rightRear.setInverted(false);
+            rightRear.setInverted(true);
             rightRear.setIdleMode(IdleMode.kBrake);
         
         driveTrain = new DifferentialDrive(leftFront, rightFront);
