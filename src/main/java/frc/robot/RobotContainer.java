@@ -6,9 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.utils.Log;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,6 +28,14 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    // Use the scheduler to log the scheduling and execution of commands.
+    CommandScheduler.getInstance().
+      onCommandInitialize(command -> Log.init(command));
+    CommandScheduler.getInstance().
+      onCommandInterrupt(command -> Log.end(command, true));
+    CommandScheduler.getInstance().
+      onCommandFinish(command -> Log.end(command, false));
   }
 
   /**
