@@ -18,6 +18,7 @@ public class RobotContainer {
 
   private final Drive drive = new Drive();
 
+  //Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive, 
     () -> -getDriverLeftY(),
@@ -30,6 +31,7 @@ public class RobotContainer {
     drive.setDefaultCommand(driveWithJoysticks);
 
     // Use the scheduler to log the scheduling and execution of commands.
+    // This way we don't need to put logging in every command
     CommandScheduler.getInstance().
       onCommandInitialize(command -> Log.init(command));
     CommandScheduler.getInstance().
