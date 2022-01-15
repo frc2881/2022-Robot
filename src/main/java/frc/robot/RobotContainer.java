@@ -4,23 +4,30 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.commands.DriveWithJoysticks;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.DriveWithJoysticks;
+import frc.robot.subsystems.Drive;
+import frc.robot.utils.Log;
+import frc.robot.utils.NavX;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   XboxController driverController = new XboxController(0);
   XboxController manipulatorController = new XboxController(1);
 
-  private final Drive drive = new Drive();
-  // private final Pneumatics pneumatics = new Pneumatics();
 
+  // private final Pneumatics pneumatics = new Pneumatics();
+  private final NavX navx = new NavX();
+
+  private final Drive drive = new Drive(navx);
+
+  //Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive, 
     () -> -getDriverLeftY(),
@@ -31,6 +38,18 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(driveWithJoysticks);
+
+    // Use the scheduler to log the scheduling and execution of commands.
+    // This way we don't need to put logging in every command
+    CommandScheduler.getInstance().
+      onCommandInitialize(command -> Log.init(command));
+    CommandScheduler.getInstance().
+      onCommandInterrupt(command -> Log.end(command, true));
+    CommandScheduler.getInstance().
+      onCommandFinish(command -> Log.end(command, false));
+
+    //Smart Dashboard Commands 
+    //SmartDashboard.putData("Path", new *());
   }
 
   private void configureButtonBindings() {
@@ -42,11 +61,11 @@ public class RobotContainer {
   private double getDriverLeftX() {
     return(driverController.getRawAxis(0));
   }
-
+//Used for: drive with Joysticks
 private double getDriverLeftY() {
     return(driverController.getRawAxis(1));
   }
-
+//Used for: drive with Joysticks
 private double getDriverRightX() {
     return(driverController.getRawAxis(2));
   }
