@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Pneumatics;
 import frc.robot.commands.DriveWithJoysticks;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,6 +19,7 @@ public class RobotContainer {
   XboxController manipulatorController = new XboxController(1);
 
   private final Drive drive = new Drive();
+  // private final Pneumatics pneumatics = new Pneumatics();
 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive, 
