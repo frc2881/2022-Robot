@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.subsystems.Drive;
 import frc.robot.utils.Log;
@@ -38,6 +39,9 @@ public class RobotContainer {
       onCommandInterrupt(command -> Log.end(command, true));
     CommandScheduler.getInstance().
       onCommandFinish(command -> Log.end(command, false));
+
+    //Smart Dashboard Commands 
+    //SmartDashboard.putData("Path", new *());
   }
 
   private void configureButtonBindings() {
@@ -49,11 +53,11 @@ public class RobotContainer {
   private double getDriverLeftX() {
     return(driverController.getRawAxis(0));
   }
-
+//Used for: drive with Joysticks
 private double getDriverLeftY() {
     return(driverController.getRawAxis(1));
   }
-
+//Used for: drive with Joysticks
 private double getDriverRightX() {
     return(driverController.getRawAxis(2));
   }
