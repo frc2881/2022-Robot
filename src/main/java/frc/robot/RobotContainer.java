@@ -29,6 +29,14 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(driveWithJoysticks);
+
+    // Use the scheduler to log the scheduling and execution of commands.
+    CommandScheduler.getInstance().
+      onCommandInitialize(command -> Log.init(command));
+    CommandScheduler.getInstance().
+      onCommandInterrupt(command -> Log.end(command, true));
+    CommandScheduler.getInstance().
+      onCommandFinish(command -> Log.end(command, false));
   }
 
   private void configureButtonBindings() {
