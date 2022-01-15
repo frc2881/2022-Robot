@@ -27,7 +27,7 @@ public class RobotContainer {
 
   private final Drive drive = new Drive(navx);
 
-  //Arcade drive 
+  //Split Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive, 
     () -> -getDriverLeftY(),
