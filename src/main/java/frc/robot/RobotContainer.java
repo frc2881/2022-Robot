@@ -8,9 +8,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import com.pathplanner.lib.PathPlanner;
 import frc.robot.commands.DriveWithJoysticks;
-import frc.robot.commands.FollowTrajectory;
 import frc.robot.subsystems.Drive;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
@@ -20,6 +18,8 @@ public class RobotContainer {
   XboxController driverController = new XboxController(0);
   XboxController manipulatorController = new XboxController(1);
 
+
+  // private final Pneumatics pneumatics = new Pneumatics();
   private final NavX navx = new NavX();
 
   private final Drive drive = new Drive(navx);
