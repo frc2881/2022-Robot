@@ -5,9 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import com.pathplanner.lib.PathPlanner;
 import frc.robot.commands.DriveWithJoysticks;
+import frc.robot.commands.FollowTrajectory;
 import frc.robot.subsystems.Drive;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
@@ -28,6 +31,13 @@ public class RobotContainer {
     () -> getDriverRightX());
 
   public RobotContainer() {
+
+    // Auton Paths
+    // private final OffTarmac driveOffTarmac = new FollowTrajectory(1, Straight);
+    // A chooser for autonomous commands
+    // This way we can choose between Paths for Autonomous Period
+    SendableChooser<Command> m_chooser = new SendableChooser<>();
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -100,7 +110,7 @@ private double getManipulatorRightTrigger() {
     return((manipulatorController.getRawAxis(4) + 1) / 2);
   }
 
-  public Command getAutonomousCommand() {
+public Command getAutonomousCommand() {
     return null;
   }
 }
