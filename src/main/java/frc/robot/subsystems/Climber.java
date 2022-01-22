@@ -7,9 +7,10 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
@@ -18,6 +19,8 @@ public class Climber extends SubsystemBase {
   DoubleSolenoid rightClimber = new DoubleSolenoid(PneumaticsModuleType.REVPH, 3, 4);
   private CANSparkMax leadScrew;
 
+  public enum ArmState {BUTTON, OUT, UP}
+
 
   
   public Climber() {
@@ -25,14 +28,22 @@ public class Climber extends SubsystemBase {
           leadScrew.setInverted(false);
           leadScrew.setIdleMode(IdleMode.kBrake);
 
-
   }
+
+  public ArmState getLeftArmState(){
+    if(leftClimber.get() != null)
+        return ArmState.UP;
+    else{
+        return ArmState.OUT;
+    }
+  }
+
   /**
    * Extends or retracts the arm
    * 
    * @param speed positive value extends
    */
-  public void runArm(double speed){
+  public void moveArm(double speed){
     System.out.println(speed);
     leadScrew.set(speed);
   }
