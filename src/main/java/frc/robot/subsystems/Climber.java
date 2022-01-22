@@ -19,25 +19,12 @@ public class Climber extends SubsystemBase {
   DoubleSolenoid rightClimber = new DoubleSolenoid(PneumaticsModuleType.REVPH, 3, 4);
   private CANSparkMax leadScrew;
 
-  public enum ArmState {BUTTON, OUT, UP}
-
-
-  
   public Climber() {
     leadScrew = new CANSparkMax(5, MotorType.kBrushless);
           leadScrew.setInverted(false);
           leadScrew.setIdleMode(IdleMode.kBrake);
 
   }
-
-  public ArmState getLeftArmState(){
-    if(leftClimber.get() != null)
-        return ArmState.UP;
-    else{
-        return ArmState.OUT;
-    }
-  }
-
   /**
    * Extends or retracts the arm
    * 

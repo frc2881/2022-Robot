@@ -10,7 +10,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveWithJoysticks;
+import frc.robot.commands.RunArm;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
@@ -32,9 +36,14 @@ public class RobotContainer {
   //Split Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive, 
-    () -> getDriverLeftY(), 
+    () -> getDriverLeftY(),
     () -> -getDriverRightX());
-
+/*
+  private final RunArm runArm = new RunArm(
+    climber, 
+    () -> getManipulatorLeftY());
+*/
+  
   public RobotContainer() {
 
     // Auton Paths
@@ -47,6 +56,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(driveWithJoysticks);
+    // climber.setDefaultCommand(runArm);
 
     // Use the scheduler to log the scheduling and execution of commands.
     // This way we don't need to put logging in every command
@@ -65,6 +75,14 @@ public class RobotContainer {
     /*new JoystickButton(driverController, Button.kBumperRight.value)
             .whenPressed(() -> drive.setMaxOutput(0.5))
             .whenReleased(() -> drive.setMaxOutput(1));*/
+/*
+      new JoystickButton(manipulatorController, XboxController.Button.kY.value)
+            .whenPressed(new InstantCommand(climber::armUp, climber));
+
+      new JoystickButton(manipulatorController, XboxController.Button.kA.value)
+            .whenPressed(new InstantCommand(climber::armBack, climber));
+
+*/
   }
 
   private double getDriverLeftX() {
