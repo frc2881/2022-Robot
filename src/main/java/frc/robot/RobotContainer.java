@@ -30,8 +30,8 @@ public class RobotContainer {
   //Split Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive, 
-    () -> -driverController.getLeftY(),
-    () -> driverController.getLeftX());
+    () -> getDriverLeftY(), 
+    () -> -getDriverRightX());
 
   public RobotContainer() {
 
@@ -74,7 +74,7 @@ private double getDriverLeftY() {
   }
 //Used for: drive with Joysticks
 private double getDriverRightX() {
-    return(driverController.getRawAxis(2));
+    return(driverController.getRawAxis(4));
   }
 
 private double getDriverRightY() {
