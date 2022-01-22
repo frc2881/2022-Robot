@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -35,18 +36,31 @@ public class Drive extends SubsystemBase {
         leftFront = new CANSparkMax(1, MotorType.kBrushless);
             leftFront.setInverted(false);
             leftFront.setIdleMode(IdleMode.kBrake);
+            leftFront.getForwardLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
+            leftFront.getReverseLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
+            leftFront.setSmartCurrentLimit(150);
 
         leftRear = new CANSparkMax(2, MotorType.kBrushless);
             leftRear.setInverted(false);
             leftRear.setIdleMode(IdleMode.kBrake);
+            leftRear.getForwardLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
+            leftRear.getReverseLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
+            leftRear.setSmartCurrentLimit(150);
+            
         
         rightFront = new CANSparkMax(3, MotorType.kBrushless);
             rightFront.setInverted(true);
             rightFront.setIdleMode(IdleMode.kBrake);
+            rightFront.getForwardLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
+            rightFront.getReverseLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
+            rightFront.setSmartCurrentLimit(150);
 
         rightRear = new CANSparkMax(4, MotorType.kBrushless);
             rightRear.setInverted(true);
             rightRear.setIdleMode(IdleMode.kBrake);
+            rightRear.getForwardLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
+            rightRear.getReverseLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
+            rightRear.setSmartCurrentLimit(150);
         
         driveTrain = new DifferentialDrive(leftFront, rightFront);
         
@@ -65,7 +79,6 @@ public class Drive extends SubsystemBase {
     }
 
     public void arcadeDrive(double speed, double rotation){
-        System.out.println(speed + " " + rotation);
         driveTrain.arcadeDrive(speed, rotation);
     }
 

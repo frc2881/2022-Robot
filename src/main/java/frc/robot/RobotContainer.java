@@ -4,14 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriveWithJoysticks;
-import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Pneumatics;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
 
@@ -26,6 +26,8 @@ public class RobotContainer {
   private final NavX navx = new NavX();
 
   private final Drive drive = new Drive(navx);
+
+  PowerDistribution powerHub = new PowerDistribution(10, ModuleType.kRev);
 
   //Split Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
