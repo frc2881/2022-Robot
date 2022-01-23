@@ -4,17 +4,14 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
 import com.pathplanner.lib.PathPlanner;
 
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -29,6 +26,9 @@ public class RobotContainer {
   XboxController driverController = new XboxController(0);
   XboxController manipulatorController = new XboxController(1);
 
+
+  // private final Pneumatics pneumatics = new Pneumatics();
+  // private final Climber climber = new Climber();
   private final NavX navx = new NavX();
 
   private final Drive drive = new Drive(navx);
@@ -38,12 +38,27 @@ public class RobotContainer {
 
   
   //Arcade drive 
+  PowerDistribution powerHub = new PowerDistribution(10, ModuleType.kRev);
+
+  //Split Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive, 
     () -> getDriverLeftY(),
     () -> -getDriverRightX());
-
+/*
+  private final RunArm runArm = new RunArm(
+    climber, 
+    () -> getManipulatorLeftY());
+*/
+  
   public RobotContainer() {
+
+    // Auton Paths
+    // private final OffTarmac driveOffTarmac = new FollowTrajectory(1, Straight);
+    // A chooser for autonomous commands
+    // This way we can choose between Paths for Autonomous Period
+    SendableChooser<Command> m_chooser = new SendableChooser<>();
+
     // Configure the button bindings
 
     trajectory1 = PathPlanner.loadPath("Straight", 1, 1);
@@ -51,6 +66,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(driveWithJoysticks);
+    // climber.setDefaultCommand(runArm);
 
     // Use the scheduler to log the scheduling and execution of commands.
     // This way we don't need to put logging in every command
@@ -77,6 +93,14 @@ public class RobotContainer {
             .whenPressed(() -> drive.driveTankVolts(3, 3))
             .whenReleased(() -> drive.driveTankVolts(0, 0));
     
+/*
+      new JoystickButton(manipulatorController, XboxController.Button.kY.value)
+            .whenPressed(new InstantCommand(climber::armUp, climber));
+
+      new JoystickButton(manipulatorController, XboxController.Button.kA.value)
+            .whenPressed(new InstantCommand(climber::armBack, climber));
+
+*/
   }
 
   private double getDriverLeftX() {
@@ -88,7 +112,7 @@ private double getDriverLeftY() {
   }
 //Used for: drive with Joysticks
 private double getDriverRightX() {
-    return(driverController.getRawAxis(2));
+    return(driverController.getRawAxis(4));
   }
 
 private double getDriverRightY() {
@@ -127,7 +151,7 @@ private double getManipulatorRightTrigger() {
     return((manipulatorController.getRawAxis(4) + 1) / 2);
   }
 
-  public Command getAutonomousCommand() {
+public Command getAutonomousCommand() {
     return null;
   }
 }
