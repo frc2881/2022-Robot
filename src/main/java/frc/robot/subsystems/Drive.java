@@ -12,6 +12,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.GearRatio;
 import frc.robot.utils.NavX;
 
 public class Drive extends SubsystemBase {
@@ -32,19 +33,19 @@ public class Drive extends SubsystemBase {
       
         m_navx = navx; 
 
-        leftFront = new CANSparkMax(1, MotorType.kBrushless);
+        leftFront = new CANSparkMax(11, MotorType.kBrushless);
             leftFront.setInverted(false);
             leftFront.setIdleMode(IdleMode.kBrake);
 
-        leftRear = new CANSparkMax(2, MotorType.kBrushless);
+        leftRear = new CANSparkMax(12, MotorType.kBrushless);
             leftRear.setInverted(false);
             leftRear.setIdleMode(IdleMode.kBrake);
         
-        rightFront = new CANSparkMax(3, MotorType.kBrushless);
+        rightFront = new CANSparkMax(13, MotorType.kBrushless);
             rightFront.setInverted(true);
             rightFront.setIdleMode(IdleMode.kBrake);
 
-        rightRear = new CANSparkMax(4, MotorType.kBrushless);
+        rightRear = new CANSparkMax(14, MotorType.kBrushless);
             rightRear.setInverted(true);
             rightRear.setIdleMode(IdleMode.kBrake);
         
@@ -53,9 +54,13 @@ public class Drive extends SubsystemBase {
         leftenc = leftRear.getEncoder();
         rightenc = rightRear.getEncoder();
 
-        leftenc.setPositionConversionFactor(Units.inchesToMeters(2.26194671058));
-        rightenc.setPositionConversionFactor(Units.inchesToMeters(2.26194671058));
+        leftenc.setPositionConversionFactor(GearRatio.measureDist(1, 10, 50, 4));
+        rightenc.setPositionConversionFactor(GearRatio.measureDist(1, 10, 50, 4));
         
+        leftenc.setVelocityConversionFactor(GearRatio.measureDist(1, 10, 50, 4) / 60);
+        rightenc.setVelocityConversionFactor(GearRatio.measureDist(1, 10, 50, 4) / 60);
+
+
         leftRear.follow(leftFront);
         rightRear.follow(rightFront);
 
@@ -65,7 +70,7 @@ public class Drive extends SubsystemBase {
     }
 
     public void arcadeDrive(double speed, double rotation){
-        System.out.println(speed + " " + rotation);
+        //System.out.println(speed + " " + rotation);
         driveTrain.arcadeDrive(speed, rotation);
     }
 
@@ -76,7 +81,7 @@ public class Drive extends SubsystemBase {
     @Override
     public void periodic() {
       odometry.update(
-          m_navx.getRotation2d(), leftenc.getPosition(), rightenc.getPosition());
+          m_navx.getRotation2d(), -leftenc.getPosition(), -rightenc.getPosition());
     }
 
     public Pose2d getPose() {
@@ -95,21 +100,24 @@ public class Drive extends SubsystemBase {
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(leftenc.getVelocity(),
+        return new DifferentialDriveWheelSpeeds(-leftenc.getVelocity(),
         -rightenc.getVelocity());
       }
 
     public void driveTankVolts(double leftVolts, double rightVolts) {
-        leftFront.setVoltage(leftVolts);
-        rightFront.setVoltage(rightVolts);
+        leftFront.setVoltage(-leftVolts);
+        rightFront.setVoltage(-rightVolts);
+        System.out.println(leftVolts + " " + "hi"+ rightVolts);
         driveTrain.feed();
       }
 
       @Override
       public void initSendable(SendableBuilder builder) {  
         super.initSendable(builder);
-        builder.addDoubleProperty("Left Encoder", () -> leftenc.getPosition(),  null);
-        builder.addDoubleProperty("Right Encoder", () -> rightenc.getPosition(),  null);
+        builder.addDoubleProperty("Left Position", () -> -leftenc.getPosition(),  null);
+        builder.addDoubleProperty("Right Position", () -> -rightenc.getPosition(),  null);
+        builder.addDoubleProperty("Left Velocity", () -> -leftenc.getVelocity(),  null);
+        builder.addDoubleProperty("Right Velocity", () -> -rightenc.getVelocity(),  null);
 
       }
 }

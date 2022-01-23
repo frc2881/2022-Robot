@@ -29,7 +29,7 @@ public final class Constants {
 
     public static final double kPDriveVel = 2.51;
 
-    public static final double kTrackWidth = Units.inchesToMeters(26);
+    public static final double kTrackWidth = Units.inchesToMeters(22.5);
 
     public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(kTrackWidth);
 

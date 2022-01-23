@@ -4,10 +4,22 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
+import com.pathplanner.lib.PathPlanner;
+
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveWithJoysticks;
+import frc.robot.commands.FollowTrajectory;
 import frc.robot.subsystems.Drive;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
@@ -21,14 +33,21 @@ public class RobotContainer {
 
   private final Drive drive = new Drive(navx);
 
+  private final Trajectory trajectory1;
+
+
+  
   //Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive, 
-    () -> -getDriverLeftY(),
-    () -> getDriverRightX());
+    () -> getDriverLeftY(),
+    () -> -getDriverRightX());
 
   public RobotContainer() {
     // Configure the button bindings
+
+    trajectory1 = PathPlanner.loadPath("Straight", 1, 1);
+    
     configureButtonBindings();
 
     drive.setDefaultCommand(driveWithJoysticks);
@@ -50,6 +69,14 @@ public class RobotContainer {
     /*new JoystickButton(driverController, Button.kBumperRight.value)
             .whenPressed(() -> drive.setMaxOutput(0.5))
             .whenReleased(() -> drive.setMaxOutput(1));*/
+
+     new JoystickButton(driverController, Button.kA.value)
+            .whenHeld(new FollowTrajectory(drive, trajectory1));
+
+     new JoystickButton(driverController, Button.kB.value)
+            .whenPressed(() -> drive.driveTankVolts(3, 3))
+            .whenReleased(() -> drive.driveTankVolts(0, 0));
+    
   }
 
   private double getDriverLeftX() {
