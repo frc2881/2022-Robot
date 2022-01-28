@@ -86,6 +86,10 @@ public class Drive extends SubsystemBase {
         driveTrain.arcadeDrive(speed, rotation);
     }
 
+    public void tankDrive(double leftSpeed, double rightSpeed){
+        driveTrain.tankDrive(leftSpeed, rightSpeed);
+    }
+
     public void setMaxOutput(double maxOutput){
         driveTrain.setMaxOutput(maxOutput);
     }

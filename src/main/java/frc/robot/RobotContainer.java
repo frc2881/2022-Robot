@@ -48,6 +48,7 @@ public class RobotContainer {
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive, 
     () -> getDriverLeftY(),
+    () -> getDriverRightY(),
     () -> -getDriverRightX());
 /*
   private final RunArm runArm = new RunArm(

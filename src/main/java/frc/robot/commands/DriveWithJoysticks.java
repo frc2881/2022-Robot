@@ -2,34 +2,49 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 import frc.robot.subsystems.Drive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveWithJoysticks extends CommandBase {
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-    private final DoubleSupplier forward;
-    private final DoubleSupplier rotation;
-
-    private Drive drive;
+    private final DoubleSupplier m_leftForward;
+    private final DoubleSupplier m_rightForward;
+    private final DoubleSupplier m_rotation;
     
-    public DriveWithJoysticks(Drive drive, DoubleSupplier forward, DoubleSupplier rotation) {
-        this.forward = forward;
-        this.rotation = rotation;
 
-        this.drive = drive;
+    private Drive m_drive;
+     
+    
+    public DriveWithJoysticks(Drive drive, DoubleSupplier leftForward, DoubleSupplier rightForward, DoubleSupplier rotation) {
+        m_leftForward = leftForward;
+        m_rightForward = rightForward; 
+        m_rotation = rotation;
 
-        addRequirements(drive);
+        m_drive = drive;
+
+        addRequirements(m_drive);
+        SmartDashboard.setDefaultBoolean("Set Arcade Drive", true);
     }
 
     @Override
     public void execute() {
 
-        drive.arcadeDrive(forward.getAsDouble(), rotation.getAsDouble());
+    if(SmartDashboard.getBoolean("Set Arcade Drive", true) == true) {
+
+        m_drive.arcadeDrive(m_leftForward.getAsDouble(), m_rotation.getAsDouble());
+    }
+    else{
+
+        m_drive.tankDrive(m_leftForward.getAsDouble(),m_rightForward.getAsDouble());
+
+    }
+        
     }
 
     @Override
     public void end(boolean interrupted) {
-        drive.arcadeDrive(0.0, 0.0);
+        m_drive.arcadeDrive(0.0, 0.0);
     }
 
       @Override
