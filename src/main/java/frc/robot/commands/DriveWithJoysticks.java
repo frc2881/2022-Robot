@@ -7,29 +7,29 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class DriveWithJoysticks extends CommandBase {
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-    private final DoubleSupplier m_forward;
-    private final DoubleSupplier m_rotation;
+    private final DoubleSupplier forward;
+    private final DoubleSupplier rotation;
 
-    private Drive m_drive;
+    private Drive drive;
     
     public DriveWithJoysticks(Drive drive, DoubleSupplier forward, DoubleSupplier rotation) {
-        m_forward = forward;
-        m_rotation = rotation;
+        this.forward = forward;
+        this.rotation = rotation;
 
-        m_drive = drive;
+        this.drive = drive;
 
-        addRequirements(m_drive);
+        addRequirements(drive);
     }
 
     @Override
     public void execute() {
 
-        m_drive.arcadeDrive(m_forward.getAsDouble(), m_rotation.getAsDouble());
+        drive.arcadeDrive(forward.getAsDouble(), rotation.getAsDouble());
     }
 
     @Override
     public void end(boolean interrupted) {
-        m_drive.arcadeDrive(0.0, 0.0);
+        drive.arcadeDrive(0.0, 0.0);
     }
 
       @Override

@@ -14,10 +14,13 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveWithJoysticks;
-import frc.robot.commands.FollowTrajectory;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Intake_Catapult;
+import frc.robot.subsystems.Intake_Catapult.Direction;
+import frc.robot.subsystems.Pneumatics;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
 
@@ -26,8 +29,9 @@ public class RobotContainer {
   XboxController driverController = new XboxController(0);
   XboxController manipulatorController = new XboxController(1);
 
+  private final Intake_Catapult intake_catapult = new Intake_Catapult();
 
-  // private final Pneumatics pneumatics = new Pneumatics();
+   //private final Pneumatics pneumatics = new Pneumatics();
   // private final Climber climber = new Climber();
   private final NavX navx = new NavX();
 
@@ -38,7 +42,7 @@ public class RobotContainer {
 
   
   //Arcade drive 
-  PowerDistribution powerHub = new PowerDistribution(10, ModuleType.kRev);
+  PowerDistribution powerHub = new PowerDistribution(2, ModuleType.kRev);
 
   //Split Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
@@ -86,12 +90,12 @@ public class RobotContainer {
             .whenPressed(() -> drive.setMaxOutput(0.5))
             .whenReleased(() -> drive.setMaxOutput(1));*/
 
-     new JoystickButton(driverController, Button.kA.value)
+     /*new JoystickButton(driverController, Button.kA.value)
             .whenHeld(new FollowTrajectory(drive, trajectory1));
 
      new JoystickButton(driverController, Button.kB.value)
             .whenPressed(() -> drive.driveTankVolts(3, 3))
-            .whenReleased(() -> drive.driveTankVolts(0, 0));
+            .whenReleased(() -> drive.driveTankVolts(0, 0));*/
     
 /*
       new JoystickButton(manipulatorController, XboxController.Button.kY.value)
@@ -101,6 +105,17 @@ public class RobotContainer {
             .whenPressed(new InstantCommand(climber::armBack, climber));
 
 */
+    new JoystickButton(manipulatorController, Button.kB.value).whenPressed(
+      new InstantCommand(() -> intake_catapult.intake(-.75, Direction.INTAKE), intake_catapult));
+
+    new JoystickButton(manipulatorController, Button.kA.value).whenPressed(
+      new InstantCommand(() -> intake_catapult.intake(0, Direction.INTAKE), intake_catapult));
+
+    new JoystickButton(manipulatorController, Button.kX.value).whenPressed(
+      new InstantCommand(() -> intake_catapult.extend(), intake_catapult));
+    
+    new JoystickButton(manipulatorController, Button.kY.value).whenPressed(
+      new InstantCommand(() -> intake_catapult.retract(), intake_catapult));
   }
 
   private double getDriverLeftX() {
