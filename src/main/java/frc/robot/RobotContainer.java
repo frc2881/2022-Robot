@@ -107,7 +107,7 @@ public class RobotContainer {
 
 */
     new JoystickButton(manipulatorController, Button.kB.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.intake(-.75, Direction.INTAKE), intake_catapult));
+      new InstantCommand(() -> intake_catapult.intake(-1, Direction.INTAKE), intake_catapult));
 
     new JoystickButton(manipulatorController, Button.kA.value).whenPressed(
       new InstantCommand(() -> intake_catapult.intake(0, Direction.INTAKE), intake_catapult));
