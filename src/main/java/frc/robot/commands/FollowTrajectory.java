@@ -18,6 +18,8 @@ public class FollowTrajectory extends CommandBase{
     public FollowTrajectory(Drive drive, Trajectory trajectory){
         m_drive = drive;
         m_trajectory = trajectory;
+        
+        addRequirements(m_drive);
 
     RamseteController ramsetecontroller = new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta);
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.kS, Constants.kV, Constants.kA);
