@@ -39,7 +39,16 @@ public class RobotContainer {
 
   private final Drive drive = new Drive(navx);
 
-  private final Trajectory trajectory1;
+  private final Trajectory straight;
+  private final Trajectory grabCargo;
+  private final Trajectory spiral;
+  private final Trajectory j;
+  private final Trajectory m;
+  private final Trajectory o;
+  private final Trajectory s;
+  private final Trajectory u;
+  private final Trajectory v;
+
 
   private final SendableChooser<Command> m_chooser;
   
@@ -62,17 +71,37 @@ public class RobotContainer {
   
   public RobotContainer() {
 
+    double maxVelocity = 2;
+    double maxAcceleration = 2;
+    
     //Trajectories from Path Planner
-    trajectory1 = PathPlanner.loadPath("Straight", 1, 1);
+    straight = PathPlanner.loadPath("Straight", maxAcceleration, maxVelocity);
+    grabCargo = PathPlanner.loadPath("Grab cargo", maxAcceleration, maxVelocity);
+    spiral = PathPlanner.loadPath("Spiral", maxVelocity, maxAcceleration);
+    j = PathPlanner.loadPath("J", maxVelocity, maxAcceleration);
+    m = PathPlanner.loadPath("M", maxVelocity, maxAcceleration);
+    o = PathPlanner.loadPath("O", maxVelocity, maxAcceleration);
+    s = PathPlanner.loadPath("S", maxVelocity, maxAcceleration);
+    u = PathPlanner.loadPath("U", maxVelocity, maxAcceleration);
+    v = PathPlanner.loadPath("V", maxVelocity, maxAcceleration);
 
     // Auton Paths
-    // private final OffTarmac driveOffTarmac = new FollowTrajectory(1, Straight);
     // A chooser for autonomous commands
     // This way we can choose between Paths for Autonomous Period
     m_chooser = new SendableChooser<>();
-    m_chooser.setDefaultOption("Straight", new FollowTrajectory(drive, trajectory1));
-    m_chooser.addOption("Crooked", new FollowTrajectory(drive, trajectory1)); //TODO: set to accurate paths
-    
+    m_chooser.setDefaultOption("Straight", new FollowTrajectory(drive, straight));
+    m_chooser.addOption("Grab cargo", new FollowTrajectory(drive, grabCargo));
+    m_chooser.addOption("Spiral", new FollowTrajectory(drive, spiral));
+    m_chooser.addOption("J", new FollowTrajectory(drive, j));
+    m_chooser.addOption("M", new FollowTrajectory(drive, m));
+    m_chooser.addOption("O", new FollowTrajectory(drive, o));
+    m_chooser.addOption("S", new FollowTrajectory(drive, s));
+    m_chooser.addOption("U", new FollowTrajectory(drive, u));
+    m_chooser.addOption("V", new FollowTrajectory(drive, v));
+
+
+
+
     // Configure the button bindings
     configureButtonBindings();
 

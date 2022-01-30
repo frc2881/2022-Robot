@@ -23,8 +23,8 @@ public class FollowTrajectory extends CommandBase{
 
     RamseteController ramsetecontroller = new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta);
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.kS, Constants.kV, Constants.kA);
-    PIDController pidleft = new PIDController(Constants.kPDriveVel, 0, 0);
-    PIDController pidright = new PIDController(Constants.kPDriveVel, 0, 0);
+    PIDController pidleft = new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel);
+    PIDController pidright = new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel);
 
     m_ramsete = new RamseteCommand(trajectory, drive::getPose, ramsetecontroller, feedforward, Constants.kKinematics,
     drive::getWheelSpeeds, pidleft, pidright, drive::driveTankVolts, drive);

@@ -1,0 +1,11 @@
+{
+  "SysId": {
+    "Analysis Type": "Drivetrain",
+    "AnalyzerJSONLocation": "C:\\Users\\Driziana\\Google Drive\\Repositories\\2022RobotDrive\\sysid_data20220130-130644.json",
+    "NetworkTables Settings": {
+      "serverTeam": "2881"
+    },
+    "mode": "Client",
+    "serverTeam": "2881"
+  }
+}
