@@ -8,23 +8,23 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
 
-  DoubleSolenoid leftClimber = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 2);
-  DoubleSolenoid rightClimber = new DoubleSolenoid(PneumaticsModuleType.REVPH, 3, 4);
+  private final Solenoid climberSolenoid = new Solenoid(PneumaticsModuleType.REVPH, 1);
   private CANSparkMax leadScrew;
 
   public Climber() {
-    leadScrew = new CANSparkMax(5, MotorType.kBrushless);
+    leadScrew = new CANSparkMax(18, MotorType.kBrushless);
+          leadScrew.restoreFactoryDefaults();
           leadScrew.setInverted(false);
-          leadScrew.setIdleMode(IdleMode.kBrake);
+          leadScrew.setIdleMode(IdleMode.kBrake);          
 
   }
+  
   /**
    * Extends or retracts the arm
    * 
@@ -33,6 +33,7 @@ public class Climber extends SubsystemBase {
   public void moveArm(double speed){
     System.out.println(speed);
     leadScrew.set(speed);
+    
   }
 
   /**
@@ -40,16 +41,16 @@ public class Climber extends SubsystemBase {
    */
 
   public void armBack(){
-    leftClimber.set(Value.kReverse);
-    rightClimber.set(Value.kReverse);
+    climberSolenoid.set(false);
+
   }
 
   /**
    * Brings the arm to upright position
    */
   public void armUp(){
-    leftClimber.set(Value.kForward);
-    rightClimber.set(Value.kForward);
+    climberSolenoid.set(true);
+
   }
 
 

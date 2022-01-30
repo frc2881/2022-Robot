@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveWithJoysticks;
+import frc.robot.commands.RunArm;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake_Catapult;
 import frc.robot.subsystems.Intake_Catapult.Direction;
@@ -31,7 +33,7 @@ public class RobotContainer {
 
   private final Intake_Catapult intake_catapult = new Intake_Catapult();
 
-   //private final Pneumatics pneumatics = new Pneumatics();
+  private final Pneumatics pneumatics = new Pneumatics();
   // private final Climber climber = new Climber();
   private final NavX navx = new NavX();
 
@@ -50,11 +52,13 @@ public class RobotContainer {
     () -> getDriverLeftY(),
     () -> getDriverRightY(),
     () -> -getDriverRightX());
-/*
+
+  /*
   private final RunArm runArm = new RunArm(
     climber, 
     () -> getManipulatorLeftY());
-*/
+
+    */
   
   public RobotContainer() {
 
@@ -100,10 +104,11 @@ public class RobotContainer {
     
 /*
       new JoystickButton(manipulatorController, XboxController.Button.kY.value)
-            .whenPressed(new InstantCommand(climber::armUp, climber));
+            .whileHeld(new ArmOut(climber));
 
       new JoystickButton(manipulatorController, XboxController.Button.kA.value)
-            .whenPressed(new InstantCommand(climber::armBack, climber));
+            .whileHeld(new ArmIn(climber));
+
 
 */
     new JoystickButton(manipulatorController, Button.kB.value).whenPressed(
