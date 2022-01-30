@@ -12,13 +12,13 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveWithJoysticks;
-import frc.robot.commands.RunArm;
-import frc.robot.subsystems.Climber;
+import frc.robot.commands.FollowTrajectory;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake_Catapult;
 import frc.robot.subsystems.Intake_Catapult.Direction;
@@ -41,7 +41,7 @@ public class RobotContainer {
 
   private final Trajectory trajectory1;
 
-
+  private final SendableChooser<Command> m_chooser;
   
   //Arcade drive 
   PowerDistribution powerHub = new PowerDistribution(2, ModuleType.kRev);
@@ -62,16 +62,18 @@ public class RobotContainer {
   
   public RobotContainer() {
 
+    //Trajectories from Path Planner
+    trajectory1 = PathPlanner.loadPath("Straight", 1, 1);
+
     // Auton Paths
     // private final OffTarmac driveOffTarmac = new FollowTrajectory(1, Straight);
     // A chooser for autonomous commands
     // This way we can choose between Paths for Autonomous Period
-    SendableChooser<Command> m_chooser = new SendableChooser<>();
-
-    // Configure the button bindings
-
-    trajectory1 = PathPlanner.loadPath("Straight", 1, 1);
+    m_chooser = new SendableChooser<>();
+    m_chooser.setDefaultOption("Straight", new FollowTrajectory(drive, trajectory1));
+    m_chooser.addOption("Crooked", new FollowTrajectory(drive, trajectory1)); //TODO: set to accurate paths
     
+    // Configure the button bindings
     configureButtonBindings();
 
     drive.setDefaultCommand(driveWithJoysticks);
@@ -87,7 +89,7 @@ public class RobotContainer {
       onCommandFinish(command -> Log.end(command, false));
 
     //Smart Dashboard Commands 
-    //SmartDashboard.putData("Path", new *());
+    SmartDashboard.putData(m_chooser);
   }
 
   private void configureButtonBindings() {
@@ -112,7 +114,7 @@ public class RobotContainer {
 
 */
     new JoystickButton(manipulatorController, Button.kB.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.intake(-.75, Direction.INTAKE), intake_catapult));
+      new InstantCommand(() -> intake_catapult.intake(-1, Direction.INTAKE), intake_catapult));
 
     new JoystickButton(manipulatorController, Button.kA.value).whenPressed(
       new InstantCommand(() -> intake_catapult.intake(0, Direction.INTAKE), intake_catapult));
@@ -173,6 +175,6 @@ private double getManipulatorRightTrigger() {
   }
 
 public Command getAutonomousCommand() {
-    return null;
+    return m_chooser.getSelected();
   }
 }

@@ -34,33 +34,24 @@ public class Drive extends SubsystemBase {
         m_navx = navx; 
 
         leftFront = new CANSparkMax(11, MotorType.kBrushless);
+            leftFront.restoreFactoryDefaults();
             leftFront.setInverted(false);
             leftFront.setIdleMode(IdleMode.kBrake);
-            leftFront.getForwardLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
-            leftFront.getReverseLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
-            leftFront.setSmartCurrentLimit(150);
 
         leftRear = new CANSparkMax(12, MotorType.kBrushless);
+            leftRear.restoreFactoryDefaults();
             leftRear.setInverted(false);
             leftRear.setIdleMode(IdleMode.kBrake);
-            leftRear.getForwardLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
-            leftRear.getReverseLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
-            leftRear.setSmartCurrentLimit(150);
-            
         
         rightFront = new CANSparkMax(13, MotorType.kBrushless);
+            rightFront.restoreFactoryDefaults();
             rightFront.setInverted(true);
             rightFront.setIdleMode(IdleMode.kBrake);
-            rightFront.getForwardLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
-            rightFront.getReverseLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
-            rightFront.setSmartCurrentLimit(150);
 
         rightRear = new CANSparkMax(14, MotorType.kBrushless);
+            rightRear.restoreFactoryDefaults();
             rightRear.setInverted(true);
             rightRear.setIdleMode(IdleMode.kBrake);
-            rightRear.getForwardLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
-            rightRear.getReverseLimitSwitch(Type.kNormallyClosed).enableLimitSwitch(false);
-            rightRear.setSmartCurrentLimit(150);
         
         driveTrain = new DifferentialDrive(leftFront, rightFront);
         
