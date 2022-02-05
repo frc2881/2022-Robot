@@ -100,16 +100,19 @@ wpi.java.configureTestTasks(test)
 //
 // WPILib documentation on using Spotless
 // https://docs.wpilib.org/en/stable/docs/software/advanced-gradlerio/code-formatting.html
-spotless {
-   java {
-      target fileTree('.') {
-            include '**/*.java'
-            exclude '**/build/**', '**/build-*/**'
-      }
+
+// spotless {
+   // java {
+      // target fileTree('.') {
+            // include '**/*.java'
+            // exclude '**/build/**', '**/build-*/**'
+      /*}
       toggleOffOn()
       googleJavaFormat()
       removeUnusedImports()
       trimTrailingWhitespace()
       endWithNewline()
    }
+   
 }
+*/
