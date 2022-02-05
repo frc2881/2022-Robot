@@ -4,6 +4,7 @@ plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2022.2.1"
     id "com.palantir.git-version" version "0.12.3"
+    id "com.diffplug.spotless" version "6.2.1"
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -94,3 +95,21 @@ jar {
 deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
+
+// Code formatting support using Spotless.
+//
+// WPILib documentation on using Spotless
+// https://docs.wpilib.org/en/stable/docs/software/advanced-gradlerio/code-formatting.html
+spotless {
+   java {
+      target fileTree('.') {
+            include '**/*.java'
+            exclude '**/build/**', '**/build-*/**'
+      }
+      toggleOffOn()
+      googleJavaFormat()
+      removeUnusedImports()
+      trimTrailingWhitespace()
+      endWithNewline()
+   }
+}
