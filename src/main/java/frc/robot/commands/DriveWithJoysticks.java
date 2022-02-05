@@ -1,9 +1,10 @@
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
-import frc.robot.subsystems.Drive;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drive;
 
 public class DriveWithJoysticks extends CommandBase {
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
