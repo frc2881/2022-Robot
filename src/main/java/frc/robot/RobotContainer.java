@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.FollowTrajectory;
 import frc.robot.subsystems.Drive;
@@ -92,7 +93,9 @@ public class RobotContainer {
     // A chooser for autonomous commands
     // This way we can choose between Paths for Autonomous Period
     m_chooser = new SendableChooser<>();
-    m_chooser.setDefaultOption("Straight", new FollowTrajectory(drive, straight));
+    //Add Auto
+    m_chooser.setDefaultOption("Autonomous", new Autonomous(drive, intake_catapult, auto1part1, auto1part2));
+    m_chooser.addOption("Straight", new FollowTrajectory(drive, straight));
     m_chooser.addOption("Grab cargo", new FollowTrajectory(drive, grabCargo));
     m_chooser.addOption("Spiral", new FollowTrajectory(drive, spiral));
     m_chooser.addOption("J", new FollowTrajectory(drive, j));
@@ -148,7 +151,7 @@ public class RobotContainer {
 
 */
     new JoystickButton(manipulatorController, Button.kB.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.intake(-1, Direction.INTAKE), intake_catapult));
+      new InstantCommand(() -> intake_catapult.intake(1, Direction.INTAKE), intake_catapult));
 
     new JoystickButton(manipulatorController, Button.kA.value).whenPressed(
       new InstantCommand(() -> intake_catapult.intake(0, Direction.INTAKE), intake_catapult));

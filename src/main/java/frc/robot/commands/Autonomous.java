@@ -2,7 +2,8 @@ package frc.robot.commands;
 
 import com.pathplanner.lib.PathPlanner;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Drive;
@@ -14,29 +15,24 @@ import frc.robot.subsystems.Intake_Catapult.Direction;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Autonomous extends SequentialCommandGroup {
   //private static final String Drive = null;
-  private static final String Auto1Part1 = null;
-  private static final String Auto1Part2 = null;
-  private Drive m_drive;
-  private Intake_Catapult intake;
+
 
   /** Creates a new Autonomous. */
-  public Autonomous(Drive drive) {
-    double maxVelocity = 2;
-    double maxAcceleration = 2;
-    //double timer = Timer;
-    m_drive = drive;
-    addRequirements(m_drive);
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+  public Autonomous(Drive drive, Intake_Catapult intake_catapult, Trajectory auto1part1, Trajectory auto1part2) {
+
+    addRequirements(drive);
+    addRequirements(intake_catapult);
+
     addCommands(
-      new ParallelCommandGroup(
-        new FollowTrajectory( m_drive, PathPlanner.loadPath("Auto1Part1", maxVelocity, maxAcceleration)),
-        new Intake(intake, 1, Direction.INTAKE)  
-      ),
-      new WaitCommand(2),
-      new Intake(intake, 0, Direction.INTAKE),
-      new FollowTrajectory( m_drive, PathPlanner.loadPath("Auto1Part2", maxVelocity, maxAcceleration, true))
-      //TODO capatult here ;)
+      new InstantCommand(() -> intake_catapult.extend(), intake_catapult),
+      new InstantCommand(() -> intake_catapult.intake(1, Direction.INTAKE), intake_catapult),
+      new WaitCommand(2),   
+      new FollowTrajectory(drive, auto1part1),
+      new InstantCommand(() -> intake_catapult.intake(0, Direction.INTAKE), intake_catapult),
+      new WaitCommand(0.5),
+      new FollowTrajectory(drive, auto1part2),
+      new WaitCommand(0.5)
+      //TODO catapult here ;)
     ); 
   
   }
