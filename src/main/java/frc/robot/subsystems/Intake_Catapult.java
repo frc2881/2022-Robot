@@ -43,9 +43,9 @@ public class Intake_Catapult extends SubsystemBase {
 
     public void intake(double speed, Direction state){
         if(state == Direction.INTAKE)
-        intake.set(speed);
+        intake.set(-speed);
         else{
-            intake.set(-speed);
+            intake.set(speed);
         }
     }
 

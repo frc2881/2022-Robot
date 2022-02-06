@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.FollowTrajectory;
 import frc.robot.subsystems.Drive;
@@ -48,7 +49,8 @@ public class RobotContainer {
   private final Trajectory s;
   private final Trajectory u;
   private final Trajectory v;
-
+  private final Trajectory auto1part1;
+  private final Trajectory auto1part2;
 
   private final SendableChooser<Command> m_chooser;
   
@@ -84,12 +86,16 @@ public class RobotContainer {
     s = PathPlanner.loadPath("S", maxVelocity, maxAcceleration);
     u = PathPlanner.loadPath("U", maxVelocity, maxAcceleration);
     v = PathPlanner.loadPath("V", maxVelocity, maxAcceleration);
+    auto1part1 = PathPlanner.loadPath("Auto1Part1", maxVelocity, maxAcceleration);
+    auto1part2 = PathPlanner.loadPath("Auto1Part2", maxVelocity, maxAcceleration, true);
 
     // Auton Paths
     // A chooser for autonomous commands
     // This way we can choose between Paths for Autonomous Period
     m_chooser = new SendableChooser<>();
-    m_chooser.setDefaultOption("Straight", new FollowTrajectory(drive, straight));
+    //Add Auto
+    m_chooser.setDefaultOption("Autonomous", new Autonomous(drive, intake_catapult, auto1part1, auto1part2));
+    m_chooser.addOption("Straight", new FollowTrajectory(drive, straight));
     m_chooser.addOption("Grab cargo", new FollowTrajectory(drive, grabCargo));
     m_chooser.addOption("Spiral", new FollowTrajectory(drive, spiral));
     m_chooser.addOption("J", new FollowTrajectory(drive, j));
@@ -98,6 +104,8 @@ public class RobotContainer {
     m_chooser.addOption("S", new FollowTrajectory(drive, s));
     m_chooser.addOption("U", new FollowTrajectory(drive, u));
     m_chooser.addOption("V", new FollowTrajectory(drive, v));
+    m_chooser.addOption("Auto 1 1/2", new FollowTrajectory(drive, auto1part1));
+    m_chooser.addOption("Auto 1 2/2", new FollowTrajectory(drive, auto1part2));
 
 
 
@@ -143,7 +151,7 @@ public class RobotContainer {
 
 */
     new JoystickButton(manipulatorController, Button.kB.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.intake(-1, Direction.INTAKE), intake_catapult));
+      new InstantCommand(() -> intake_catapult.intake(1, Direction.INTAKE), intake_catapult));
 
     new JoystickButton(manipulatorController, Button.kA.value).whenPressed(
       new InstantCommand(() -> intake_catapult.intake(0, Direction.INTAKE), intake_catapult));
