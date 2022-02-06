@@ -86,7 +86,7 @@ public class RobotContainer {
     u = PathPlanner.loadPath("U", maxVelocity, maxAcceleration);
     v = PathPlanner.loadPath("V", maxVelocity, maxAcceleration);
     auto1part1 = PathPlanner.loadPath("Auto1Part1", maxVelocity, maxAcceleration);
-    auto1part2 = PathPlanner.loadPath("Auto1Part2", maxVelocity, maxAcceleration);
+    auto1part2 = PathPlanner.loadPath("Auto1Part2", maxVelocity, maxAcceleration, true);
 
     // Auton Paths
     // A chooser for autonomous commands
