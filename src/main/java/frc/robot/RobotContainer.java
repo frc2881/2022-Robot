@@ -48,7 +48,8 @@ public class RobotContainer {
   private final Trajectory s;
   private final Trajectory u;
   private final Trajectory v;
-
+  private final Trajectory auto1part1;
+  private final Trajectory auto1part2;
 
   private final SendableChooser<Command> m_chooser;
   
@@ -84,6 +85,8 @@ public class RobotContainer {
     s = PathPlanner.loadPath("S", maxVelocity, maxAcceleration);
     u = PathPlanner.loadPath("U", maxVelocity, maxAcceleration);
     v = PathPlanner.loadPath("V", maxVelocity, maxAcceleration);
+    auto1part1 = PathPlanner.loadPath("Auto1Part1", maxVelocity, maxAcceleration);
+    auto1part2 = PathPlanner.loadPath("Auto1Part2", maxVelocity, maxAcceleration);
 
     // Auton Paths
     // A chooser for autonomous commands
@@ -98,6 +101,8 @@ public class RobotContainer {
     m_chooser.addOption("S", new FollowTrajectory(drive, s));
     m_chooser.addOption("U", new FollowTrajectory(drive, u));
     m_chooser.addOption("V", new FollowTrajectory(drive, v));
+    m_chooser.addOption("Auto 1 1/2", new FollowTrajectory(drive, auto1part1));
+    m_chooser.addOption("Auto 1 2/2", new FollowTrajectory(drive, auto1part2));
 
 
 
