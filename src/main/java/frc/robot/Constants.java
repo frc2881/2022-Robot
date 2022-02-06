@@ -17,22 +17,26 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
-    public static final double kRamseteB = 2.0; 
+    public static final class Drive {
 
-    public static final double kRamseteZeta= 0.7; 
+        public static final double kRamseteB = 2.0; 
 
-    public static final double kS= 0.15734;
+        public static final double kRamseteZeta= 0.7; 
 
-    public static final double kV= 2.0487;
+        public static final double kS= 0.15734;
 
-    public static final double kA= 0.36811;
+        public static final double kV= 2.0487;
 
-    public static final double kPDriveVel = 2.6446;
+        public static final double kA= 0.36811;
 
-    public static final double kDDriveVel = 0;
+        public static final double kPDriveVel = 2.6446;
 
-    public static final double kTrackWidth = Units.inchesToMeters(22.5);
+        public static final double kDDriveVel = 0;
 
-    public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(kTrackWidth);
+        public static final double kTrackWidth = Units.inchesToMeters(22.5);
+
+        public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(kTrackWidth);
+
+    }
 
 }

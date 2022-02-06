@@ -24,6 +24,7 @@ public class Autonomous extends SequentialCommandGroup {
     addRequirements(intake_catapult);
 
     addCommands(
+      new WaitCommand(0),
       new InstantCommand(() -> intake_catapult.extend(), intake_catapult),
       new InstantCommand(() -> intake_catapult.intake(1, Direction.INTAKE), intake_catapult),
       new WaitCommand(2),   

@@ -7,10 +7,10 @@ package frc.robot;
 import com.pathplanner.lib.PathPlanner;
 
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,7 +29,7 @@ import frc.robot.utils.NavX;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  XboxController driverController = new XboxController(0);
+  PS4Controller driverController = new PS4Controller(0);
   XboxController manipulatorController = new XboxController(1);
 
   private final Intake_Catapult intake_catapult = new Intake_Catapult();
@@ -60,9 +60,9 @@ public class RobotContainer {
   //Split Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive, 
-    () -> getDriverLeftY(),
-    () -> getDriverRightY(),
-    () -> -getDriverRightX());
+    () -> driverController.getLeftY(),
+    () -> driverController.getRightY(),
+    () -> -driverController.getRightX()); //-getDriverRightX());
 
   /*
   private final RunArm runArm = new RunArm(
@@ -89,11 +89,8 @@ public class RobotContainer {
     auto1part1 = PathPlanner.loadPath("Auto1Part1", maxVelocity, maxAcceleration);
     auto1part2 = PathPlanner.loadPath("Auto1Part2", maxVelocity, maxAcceleration, true);
 
-    // Auton Paths
-    // A chooser for autonomous commands
-    // This way we can choose between Paths for Autonomous Period
+    // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
-    //Add Auto
     m_chooser.setDefaultOption("Autonomous", new Autonomous(drive, intake_catapult, auto1part1, auto1part2));
     m_chooser.addOption("Straight", new FollowTrajectory(drive, straight));
     m_chooser.addOption("Grab cargo", new FollowTrajectory(drive, grabCargo));
@@ -106,9 +103,6 @@ public class RobotContainer {
     m_chooser.addOption("V", new FollowTrajectory(drive, v));
     m_chooser.addOption("Auto 1 1/2", new FollowTrajectory(drive, auto1part1));
     m_chooser.addOption("Auto 1 2/2", new FollowTrajectory(drive, auto1part2));
-
-
-
 
     // Configure the button bindings
     configureButtonBindings();
@@ -130,6 +124,9 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+
+    //DRIVER PS4 CONTROLLER
+
     /*new JoystickButton(driverController, Button.kBumperRight.value)
             .whenPressed(() -> drive.setMaxOutput(0.5))
             .whenReleased(() -> drive.setMaxOutput(1));*/
@@ -147,68 +144,26 @@ public class RobotContainer {
 
       new JoystickButton(manipulatorController, XboxController.Button.kA.value)
             .whileHeld(new ArmIn(climber));
-
-
 */
-    new JoystickButton(manipulatorController, Button.kB.value).whenPressed(
+    new JoystickButton(driverController, PS4Controller.Button.kCircle.value).whenPressed(
       new InstantCommand(() -> intake_catapult.intake(1, Direction.INTAKE), intake_catapult));
 
-    new JoystickButton(manipulatorController, Button.kA.value).whenPressed(
+    new JoystickButton(driverController, PS4Controller.Button.kCross.value).whenPressed(
       new InstantCommand(() -> intake_catapult.intake(0, Direction.INTAKE), intake_catapult));
 
-    new JoystickButton(manipulatorController, Button.kX.value).whenPressed(
+    //MANIPULATOR XBOX CONTROLLER
+
+    new JoystickButton(manipulatorController, XboxController.Button.kB.value).whenPressed(
+      new InstantCommand(() -> intake_catapult.intake(1, Direction.INTAKE), intake_catapult));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kA.value).whenPressed(
+      new InstantCommand(() -> intake_catapult.intake(0, Direction.INTAKE), intake_catapult));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kX.value).whenPressed(
       new InstantCommand(() -> intake_catapult.extend(), intake_catapult));
     
-    new JoystickButton(manipulatorController, Button.kY.value).whenPressed(
+    new JoystickButton(manipulatorController, XboxController.Button.kY.value).whenPressed(
       new InstantCommand(() -> intake_catapult.retract(), intake_catapult));
-  }
-
-  private double getDriverLeftX() {
-    return(driverController.getRawAxis(0));
-  }
-//Used for: drive with Joysticks
-private double getDriverLeftY() {
-    return(driverController.getRawAxis(1));
-  }
-//Used for: drive with Joysticks
-private double getDriverRightX() {
-    return(driverController.getRawAxis(4));
-  }
-
-private double getDriverRightY() {
-    return(driverController.getRawAxis(5));
-  }
-
-private double getDriverLeftTrigger() {
-    return((driverController.getRawAxis(3) + 1) / 2);
-  }
-
-private double getDriverRightTrigger() {
-    return((driverController.getRawAxis(4) + 1) / 2);
-  }
-
-private double getManipulatorLeftX() {
-    return(manipulatorController.getRawAxis(0));
-  }
-
-private double getManipulatorLeftY() {
-    return(manipulatorController.getRawAxis(1));
-  }
-
-private double getManipulatorRightX() {
-    return(manipulatorController.getRawAxis(2));
-  }
-
-private double getManipulatorRightY() {
-    return(manipulatorController.getRawAxis(5));
-  }
-
-private double getManipulatorLeftTrigger() {
-    return((manipulatorController.getRawAxis(3) + 1) / 2);
-  }
-
-private double getManipulatorRightTrigger() {
-    return((manipulatorController.getRawAxis(4) + 1) / 2);
   }
 
 public Command getAutonomousCommand() {

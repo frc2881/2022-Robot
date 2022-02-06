@@ -21,12 +21,12 @@ public class FollowTrajectory extends CommandBase{
         
         addRequirements(m_drive);
 
-    RamseteController ramsetecontroller = new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta);
-    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.kS, Constants.kV, Constants.kA);
-    PIDController pidleft = new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel);
-    PIDController pidright = new PIDController(Constants.kPDriveVel, 0, Constants.kDDriveVel);
+    RamseteController ramsetecontroller = new RamseteController(Constants.Drive.kRamseteB, Constants.Drive.kRamseteZeta);
+    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Drive.kS, Constants.Drive.kV, Constants.Drive.kA);
+    PIDController pidleft = new PIDController(Constants.Drive.kPDriveVel, 0, Constants.Drive.kDDriveVel);
+    PIDController pidright = new PIDController(Constants.Drive.kPDriveVel, 0, Constants.Drive.kDDriveVel);
 
-    m_ramsete = new RamseteCommand(trajectory, drive::getPose, ramsetecontroller, feedforward, Constants.kKinematics,
+    m_ramsete = new RamseteCommand(trajectory, drive::getPose, ramsetecontroller, feedforward, Constants.Drive.kKinematics,
     drive::getWheelSpeeds, pidleft, pidright, drive::driveTankVolts, drive);
 
       // Called when the command is initially scheduled.
