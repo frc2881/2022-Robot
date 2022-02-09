@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.FollowTrajectory;
+import frc.robot.commands.RunArm;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake_Catapult;
 import frc.robot.subsystems.Intake_Catapult.Direction;
@@ -31,6 +33,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   PS4Controller driverController = new PS4Controller(0);
   XboxController manipulatorController = new XboxController(1);
+
+  private final Climber climber = new Climber();
 
   private final Intake_Catapult intake_catapult = new Intake_Catapult();
 
@@ -64,12 +68,12 @@ public class RobotContainer {
     () -> driverController.getRightY(),
     () -> -driverController.getRightX()); //-getDriverRightX());
 
-  /*
+
   private final RunArm runArm = new RunArm(
     climber, 
-    () -> getManipulatorLeftY());
+    () -> manipulatorController.getLeftY());
 
-    */
+
   
   public RobotContainer() {
 
@@ -108,7 +112,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(driveWithJoysticks);
-    // climber.setDefaultCommand(runArm);
+    climber.setDefaultCommand(runArm);
 
     // Use the scheduler to log the scheduling and execution of commands.
     // This way we don't need to put logging in every command
@@ -145,11 +149,11 @@ public class RobotContainer {
       new JoystickButton(manipulatorController, XboxController.Button.kA.value)
             .whileHeld(new ArmIn(climber));
 */
-    new JoystickButton(driverController, PS4Controller.Button.kCircle.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.intake(1, Direction.INTAKE), intake_catapult));
+    //new JoystickButton(driverController, PS4Controller.Button.kCircle.value).whenPressed(
+      //new InstantCommand(() -> intake_catapult.intake(1, Direction.INTAKE), intake_catapult));
 
-    new JoystickButton(driverController, PS4Controller.Button.kCross.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.intake(0, Direction.INTAKE), intake_catapult));
+    //new JoystickButton(driverController, PS4Controller.Button.kCross.value).whenPressed(
+      //new InstantCommand(() -> intake_catapult.intake(0, Direction.INTAKE), intake_catapult));
 
     //MANIPULATOR XBOX CONTROLLER
 
@@ -164,6 +168,12 @@ public class RobotContainer {
     
     new JoystickButton(manipulatorController, XboxController.Button.kY.value).whenPressed(
       new InstantCommand(() -> intake_catapult.retract(), intake_catapult));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).whenPressed(
+      new InstantCommand(() -> climber.armBack(), climber));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).whenPressed(
+      new InstantCommand(() -> climber.armUp(), climber));
   }
 
 public Command getAutonomousCommand() {
