@@ -71,7 +71,8 @@ public class RobotContainer {
 
   private final RunArm runArm = new RunArm(
     climber, 
-    () -> manipulatorController.getLeftY());
+    () -> -manipulatorController.getLeftY()
+    );
 
 
   
