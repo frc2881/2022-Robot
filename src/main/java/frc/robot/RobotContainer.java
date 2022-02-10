@@ -34,6 +34,14 @@ public class RobotContainer {
   PS4Controller driverController = new PS4Controller(0);
   XboxController manipulatorController = new XboxController(1);
 
+  public double applyDeadband(double input){
+    if(Math.abs(input) < 0.1){
+        return 0.0;
+    } else {
+        return input;
+    }
+  }
+
   private final Climber climber = new Climber();
 
   private final Intake_Catapult intake_catapult = new Intake_Catapult();
@@ -64,14 +72,15 @@ public class RobotContainer {
   //Split Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive, 
-    () -> driverController.getLeftY(),
-    () -> driverController.getRightY(),
-    () -> -driverController.getRightX()); //-getDriverRightX());
+    () -> applyDeadband(driverController.getLeftY()),
+    () -> applyDeadband(driverController.getRightY()),
+    () -> applyDeadband(-driverController.getRightX())
+    );
 
 
   private final RunArm runArm = new RunArm(
     climber, 
-    () -> -manipulatorController.getLeftY()
+    () -> applyDeadband(-manipulatorController.getLeftY())
     );
 
 
