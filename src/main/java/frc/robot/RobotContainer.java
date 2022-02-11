@@ -83,16 +83,21 @@ public class RobotContainer {
     () -> applyDeadband(-manipulatorController.getLeftY())
     );
 
+  //public final boolean competitionMode = new 
 
-  
+  public void PneumaticDisabledState() {  
+    intake_catapult.retract();
+    climber.armUp(); 
+  }
+ 
   public RobotContainer() {
 
     double maxVelocity = 2;
     double maxAcceleration = 2;
-    
+
     //Trajectories from Path Planner
-    straight = PathPlanner.loadPath("Straight", maxAcceleration, maxVelocity);
-    grabCargo = PathPlanner.loadPath("Grab cargo", maxAcceleration, maxVelocity);
+    straight = PathPlanner.loadPath("Straight", maxVelocity, maxAcceleration);
+    grabCargo = PathPlanner.loadPath("Grab cargo", maxVelocity, maxAcceleration);
     spiral = PathPlanner.loadPath("Spiral", maxVelocity, maxAcceleration);
     j = PathPlanner.loadPath("J", maxVelocity, maxAcceleration);
     m = PathPlanner.loadPath("M", maxVelocity, maxAcceleration);
