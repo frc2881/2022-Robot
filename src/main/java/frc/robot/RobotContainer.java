@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Autonomous;
+import frc.robot.commands.ClimberOverride;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.FollowTrajectory;
 import frc.robot.commands.RunArm;
@@ -189,6 +190,9 @@ public class RobotContainer {
 
     new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).whenPressed(
       new InstantCommand(() -> climber.armUp(), climber));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kStart.value)
+      .whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
   }
 
 public Command getAutonomousCommand() {
