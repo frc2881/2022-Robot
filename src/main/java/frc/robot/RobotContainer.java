@@ -25,7 +25,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake_Catapult;
 import frc.robot.subsystems.Intake_Catapult.Direction;
-import frc.robot.subsystems.Pneumatics;
+// import frc.robot.subsystems.Pneumatics;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
 
@@ -46,7 +46,7 @@ public class RobotContainer {
 
   private final Intake_Catapult intake_catapult = new Intake_Catapult();
 
-  private final Pneumatics pneumatics = new Pneumatics();
+  // private final Pneumatics pneumatics = new Pneumatics();
   // private final Climber climber = new Climber();
   private final NavX navx = new NavX();
 

@@ -3,7 +3,6 @@ package frc.robot.utils;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.SPI;
 
     public class NavX extends AHRS {
@@ -29,7 +28,8 @@ import edu.wpi.first.wpilibj.SPI;
          *
          * @return the velocity of the robot.
          */
-        private double getVelocity() {
+        /*
+         private double getVelocity() {
           // Get the X and Y velocity of the robot.
           double x = getVelocityX();
           double y = getVelocityY();
@@ -37,7 +37,8 @@ import edu.wpi.first.wpilibj.SPI;
           // Compute and return the Euclidean velocity of the robot.
           return Math.sqrt((x * x) + (y * y));
         }
-      
+        */
+
         /**
          * Gets a rotation matrix representing the robot's current heading.
         *
