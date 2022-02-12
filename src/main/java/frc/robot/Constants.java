@@ -37,6 +37,7 @@ public final class Constants {
 
         public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(kTrackWidth);
 
+        public static final int kCurrentLimit = (60);
     }
 
 }

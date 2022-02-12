@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.utils.GearRatio;
 import frc.robot.utils.NavX;
 
@@ -36,21 +37,25 @@ public class Drive extends SubsystemBase {
             leftFront.restoreFactoryDefaults();
             leftFront.setInverted(false);
             leftFront.setIdleMode(IdleMode.kBrake);
+            leftFront.setSmartCurrentLimit(Constants.Drive.kCurrentLimit);
 
         leftRear = new CANSparkMax(12, MotorType.kBrushless);
             leftRear.restoreFactoryDefaults();
             leftRear.setInverted(false);
             leftRear.setIdleMode(IdleMode.kBrake);
+            leftRear.setSmartCurrentLimit(Constants.Drive.kCurrentLimit);
         
         rightFront = new CANSparkMax(13, MotorType.kBrushless);
             rightFront.restoreFactoryDefaults();
             rightFront.setInverted(true);
             rightFront.setIdleMode(IdleMode.kBrake);
+            rightFront.setSmartCurrentLimit(Constants.Drive.kCurrentLimit);
 
         rightRear = new CANSparkMax(14, MotorType.kBrushless);
             rightRear.restoreFactoryDefaults();
             rightRear.setInverted(true);
             rightRear.setIdleMode(IdleMode.kBrake);
+            rightRear.setSmartCurrentLimit(Constants.Drive.kCurrentLimit);
         
         driveTrain = new DifferentialDrive(leftFront, rightFront);
         
