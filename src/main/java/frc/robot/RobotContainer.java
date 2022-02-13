@@ -21,12 +21,14 @@ import frc.robot.commands.Autonomous;
 import frc.robot.commands.ClimberOverride;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.FollowTrajectory;
+import frc.robot.commands.LaunchCatapult;
 import frc.robot.commands.RunArm;
 import frc.robot.commands.RunIntake;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake_Catapult;
-import frc.robot.subsystems.Intake_Catapult.Direction;
+import frc.robot.subsystems.Intake_Catapult.Catapult_Direction;
+import frc.robot.subsystems.Intake_Catapult.Feeder_Direction;
 // import frc.robot.subsystems.Pneumatics;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
@@ -91,7 +93,7 @@ public class RobotContainer {
 
   public void resetRobot() {
     if (robotResetState == true) {
-      intake_catapult.intake(0, Direction.INTAKE);
+      intake_catapult.intake_feed(0, Feeder_Direction.INTAKE);
       intake_catapult.retract();
       climber.armUp(); 
       System.out.println("reset robot");
@@ -159,31 +161,8 @@ public class RobotContainer {
 
     //DRIVER PS4 CONTROLLER
 
-    /*new JoystickButton(driverController, Button.kBumperRight.value)
-            .whenPressed(() -> drive.setMaxOutput(0.5))
-            .whenReleased(() -> drive.setMaxOutput(1));*/
-
-     /*new JoystickButton(driverController, Button.kA.value)
-            .whenHeld(new FollowTrajectory(drive, trajectory1));
-
-     new JoystickButton(driverController, Button.kB.value)
-            .whenPressed(() -> drive.driveTankVolts(3, 3))
-            .whenReleased(() -> drive.driveTankVolts(0, 0));*/
-    
-/*
-      new JoystickButton(manipulatorController, XboxController.Button.kY.value)
-            .whileHeld(new ArmOut(climber));
-
-      new JoystickButton(manipulatorController, XboxController.Button.kA.value)
-            .whileHeld(new ArmIn(climber));
-*/
-    //new JoystickButton(driverController, PS4Controller.Button.kCircle.value).whenPressed(
-      //new InstantCommand(() -> intake_catapult.intake(1, Direction.INTAKE), intake_catapult));
-
-    //new JoystickButton(driverController, PS4Controller.Button.kCross.value).whenPressed(
-      //new InstantCommand(() -> intake_catapult.intake(0, Direction.INTAKE), intake_catapult));
-
     //MANIPULATOR XBOX CONTROLLER
+
     
     new JoystickButton(manipulatorController, XboxController.Button.kB.value)
     .whileHeld(new RunIntake(intake_catapult));
@@ -200,8 +179,18 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).whenPressed(
       new InstantCommand(() -> climber.armUp(), climber));
 
+    new JoystickButton(manipulatorController, XboxController.Button.kBack.value).whileHeld( //LEFT SMALL BUTTON
+      new LaunchCatapult(intake_catapult, Catapult_Direction.LAUNCH, Catapult_Direction.LAUNCH));
+
+    //new JoystickButton(manipulatorController, XboxController.Button.kStart.value).whileHeld( 
+      //new LaunchSequence(intake_catapult));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kRightStick.value).whileHeld(  
+      new LaunchCatapult(intake_catapult, Catapult_Direction.RESET, Catapult_Direction.RESET));
+    
+
     new JoystickButton(manipulatorController, XboxController.Button.kStart.value)
-      .whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
+    .whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY()))); 
   }
 
 public Command getAutonomousCommand() {
