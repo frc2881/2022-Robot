@@ -7,11 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
-public class ArmIn extends CommandBase {
+public class ArmUp extends CommandBase {
 
   private Climber m_climber;
   /** Creates a new ArmIn. */
-  public ArmIn(Climber climber) {
+  public ArmUp(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = climber;
     addRequirements(m_climber);

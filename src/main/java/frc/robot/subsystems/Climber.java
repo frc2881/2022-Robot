@@ -53,7 +53,7 @@ public class Climber extends SubsystemBase {
   }
 
 public void _armBack(){
-  climberSolenoid.set(false);
+  climberSolenoid.set(true);
 }
   /**
    * Brings the arm to back position
@@ -65,7 +65,7 @@ public void _armBack(){
   }
 
   public void _armUp(){
-    climberSolenoid.set(true);
+    climberSolenoid.set(false);
   }
   /**
    * Brings the arm to upright position
