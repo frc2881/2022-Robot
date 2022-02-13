@@ -23,6 +23,7 @@ import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.FollowTrajectory;
 import frc.robot.commands.LaunchCatapult;
 import frc.robot.commands.RunArm;
+import frc.robot.commands.RunIntake;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake_Catapult;
@@ -162,11 +163,9 @@ public class RobotContainer {
 
     //MANIPULATOR XBOX CONTROLLER
 
-    new JoystickButton(manipulatorController, XboxController.Button.kB.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.intake_feed(1, Feeder_Direction.INTAKE), intake_catapult));
-
-    new JoystickButton(manipulatorController, XboxController.Button.kA.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.intake_feed(0, Feeder_Direction.INTAKE), intake_catapult));
+    
+    new JoystickButton(manipulatorController, XboxController.Button.kB.value)
+    .whileHeld(new RunIntake(intake_catapult));
 
     new JoystickButton(manipulatorController, XboxController.Button.kX.value).whenPressed(
       new InstantCommand(() -> intake_catapult.extend(), intake_catapult));
