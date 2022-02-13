@@ -106,7 +106,7 @@ public class Intake_Catapult extends SubsystemBase {
         leftCatapult.set(speed);
         }
         else{
-        leftCatapult.set(speed/3);
+        leftCatapult.set(speed/2);
         }
         
     }
@@ -124,7 +124,7 @@ public class Intake_Catapult extends SubsystemBase {
         rightCatapult.set(speed);
         }
         else{
-        rightCatapult.set(speed/3);   
+        rightCatapult.set(speed/2);   
         }
 
     }

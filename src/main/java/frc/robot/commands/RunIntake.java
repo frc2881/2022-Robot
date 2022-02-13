@@ -8,7 +8,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake_Catapult;
-import frc.robot.subsystems.Intake_Catapult.Direction;
+import frc.robot.subsystems.Intake_Catapult.Feeder_Direction;
 
 public class RunIntake extends CommandBase {
 
@@ -22,7 +22,7 @@ public class RunIntake extends CommandBase {
   @Override
   public void initialize() {
     
-    intake_catapult.intake(1, Direction.INTAKE);
+    intake_catapult.intake_feed(1, Feeder_Direction.INTAKE);
     
   }
 
@@ -34,7 +34,7 @@ public class RunIntake extends CommandBase {
   @Override
   public void end(boolean interrupted) {
 
-    intake_catapult.intake(0, Direction.INTAKE);
+    intake_catapult.intake_feed(0, Feeder_Direction.INTAKE);
     
   }
 
