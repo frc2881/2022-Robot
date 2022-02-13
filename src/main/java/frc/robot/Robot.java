@@ -57,9 +57,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     Log.mode("DISABLED");
-    if (isCompetitionMode() == false) {
-        //m_robotContainer.PneumaticDisabledState();
-    } 
+    m_robotContainer.robotShouldReset();
+
   }
 
   @Override
@@ -74,6 +73,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    m_robotContainer.resetRobot();
   }
 
   /** This function is called periodically during autonomous. */
@@ -90,7 +90,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    
+    if(!isCompetitionMode()) {
+      m_robotContainer.resetRobot();
+    }
   }
 
   /** This function is called periodically during operator control. */
@@ -101,6 +103,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    m_robotContainer.resetRobot();
   }
 
   /** This function is called periodically during test mode. */

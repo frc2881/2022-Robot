@@ -66,6 +66,8 @@ public class RobotContainer {
   private final Trajectory auto1part2;
 
   private final SendableChooser<Command> m_chooser;
+
+  public boolean robotResetState = true;
   
   //Arcade drive 
   PowerDistribution powerHub = new PowerDistribution(2, ModuleType.kRev);
@@ -86,9 +88,18 @@ public class RobotContainer {
 
   //public final boolean competitionMode = new 
 
-  public void PneumaticDisabledState() {  
-    intake_catapult.retract();
-    climber.armUp(); 
+  public void resetRobot() {
+    if (robotResetState == true) {
+      intake_catapult.intake(0, Direction.INTAKE);
+      intake_catapult.retract();
+      climber.armUp(); 
+      System.out.println("reset robot");
+      robotResetState = false;
+    }
+  }
+
+  public void robotShouldReset() {
+    robotResetState = true;
   }
  
   public RobotContainer() {
