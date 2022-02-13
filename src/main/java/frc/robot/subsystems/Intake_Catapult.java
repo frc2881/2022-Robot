@@ -12,40 +12,57 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake_Catapult extends SubsystemBase {
 
-    private CANSparkMax intake;
+    private CANSparkMax intake_feeder;
     private CANSparkMax leftCatapult;
     private CANSparkMax rightCatapult;
     private Solenoid intakeSolenoid;
 
-    public enum Direction {INTAKE, EJECT}
+    public enum Feeder_Direction {INTAKE, EJECT}
+    public enum Catapult_Direction {LAUNCH, RESET}
+    public enum Intake_Arm_Direction {EXTEND, RETRACT}
+
+
 
     public Intake_Catapult(){
       
-        intake = new CANSparkMax(15, MotorType.kBrushless);
-            intake.setInverted(false);
-            intake.setIdleMode(IdleMode.kBrake);
-            intake.setSmartCurrentLimit(16);
+        intake_feeder = new CANSparkMax(15, MotorType.kBrushless);
+            intake_feeder.restoreFactoryDefaults();
+            intake_feeder.setInverted(false);
+            intake_feeder.setIdleMode(IdleMode.kBrake);
+            intake_feeder.setSmartCurrentLimit(16);
 
-        //two motor controllers, one follows the other
-        /*
         leftCatapult = new CANSparkMax(16, MotorType.kBrushless);
+            leftCatapult.restoreFactoryDefaults();
             leftCatapult.setInverted(false);
             leftCatapult.setIdleMode(IdleMode.kBrake);
+            leftCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+            leftCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+            leftCatapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)4.5);
+            leftCatapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)0);
+            leftCatapult.getEncoder().setPosition(0);
+            leftCatapult.setSmartCurrentLimit(80);
         
         rightCatapult = new CANSparkMax(17, MotorType.kBrushless);
-            rightCatapult.setInverted(false);
+            rightCatapult.restoreFactoryDefaults();
+            rightCatapult.setInverted(true);
             rightCatapult.setIdleMode(IdleMode.kBrake);
-            */
+            rightCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+            rightCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+            rightCatapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)4.5);
+            rightCatapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)0);
+            rightCatapult.getEncoder().setPosition(0);
+            rightCatapult.setSmartCurrentLimit(80);
+            
 
         intakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, 0);
 
     }
 
-    public void intake(double speed, Direction state){
-        if(state == Direction.INTAKE)
-        intake.set(-speed);
+    public void intake_feed(double speed, Feeder_Direction state){
+        if(state == Feeder_Direction.INTAKE)
+        intake_feeder.set(-speed);
         else{
-            intake.set(speed);
+            intake_feeder.set(speed);
         }
     }
 
@@ -54,7 +71,7 @@ public class Intake_Catapult extends SubsystemBase {
     }
 
     public void rightCatapult(double speed){
-        rightCatapult.set(-speed);
+        rightCatapult.set(speed);
     }
 
     public void extend(){
@@ -68,7 +85,7 @@ public class Intake_Catapult extends SubsystemBase {
     @Override
       public void initSendable(SendableBuilder builder) {  
         super.initSendable(builder);
-        builder.addDoubleProperty("Current", () -> intake.getOutputCurrent(),  null);
+        builder.addDoubleProperty("Current", () -> intake_feeder.getOutputCurrent(),  null);
     }
 
 }
