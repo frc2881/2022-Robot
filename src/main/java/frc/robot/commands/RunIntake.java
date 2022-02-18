@@ -7,22 +7,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake_Catapult;
-import frc.robot.subsystems.Intake_Catapult.Feeder_Direction;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.Feeder_Direction;
 
 public class RunIntake extends CommandBase {
 
-  private Intake_Catapult intake_catapult;
+  private Intake intake;
   
-  public RunIntake(Intake_Catapult intake_catapult) {
-    this.intake_catapult = intake_catapult;
+  public RunIntake(Intake intake) {
+    this.intake = intake;
   }
 
   // called when the command is initially scheduled
   @Override
   public void initialize() {
     
-    intake_catapult.intake_feed(1, Feeder_Direction.INTAKE);
+    intake.intake_feed(1, Feeder_Direction.INTAKE);
     
   }
 
@@ -34,7 +34,7 @@ public class RunIntake extends CommandBase {
   @Override
   public void end(boolean interrupted) {
 
-    intake_catapult.intake_feed(0, Feeder_Direction.INTAKE);
+    intake.intake_feed(0, Feeder_Direction.INTAKE);
     
   }
 
