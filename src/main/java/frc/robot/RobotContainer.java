@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.ClimberOverride;
+import frc.robot.commands.ClimberSequence;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.FollowTrajectory;
 import frc.robot.commands.LaunchRightCatapult;
@@ -166,11 +167,33 @@ public class RobotContainer {
 
     //MANIPULATOR XBOX CONTROLLER
 
-    new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).whenPressed(
-      new InstantCommand(() -> climber.armBack(), climber));
+    new JoystickButton(manipulatorController, XboxController.Button.kX.value).whileHeld(
+      new RunIntake(intake_catapult));
+    
+    new JoystickButton(manipulatorController, XboxController.Button.kY.value).whenPressed(
+      new InstantCommand(() -> intake_catapult.extend(), intake_catapult));
+    
+    new JoystickButton(manipulatorController, XboxController.Button.kA.value).whenPressed(
+      new InstantCommand(() -> intake_catapult.retract(), intake_catapult));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).whenHeld(
+      new ClimberSequence(climber));
 
     new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).whenPressed(
-      new InstantCommand(() -> climber.armUp(), climber));
+      new InstantCommand(() -> climber.armToggle()));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kBack.value).whileHeld( //LEFT SMALL BUTTON
+      new LaunchCatapult(intake_catapult, Catapult_Direction.LAUNCH, Catapult_Direction.LAUNCH));
+
+    //new JoystickButton(manipulatorController, XboxController.Button.kStart.value).whileHeld( 
+      //new LaunchSequence(intake_catapult));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kRightStick.value).whileHeld(  
+      new LaunchCatapult(intake_catapult, Catapult_Direction.RESET, Catapult_Direction.RESET));
+    
+
+    new JoystickButton(manipulatorController, XboxController.Button.kStart.value)
+    .whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY()))); 
   }
 
 public Command getAutonomousCommand() {

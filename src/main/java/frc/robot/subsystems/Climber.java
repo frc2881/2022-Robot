@@ -28,9 +28,10 @@ public class Climber extends SubsystemBase {
           leadScrew.setInverted(false);
           leadScrew.setIdleMode(IdleMode.kBrake);   
           leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-          leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)23.8);
+          leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)26);
           leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
           leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)0.5);
+          leadScrew.setOpenLoopRampRate(0.08);
 
       climbenc = leadScrew.getEncoder();
 
@@ -76,15 +77,25 @@ public void _armBack(){
     }
   }
 
+  public void _armToggle(){
+    climberSolenoid.toggle();
+  }
+
+  public void armToggle(){
+    if(DriverStation.getMatchTime() < 35){
+      _armToggle();
+      }
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
 
-  public void getClimbEncoderPostion(){
-    climbenc.getPosition();
+  public Double getClimbEncoderPostion(){
+    return climbenc.getPosition();
   }
+
 
   public void unenableEncoderSoftLimit(){
     leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
