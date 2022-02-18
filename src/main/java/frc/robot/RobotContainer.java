@@ -164,13 +164,13 @@ public class RobotContainer {
     //MANIPULATOR XBOX CONTROLLER
 
     
-    new JoystickButton(manipulatorController, XboxController.Button.kB.value)
-    .whileHeld(new RunIntake(intake_catapult));
-
-    new JoystickButton(manipulatorController, XboxController.Button.kX.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.extend(), intake_catapult));
+    new JoystickButton(manipulatorController, XboxController.Button.kX.value).whileHeld(
+      new RunIntake(intake_catapult));
     
     new JoystickButton(manipulatorController, XboxController.Button.kY.value).whenPressed(
+      new InstantCommand(() -> intake_catapult.extend(), intake_catapult));
+    
+    new JoystickButton(manipulatorController, XboxController.Button.kA.value).whenPressed(
       new InstantCommand(() -> intake_catapult.retract(), intake_catapult));
 
     new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).whenPressed(
