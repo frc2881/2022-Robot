@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class RunArm extends CommandBase {
-  /** Creates a new moveArm. */
-    DoubleSupplier m_speed;
-    private Climber m_climber;
+  DoubleSupplier m_speed;
+  private Climber m_climber;
 
+  /** Creates a new RunArm. */
   public RunArm(Climber climber, DoubleSupplier speed) {
       m_speed = speed;
       m_climber = climber;
@@ -20,14 +20,14 @@ public class RunArm extends CommandBase {
       addRequirements(m_climber);
   }
 
-// Called when the command is initially scheduled.
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      m_climber.moveArm(m_speed.getAsDouble());
+    m_climber.moveArm(m_speed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

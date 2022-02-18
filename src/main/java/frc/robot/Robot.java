@@ -21,7 +21,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  public static boolean competitionMode;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -33,8 +32,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-
-    
   }
 
   /**
@@ -58,7 +55,6 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     Log.mode("DISABLED");
     m_robotContainer.robotShouldReset();
-
   }
 
   @Override
@@ -113,8 +109,6 @@ public class Robot extends TimedRobot {
   public static boolean isCompetitionMode() {
     // In Practice mode and in a real competition getMatchTime() returns time left in this
     // part of the match.  Otherwise it just returns -1.0.
-    competitionMode = DriverStation.getMatchTime() != -1;
-    return competitionMode;
-}
-
+    return DriverStation.getMatchTime() != -1;
+  }
 }

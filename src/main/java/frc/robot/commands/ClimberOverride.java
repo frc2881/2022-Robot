@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class ClimberOverride extends CommandBase {
-  
   private Climber m_climber;
   DoubleSupplier m_speed;
 
@@ -21,13 +20,12 @@ public class ClimberOverride extends CommandBase {
     m_speed = speed;
 
     addRequirements(climber);
-
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climber.unenableEncoderSoftLimit();
+    m_climber.disableEncoderSoftLimit();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

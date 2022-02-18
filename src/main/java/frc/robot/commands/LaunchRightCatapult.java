@@ -5,36 +5,31 @@ import frc.robot.subsystems.RightCatapult;
 import frc.robot.subsystems.RightCatapult.Right_Catapult_Direction;
 
 public class LaunchRightCatapult extends CommandBase {
-@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  private RightCatapult catapult;
+  private Right_Catapult_Direction direction;
 
-private RightCatapult rightCatapult;
-private Right_Catapult_Direction rightCatapultState;
+  public LaunchRightCatapult(RightCatapult rightCatapult, Right_Catapult_Direction direction) {
+    this.catapult = rightCatapult;
+    this.direction = direction;        
+    addRequirements(rightCatapult);
+  }
 
-    public LaunchRightCatapult(RightCatapult rightCatapult, Right_Catapult_Direction left, Right_Catapult_Direction right) {
-
-        this.rightCatapult = rightCatapult;
-        this.rightCatapultState = right;        
-        addRequirements(rightCatapult);
+  @Override
+  public void execute() {
+    if(direction == Right_Catapult_Direction.LAUNCH) {
+      catapult.run(1);
+    } else if(direction == Right_Catapult_Direction.RESET) {
+      catapult.run(-.1);
     }
+  }
 
-    @Override
-    public void execute() {
+  @Override
+  public void end(boolean interrupted) {
+    catapult.run(0);           
+  }
 
-        if(rightCatapultState == Right_Catapult_Direction.LAUNCH){
-            rightCatapult.rightCatapult(1);
-        } else if(rightCatapultState == Right_Catapult_Direction.RESET){
-            rightCatapult.rightCatapult(-.1);
-        }
-
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        rightCatapult.rightCatapult(0);           
-    }
-
-      @Override
-    public boolean isFinished() {
-        return false;
-    }
-} 
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+}

@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class ArmUp extends CommandBase {
-
   private Climber m_climber;
-  /** Creates a new ArmIn. */
+
+  /** Creates a new ArmUp. */
   public ArmUp(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = climber;
@@ -25,10 +25,7 @@ public class ArmUp extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-
-    
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

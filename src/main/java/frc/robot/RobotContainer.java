@@ -21,16 +21,15 @@ import frc.robot.commands.ClimberOverride;
 import frc.robot.commands.ClimberSequence;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.FollowTrajectory;
-import frc.robot.commands.LaunchRightCatapult;
 import frc.robot.commands.RunArm;
 import frc.robot.commands.RunIntake;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Intake.Feeder_Direction;
+import frc.robot.subsystems.Intake.Direction;
 import frc.robot.subsystems.LeftCatapult;
+import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.RightCatapult;
-import frc.robot.subsystems.RightCatapult.Right_Catapult_Direction;
 // import frc.robot.subsystems.Pneumatics;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
@@ -40,22 +39,13 @@ public class RobotContainer {
   XboxController driverController = new XboxController(0);
   XboxController manipulatorController = new XboxController(1);
 
-  public double applyDeadband(double input){
-    if(Math.abs(input) < 0.1){
-        return 0.0;
-    } else {
-        return input;
-    }
-  }
-
+  private final Pneumatics pneumatics = new Pneumatics();
   private final Climber climber = new Climber();
 
   private final Intake intake = new Intake();
   private final LeftCatapult leftCatapult = new LeftCatapult();
   private final RightCatapult rightCatapult = new RightCatapult();
 
-  // private final Pneumatics pneumatics = new Pneumatics();
-  // private final Climber climber = new Climber();
   private final NavX navx = new NavX();
 
   private final Drive drive = new Drive(navx);
@@ -97,7 +87,7 @@ public class RobotContainer {
 
   public void resetRobot() {
     if (robotResetState == true) {
-      intake.intake_feed(0, Feeder_Direction.INTAKE);
+      intake.run(0, Direction.INTAKE);
       intake.retract();
       climber.armUp(); 
       System.out.println("reset robot");
@@ -110,7 +100,6 @@ public class RobotContainer {
   }
  
   public RobotContainer() {
-
     double maxVelocity = 2;
     double maxAcceleration = 2;
 
@@ -162,7 +151,6 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-
     //DRIVER PS4 CONTROLLER
 
     //MANIPULATOR XBOX CONTROLLER
@@ -196,7 +184,15 @@ public class RobotContainer {
     .whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY()))); 
   }
 
-public Command getAutonomousCommand() {
+  public double applyDeadband(double input) {
+    if(Math.abs(input) < 0.1) {
+      return 0.0;
+    } else {
+      return input;
+    }
+  }
+
+  public Command getAutonomousCommand() {
     return m_chooser.getSelected();
   }
 }

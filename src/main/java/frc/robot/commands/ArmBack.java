@@ -9,7 +9,8 @@ import frc.robot.subsystems.Climber;
 
 public class ArmBack extends CommandBase {
   private Climber m_climber;
-  /** Creates a new ArmOut. */
+
+  /** Creates a new ArmBack. */
   public ArmBack(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_climber = climber;
@@ -25,9 +26,7 @@ public class ArmBack extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

@@ -2,16 +2,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Intake.Intake_Arm_Direction;
+import frc.robot.subsystems.Intake.State;
 
 public class IntakeArm extends CommandBase {
-
   private Intake intake;
-  private Intake_Arm_Direction state;
+  private State state;
 
   /** Creates a new Intake_Arm. */
-  public IntakeArm(Intake intake, Intake_Arm_Direction state) {
-
+  public IntakeArm(Intake intake, State state) {
     this.intake = intake;
     this.state = state;
     addRequirements(intake);
@@ -19,16 +17,14 @@ public class IntakeArm extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    if(state == Intake_Arm_Direction.EXTEND)
+    if(state == State.EXTEND) {
       intake.extend();
-    else{
+    } else {
       intake.retract();
     }
   }

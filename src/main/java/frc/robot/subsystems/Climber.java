@@ -24,21 +24,21 @@ public class Climber extends SubsystemBase {
 
   public Climber() {
     leadScrew = new CANSparkMax(18, MotorType.kBrushless);
-          leadScrew.restoreFactoryDefaults();
-          leadScrew.setInverted(false);
-          leadScrew.setIdleMode(IdleMode.kBrake);   
-          leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-          leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)26);
-          leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-          leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)0.5);
-          leadScrew.setOpenLoopRampRate(0.08);
+        leadScrew.restoreFactoryDefaults();
+        leadScrew.setInverted(false);
+        leadScrew.setIdleMode(IdleMode.kBrake);   
+        leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+        leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)26);
+        leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+        leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)0.5);
+        leadScrew.setOpenLoopRampRate(0.08);
 
-      climbenc = leadScrew.getEncoder();
+    climbenc = leadScrew.getEncoder();
 
-      climbenc.setPositionConversionFactor((1.0/2.0) / 3.0);
-
+    climbenc.setPositionConversionFactor((1.0/2.0) / 3.0);
   }
-  public void _moveArm(double speed){
+
+  public void _moveArm(double speed) {
     leadScrew.set(speed);
   }
 
@@ -47,44 +47,46 @@ public class Climber extends SubsystemBase {
    * 
    * @param speed positive value extends
    */
-  public void moveArm(double speed){
-    if(DriverStation.getMatchTime() < 35){
+  public void moveArm(double speed) {
+    if(DriverStation.getMatchTime() < 35) {
       _moveArm(speed);
     }
   }
 
-public void _armBack(){
-  climberSolenoid.set(true);
-}
+  public void _armBack() {
+    climberSolenoid.set(true);
+  }
+
   /**
    * Brings the arm to back position
    */
-  public void armBack(){
-    if(DriverStation.getMatchTime() < 35){
-    _armBack();
+  public void armBack() {
+    if(DriverStation.getMatchTime() < 35) {
+      _armBack();
     }
   }
 
-  public void _armUp(){
+  public void _armUp() {
     climberSolenoid.set(false);
   }
+
   /**
    * Brings the arm to upright position
    */
-  public void armUp(){
-    if(DriverStation.getMatchTime() < 35){
-    _armUp();
+  public void armUp() {
+    if(DriverStation.getMatchTime() < 35) {
+      _armUp();
     }
   }
 
-  public void _armToggle(){
+  public void _armToggle() {
     climberSolenoid.toggle();
   }
 
-  public void armToggle(){
-    if(DriverStation.getMatchTime() < 35){
+  public void armToggle() {
+    if(DriverStation.getMatchTime() < 35) {
       _armToggle();
-      }
+    }
   }
 
   @Override
@@ -96,8 +98,7 @@ public void _armBack(){
     return climbenc.getPosition();
   }
 
-
-  public void unenableEncoderSoftLimit(){
+  public void disableEncoderSoftLimit(){
     leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
     leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
   }
@@ -112,10 +113,9 @@ public void _armBack(){
   }
 
   @Override
-    public void initSendable(SendableBuilder builder) {  
-      super.initSendable(builder);
-      builder.addDoubleProperty("Climber Postion", () -> climbenc.getPosition(),  null);
-      builder.addDoubleProperty("Current", () -> leadScrew.getOutputCurrent(),  null);
-    }
-
+  public void initSendable(SendableBuilder builder) {  
+    super.initSendable(builder);
+    builder.addDoubleProperty("Climber Postion", () -> climbenc.getPosition(),  null);
+    builder.addDoubleProperty("Current", () -> leadScrew.getOutputCurrent(),  null);
+  }
 }

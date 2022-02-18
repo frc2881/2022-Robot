@@ -72,7 +72,6 @@ public class Drive extends SubsystemBase {
         leftenc.setVelocityConversionFactor(GearRatio.measureDist(1, 10, 50, 4) / 60);
         rightenc.setVelocityConversionFactor(GearRatio.measureDist(1, 10, 50, 4) / 60);
 
-
         leftRear.follow(leftFront);
         rightRear.follow(rightFront);
 
@@ -101,12 +100,12 @@ public class Drive extends SubsystemBase {
 
     public Pose2d getPose() {
         return odometry.getPoseMeters();
-      }
+    }
 
     public void resetEncoders()
     {
-      leftenc.setPosition(0);
-      rightenc.setPosition(0);
+        leftenc.setPosition(0);
+        rightenc.setPosition(0);
     }
 
     public void resetOdometry(Pose2d pose) {
@@ -117,22 +116,20 @@ public class Drive extends SubsystemBase {
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(-leftenc.getVelocity(),
         -rightenc.getVelocity());
-      }
+    }
 
     public void driveTankVolts(double leftVolts, double rightVolts) {
         leftFront.setVoltage(-leftVolts);
         rightFront.setVoltage(-rightVolts);
-        System.out.println(leftVolts + " " + "hi"+ rightVolts);
         driveTrain.feed();
-      }
+    }
 
-      @Override
-      public void initSendable(SendableBuilder builder) {  
+    @Override
+    public void initSendable(SendableBuilder builder) {  
         super.initSendable(builder);
         builder.addDoubleProperty("Left Position", () -> -leftenc.getPosition(),  null);
         builder.addDoubleProperty("Right Position", () -> -rightenc.getPosition(),  null);
         builder.addDoubleProperty("Left Velocity", () -> -leftenc.getVelocity(),  null);
         builder.addDoubleProperty("Right Velocity", () -> -rightenc.getVelocity(),  null);
-
-      }
+    }
 }

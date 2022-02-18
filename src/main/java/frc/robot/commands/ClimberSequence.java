@@ -4,31 +4,18 @@
 
 package frc.robot.commands;
 
-
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Climber;
 
 /** Add your docs here. */
-public class ClimberSequence extends SequentialCommandGroup{
-
-
-
-    public ClimberSequence(Climber climber){
-
-
-        
-        addCommands(
-
-            new ArmToLength(climber, -1.0, .5),
-            new ArmToLength(climber, 1.0, 5.0),
-            new ArmBack(climber),
-            new ArmToLength(climber, 1.0, 23.8),
-            new ArmUp(climber)
-
-
-        );
-    }
+public class ClimberSequence extends SequentialCommandGroup {
+  public ClimberSequence(Climber climber) {
+    addCommands(
+        new ArmToLength(climber, -1.0, .5),
+        new ArmToLength(climber, 1.0, 5.0),
+        new ArmBack(climber),
+        new ArmToLength(climber, 1.0, 23.8),
+        new ArmUp(climber)
+    );
+  }
 }
-
-
-
