@@ -35,7 +35,7 @@ import frc.robot.utils.NavX;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  PS4Controller driverController = new PS4Controller(0);
+  XboxController driverController = new XboxController(0);
   XboxController manipulatorController = new XboxController(1);
 
   public double applyDeadband(double input){
