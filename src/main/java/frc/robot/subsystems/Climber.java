@@ -82,9 +82,10 @@ public void _armBack(){
     // This method will be called once per scheduler run
   }
 
-  public void getClimbEncoderPostion(){
-    climbenc.getPosition();
+  public Double getClimbEncoderPostion(){
+    return climbenc.getPosition();
   }
+
 
   public void unenableEncoderSoftLimit(){
     leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
