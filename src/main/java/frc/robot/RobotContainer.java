@@ -168,13 +168,13 @@ public class RobotContainer {
     //MANIPULATOR XBOX CONTROLLER
 
     new JoystickButton(manipulatorController, XboxController.Button.kX.value).whileHeld(
-      new RunIntake(intake_catapult));
+      new RunIntake(intake));
     
     new JoystickButton(manipulatorController, XboxController.Button.kY.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.extend(), intake_catapult));
+      new InstantCommand(() -> intake.extend(), intake));
     
     new JoystickButton(manipulatorController, XboxController.Button.kA.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.retract(), intake_catapult));
+      new InstantCommand(() -> intake.retract(), intake));
 
     new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).whenHeld(
       new ClimberSequence(climber));
@@ -182,14 +182,14 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).whenPressed(
       new InstantCommand(() -> climber.armToggle()));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kBack.value).whileHeld( //LEFT SMALL BUTTON
-      new LaunchCatapult(intake_catapult, Catapult_Direction.LAUNCH, Catapult_Direction.LAUNCH));
+//    new JoystickButton(manipulatorController, XboxController.Button.kBack.value).whileHeld( //LEFT SMALL BUTTON
+//      new LaunchCatapult(intake_catapult, Catapult_Direction.LAUNCH, Catapult_Direction.LAUNCH));
 
     //new JoystickButton(manipulatorController, XboxController.Button.kStart.value).whileHeld( 
       //new LaunchSequence(intake_catapult));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kRightStick.value).whileHeld(  
-      new LaunchCatapult(intake_catapult, Catapult_Direction.RESET, Catapult_Direction.RESET));
+//    new JoystickButton(manipulatorController, XboxController.Button.kRightStick.value).whileHeld(  
+//      new LaunchCatapult(intake_catapult, Catapult_Direction.RESET, Catapult_Direction.RESET));
     
 
     new JoystickButton(manipulatorController, XboxController.Button.kStart.value)
