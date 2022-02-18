@@ -7,7 +7,6 @@ package frc.robot;
 import com.pathplanner.lib.PathPlanner;
 
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.XboxController;
@@ -19,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.ClimberOverride;
+import frc.robot.commands.ClimberSequence;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.FollowTrajectory;
 import frc.robot.commands.LaunchCatapult;
@@ -46,9 +46,8 @@ public class RobotContainer {
     }
   }
 
-  private final Climber climber = new Climber();
-
   private final Intake_Catapult intake_catapult = new Intake_Catapult();
+  private final Climber climber = new Climber();
 
   // private final Pneumatics pneumatics = new Pneumatics();
   // private final Climber climber = new Climber();
@@ -173,8 +172,8 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, XboxController.Button.kA.value).whenPressed(
       new InstantCommand(() -> intake_catapult.retract(), intake_catapult));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).whenPressed(
-      new InstantCommand(() -> climber.armBack(), climber));
+    new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value)
+        .whenHeld(new ClimberSequence(climber));
 
     new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).whenPressed(
       new InstantCommand(() -> climber.armUp(), climber));
