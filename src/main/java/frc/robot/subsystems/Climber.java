@@ -77,6 +77,15 @@ public void _armBack(){
     }
   }
 
+  public void _armToggle(){
+    climberSolenoid.toggle();
+  }
+
+  public void armToggle(){
+    if(DriverStation.getMatchTime() < 35){
+      _armToggle();
+      }
+  }
 
   @Override
   public void periodic() {

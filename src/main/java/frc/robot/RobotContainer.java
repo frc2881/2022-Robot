@@ -172,11 +172,11 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, XboxController.Button.kA.value).whenPressed(
       new InstantCommand(() -> intake_catapult.retract(), intake_catapult));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value)
-        .whenHeld(new ClimberSequence(climber));
+    new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).whenHeld(
+      new ClimberSequence(climber));
 
     new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).whenPressed(
-      new InstantCommand(() -> climber.armUp(), climber));
+      new InstantCommand(() -> climber.armToggle()));
 
     new JoystickButton(manipulatorController, XboxController.Button.kBack.value).whileHeld( //LEFT SMALL BUTTON
       new LaunchCatapult(intake_catapult, Catapult_Direction.LAUNCH, Catapult_Direction.LAUNCH));
