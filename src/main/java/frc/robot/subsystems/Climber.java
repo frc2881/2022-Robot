@@ -31,6 +31,7 @@ public class Climber extends SubsystemBase {
           leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)23.8);
           leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
           leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)0.5);
+          leadScrew.setOpenLoopRampRate(0.08);
 
       climbenc = leadScrew.getEncoder();
 
