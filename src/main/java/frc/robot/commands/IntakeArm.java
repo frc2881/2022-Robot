@@ -1,20 +1,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake_Catapult;
-import frc.robot.subsystems.Intake_Catapult.Intake_Arm_Direction;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.Intake_Arm_Direction;
 
 public class IntakeArm extends CommandBase {
 
-  private Intake_Catapult intakeCatapult;
+  private Intake intake;
   private Intake_Arm_Direction state;
 
   /** Creates a new Intake_Arm. */
-  public IntakeArm(Intake_Catapult intakeCatapult, Intake_Arm_Direction state) {
+  public IntakeArm(Intake intake, Intake_Arm_Direction state) {
 
-    this.intakeCatapult = intakeCatapult;
+    this.intake = intake;
     this.state = state;
-    addRequirements(intakeCatapult);
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -27,9 +27,9 @@ public class IntakeArm extends CommandBase {
   public void execute() {
 
     if(state == Intake_Arm_Direction.EXTEND)
-      intakeCatapult.extend();
+      intake.extend();
     else{
-      intakeCatapult.retract();
+      intake.retract();
     }
   }
 

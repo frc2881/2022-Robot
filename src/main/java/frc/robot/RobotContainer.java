@@ -7,7 +7,6 @@ package frc.robot;
 import com.pathplanner.lib.PathPlanner;
 
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.XboxController;
@@ -21,14 +20,16 @@ import frc.robot.commands.Autonomous;
 import frc.robot.commands.ClimberOverride;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.FollowTrajectory;
-import frc.robot.commands.LaunchCatapult;
+import frc.robot.commands.LaunchRightCatapult;
 import frc.robot.commands.RunArm;
 import frc.robot.commands.RunIntake;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Intake_Catapult;
-import frc.robot.subsystems.Intake_Catapult.Catapult_Direction;
-import frc.robot.subsystems.Intake_Catapult.Feeder_Direction;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.Feeder_Direction;
+import frc.robot.subsystems.LeftCatapult;
+import frc.robot.subsystems.RightCatapult;
+import frc.robot.subsystems.RightCatapult.Right_Catapult_Direction;
 // import frc.robot.subsystems.Pneumatics;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
@@ -48,7 +49,9 @@ public class RobotContainer {
 
   private final Climber climber = new Climber();
 
-  private final Intake_Catapult intake_catapult = new Intake_Catapult();
+  private final Intake intake = new Intake();
+  private final LeftCatapult leftCatapult = new LeftCatapult();
+  private final RightCatapult rightCatapult = new RightCatapult();
 
   // private final Pneumatics pneumatics = new Pneumatics();
   // private final Climber climber = new Climber();
@@ -93,8 +96,8 @@ public class RobotContainer {
 
   public void resetRobot() {
     if (robotResetState == true) {
-      intake_catapult.intake_feed(0, Feeder_Direction.INTAKE);
-      intake_catapult.retract();
+      intake.intake_feed(0, Feeder_Direction.INTAKE);
+      intake.retract();
       climber.armUp(); 
       System.out.println("reset robot");
       robotResetState = false;
@@ -125,7 +128,7 @@ public class RobotContainer {
 
     // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
-    m_chooser.setDefaultOption("Autonomous", new Autonomous(drive, intake_catapult, auto1part1, auto1part2));
+    m_chooser.setDefaultOption("Autonomous", new Autonomous(drive, intake, auto1part1, auto1part2));
     m_chooser.addOption("Straight", new FollowTrajectory(drive, straight));
     m_chooser.addOption("Grab cargo", new FollowTrajectory(drive, grabCargo));
     m_chooser.addOption("Spiral", new FollowTrajectory(drive, spiral));
@@ -163,34 +166,11 @@ public class RobotContainer {
 
     //MANIPULATOR XBOX CONTROLLER
 
-    
-    new JoystickButton(manipulatorController, XboxController.Button.kB.value)
-    .whileHeld(new RunIntake(intake_catapult));
-
-    new JoystickButton(manipulatorController, XboxController.Button.kX.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.extend(), intake_catapult));
-    
-    new JoystickButton(manipulatorController, XboxController.Button.kY.value).whenPressed(
-      new InstantCommand(() -> intake_catapult.retract(), intake_catapult));
-
     new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).whenPressed(
       new InstantCommand(() -> climber.armBack(), climber));
 
     new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).whenPressed(
       new InstantCommand(() -> climber.armUp(), climber));
-
-    new JoystickButton(manipulatorController, XboxController.Button.kBack.value).whileHeld( //LEFT SMALL BUTTON
-      new LaunchCatapult(intake_catapult, Catapult_Direction.LAUNCH, Catapult_Direction.LAUNCH));
-
-    //new JoystickButton(manipulatorController, XboxController.Button.kStart.value).whileHeld( 
-      //new LaunchSequence(intake_catapult));
-
-    new JoystickButton(manipulatorController, XboxController.Button.kRightStick.value).whileHeld(  
-      new LaunchCatapult(intake_catapult, Catapult_Direction.RESET, Catapult_Direction.RESET));
-    
-
-    new JoystickButton(manipulatorController, XboxController.Button.kStart.value)
-    .whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY()))); 
   }
 
 public Command getAutonomousCommand() {
