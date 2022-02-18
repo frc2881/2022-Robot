@@ -38,24 +38,28 @@ public class Drive extends SubsystemBase {
             leftFront.setInverted(false);
             leftFront.setIdleMode(IdleMode.kBrake);
             leftFront.setSmartCurrentLimit(Constants.Drive.kCurrentLimit);
+            leftFront.setOpenLoopRampRate(0.08);
 
         leftRear = new CANSparkMax(12, MotorType.kBrushless);
             leftRear.restoreFactoryDefaults();
             leftRear.setInverted(false);
             leftRear.setIdleMode(IdleMode.kBrake);
             leftRear.setSmartCurrentLimit(Constants.Drive.kCurrentLimit);
+            leftRear.setOpenLoopRampRate(0.08);
         
         rightFront = new CANSparkMax(13, MotorType.kBrushless);
             rightFront.restoreFactoryDefaults();
             rightFront.setInverted(true);
             rightFront.setIdleMode(IdleMode.kBrake);
             rightFront.setSmartCurrentLimit(Constants.Drive.kCurrentLimit);
+            rightFront.setOpenLoopRampRate(0.08);
 
         rightRear = new CANSparkMax(14, MotorType.kBrushless);
             rightRear.restoreFactoryDefaults();
             rightRear.setInverted(true);
             rightRear.setIdleMode(IdleMode.kBrake);
             rightRear.setSmartCurrentLimit(Constants.Drive.kCurrentLimit);
+            rightRear.setOpenLoopRampRate(0.08);
         
         driveTrain = new DifferentialDrive(leftFront, rightFront);
         
