@@ -29,6 +29,9 @@ public class RightCatapult extends SubsystemBase {
 
   private final int distance = 600;
 
+  private boolean cargoIsRed;
+  private boolean cargoIsBlue;
+
   public RightCatapult() {
     rightCatapult = new CANSparkMax(17, MotorType.kBrushless);
         rightCatapult.restoreFactoryDefaults();
@@ -75,41 +78,32 @@ public class RightCatapult extends SubsystemBase {
   }
 
   public void run(double speed) {
-    /*Color detectedColorRight = colorSensorRight.getColor();
-    matchRight = colorMatcher.matchColor(detectedColorRight);
-    if((DriverStation.getAlliance() == Alliance.Blue) &&
-       (colorSensorRight.getProximity() > distance) &&
-       (matchRight.color == blueCargo)) {
-      _run(speed);
-    } else if((DriverStation.getAlliance() == Alliance.Red) &&
-              (colorSensorRight.getProximity() > distance) &&
-              (matchRight.color == redCargo)) {
-      _run(speed);
-    } else{
-      rightCatapult.set(speed/2);
-    }*/
     rightCatapult.set(speed);
   }
 
   public boolean isBlue() {
-    Color detectedColorRight = colorSensorRight.getColor();
-    matchRight = colorMatcher.matchColor(detectedColorRight);
-    if((matchRight != null) && (matchRight.color == blueCargo) &&
-       (colorSensorRight.getProximity() > distance)) {
-      return true;
-    } else {
-      return false;
-    }
+    return cargoIsBlue;
   }
 
   public boolean isRed() {
+    return cargoIsRed;
+  }
+
+  @Override
+  public void periodic(){
     Color detectedColorRight = colorSensorRight.getColor();
     matchRight = colorMatcher.matchColor(detectedColorRight);
     if((matchRight != null) && (matchRight.color == redCargo) &&
        (colorSensorRight.getProximity() > distance)) {
-      return true;
+        cargoIsRed = true;
     } else {
-      return false;
+      cargoIsRed = false;
+    }
+    if((matchRight != null) && (matchRight.color == blueCargo) &&
+       (colorSensorRight.getProximity() > distance)) {
+        cargoIsBlue = true;
+    } else {
+      cargoIsBlue = false;
     }
   }
 
