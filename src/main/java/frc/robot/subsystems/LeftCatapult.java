@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -18,6 +19,8 @@ public class LeftCatapult extends SubsystemBase {
   private CANSparkMax leftCatapult;
   private ColorMatchResult matchLeft;
   private ColorSensorV3 colorSensorLeft = new ColorSensorV3(Port.kMXP);
+
+  private final RelativeEncoder leftCatapultEnc;
 
   private final ColorMatch colorMatcher = new ColorMatch();
                                             //R       G       B
@@ -43,6 +46,26 @@ public class LeftCatapult extends SubsystemBase {
     colorMatcher.addColorMatch(blueCargo);
     colorMatcher.addColorMatch(redCargo);
     colorMatcher.setConfidenceThreshold(.95);
+
+    leftCatapultEnc = leftCatapult.getEncoder();
+  }
+
+  public void _run(double speed){
+    leftCatapult.set(speed);
+  }
+
+  public void disableEncoderSoftLimit(){
+    leftCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
+    leftCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
+  }
+
+  public void enableEncoderSoftLimit(){
+    leftCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    leftCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+  }
+
+  public void resetEncoder(){
+    leftCatapultEnc.setPosition(0);
   }
 
   public void run(double speed) {
@@ -52,14 +75,14 @@ public class LeftCatapult extends SubsystemBase {
     if((DriverStation.getAlliance() == Alliance.Blue) &&
        (colorSensorLeft.getProximity() > distance) &&
        (matchLeft.color == blueCargo)) {
-      leftCatapult.set(speed);
+      _run(speed);
     }
     else if((DriverStation.getAlliance() == Alliance.Red) &&
             (colorSensorLeft.getProximity() > distance) &&
             (matchLeft.color == redCargo)) {
-      leftCatapult.set(speed);
+      _run(speed);
     } else {
-      leftCatapult.set(speed/2);
+      _run(speed/2);
     }
   }
 
@@ -91,5 +114,6 @@ public class LeftCatapult extends SubsystemBase {
 
     builder.addBooleanProperty("Left Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Left Red", () -> isRed(), null);
+    builder.addDoubleProperty("Left Catapult position", () -> leftCatapultEnc.getPosition(), null);
   }
 }
