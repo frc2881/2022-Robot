@@ -29,6 +29,9 @@ public class LeftCatapult extends SubsystemBase {
 
   private final int distance = 600;
 
+  private boolean cargoIsRed;
+  private boolean cargoIsBlue;
+
   public LeftCatapult() {
     leftCatapult = new CANSparkMax(16, MotorType.kBrushless);
         leftCatapult.restoreFactoryDefaults();
@@ -75,44 +78,33 @@ public class LeftCatapult extends SubsystemBase {
   }
 
   public void run(double speed) {
-    /*Color detectedColorLeft = colorSensorLeft.getColor();
-    matchLeft = colorMatcher.matchColor(detectedColorLeft);
-        
-    if((DriverStation.getAlliance() == Alliance.Blue) &&
-       (colorSensorLeft.getProximity() > distance) &&
-       (matchLeft.color == blueCargo)) {
-      _run(speed);
-    }
-    else if((DriverStation.getAlliance() == Alliance.Red) &&
-            (colorSensorLeft.getProximity() > distance) &&
-            (matchLeft.color == redCargo)) {
-      _run(speed);
-    } else {
-      leftCatapult.set(speed/2);
-    }*/
     leftCatapult.set(speed);
   }
 
   public boolean isBlue() {
-    Color detectedColorLeft = colorSensorLeft.getColor();
-    matchLeft = colorMatcher.matchColor(detectedColorLeft);
-    if((matchLeft != null) && (matchLeft.color == blueCargo) &&
-       (colorSensorLeft.getProximity() > distance)) {
-      return true;
-    } else {
-      return false;
-    }
+    return cargoIsBlue;
   }
 
   public boolean isRed() {
+    return cargoIsRed;
+  }
+
+  @Override
+  public void periodic(){
     Color detectedColorLeft = colorSensorLeft.getColor();
     matchLeft = colorMatcher.matchColor(detectedColorLeft);
     if((matchLeft != null) && (matchLeft.color == redCargo) &&
        (colorSensorLeft.getProximity() > distance)) {
-      return true;
-    } else {
-      return false;
-    }
+         cargoIsRed = true;
+       } else {
+         cargoIsRed = false;
+       }
+    if((matchLeft != null) && (matchLeft.color == blueCargo) &&
+      (colorSensorLeft.getProximity() > distance)) {
+        cargoIsBlue = true;
+      } else {
+        cargoIsBlue = false;
+      }
   }
 
   @Override
