@@ -27,6 +27,8 @@ import frc.robot.commands.FirstClimberSequence;
 import frc.robot.commands.FollowTrajectory;
 import frc.robot.commands.RunArm;
 import frc.robot.commands.RunIntake;
+import frc.robot.commands.ScoreLeft;
+import frc.robot.commands.ScoreRight;
 import frc.robot.commands.SecondClimberSequence;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
@@ -177,6 +179,12 @@ public class RobotContainer {
     
     buttonFromDPad(manipulatorController).whenPressed(
       new InstantCommand(() -> climber.armToggle()));
+    
+    buttonFromDouble(() -> manipulatorController.getLeftTriggerAxis()).whenPressed(
+      new ScoreLeft(leftCatapult));
+    
+    buttonFromDouble(() -> manipulatorController.getRightTriggerAxis()).whenPressed(
+      new ScoreRight(rightCatapult));
 
 //    new JoystickButton(manipulatorController, XboxController.Button.kBack.value).whileHeld( //LEFT SMALL BUTTON
 //      new LaunchCatapult(intake_catapult, Catapult_Direction.LAUNCH, Catapult_Direction.LAUNCH));
