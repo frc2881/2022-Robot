@@ -9,7 +9,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.TWINKLES;
 
 public class PrettyLights extends SubsystemBase {
+  public static final double green = 0.77;
+
   public static final double hotPink = 0.57;
+  
+  public static final double red = -0.25;
 
   private final Spark lights;
   /** Creates a new PrettyLights. */
