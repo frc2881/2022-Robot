@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -18,6 +19,8 @@ public class RightCatapult extends SubsystemBase {
   private CANSparkMax rightCatapult;
   private ColorMatchResult matchRight;
   private ColorSensorV3 colorSensorRight = new ColorSensorV3(Port.kOnboard);
+
+  private final RelativeEncoder rightCatapultEnc;
 
   private final ColorMatch colorMatcher = new ColorMatch();
                                             //R       G       B
@@ -43,6 +46,26 @@ public class RightCatapult extends SubsystemBase {
     colorMatcher.addColorMatch(blueCargo);
     colorMatcher.addColorMatch(redCargo);
     colorMatcher.setConfidenceThreshold(.95);
+
+    rightCatapultEnc = rightCatapult.getEncoder();
+  }
+
+  public void _run(double speed){
+    rightCatapult.set(speed);
+  }
+
+  public void disableEncoderSoftLimit(){
+    rightCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
+    rightCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
+  }
+
+  public void enableEncoderSoftLimit(){
+    rightCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    rightCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+  }
+
+  public void resetEncoder(){
+    rightCatapultEnc.setPosition(0);
   }
 
   public void run(double speed) {
@@ -51,13 +74,13 @@ public class RightCatapult extends SubsystemBase {
     if((DriverStation.getAlliance() == Alliance.Blue) &&
        (colorSensorRight.getProximity() > distance) &&
        (matchRight.color == blueCargo)) {
-      rightCatapult.set(speed);
+      _run(speed);
     } else if((DriverStation.getAlliance() == Alliance.Red) &&
               (colorSensorRight.getProximity() > distance) &&
               (matchRight.color == redCargo)) {
-      rightCatapult.set(speed);
+      _run(speed);
     } else{
-      rightCatapult.set(speed/2);
+      _run(speed/2);
     }
   }
 
@@ -90,5 +113,6 @@ public class RightCatapult extends SubsystemBase {
     builder.addDoubleProperty("Right Distance", () -> colorSensorRight.getProximity(),  null);   
     builder.addBooleanProperty("Right Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Right Red", () -> isRed(), null);
+    builder.addDoubleProperty("Right Catapult position", () -> rightCatapultEnc.getPosition(), null);
   }
 }

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Autonomous;
+import frc.robot.commands.CatapultOverrride;
 import frc.robot.commands.ClimberOverride;
 import frc.robot.commands.ClimberSequence;
 import frc.robot.commands.DriveWithJoysticks;
@@ -180,8 +181,11 @@ public class RobotContainer {
 //      new LaunchCatapult(intake_catapult, Catapult_Direction.RESET, Catapult_Direction.RESET));
     
 
-    new JoystickButton(manipulatorController, XboxController.Button.kStart.value)
-    .whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY()))); 
+    new JoystickButton(manipulatorController, XboxController.Button.kStart.value).whenHeld(
+      new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kBack.value).whenHeld(
+      new CatapultOverrride(leftCatapult, rightCatapult));
   }
 
   public double applyDeadband(double input) {
