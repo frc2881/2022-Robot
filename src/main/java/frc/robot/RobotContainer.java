@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import com.pathplanner.lib.PathPlanner;
 
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -74,7 +76,7 @@ public class RobotContainer {
 
   //Split Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
-    drive, 
+    drive,
     () -> applyDeadband(driverController.getLeftY()),
     () -> applyDeadband(driverController.getRightY()),
     () -> applyDeadband(-driverController.getRightX())
@@ -191,6 +193,15 @@ public class RobotContainer {
 
     new JoystickButton(manipulatorController, XboxController.Button.kBack.value).whenHeld(
       new CatapultOverrride(leftCatapult, rightCatapult));
+  }
+
+  private Button buttonFromDouble(DoubleSupplier value){
+    return new Button(){
+      @Override
+      public boolean get(){
+        return Math.abs(value.getAsDouble()) > 0.1;
+      }
+    };
   }
 
   public double applyDeadband(double input) {

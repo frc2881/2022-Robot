@@ -29,8 +29,6 @@ public class LeftCatapult extends SubsystemBase {
 
   private final int distance = 600;
 
-  public enum Left_Catapult_Direction {LAUNCH, RESET}
-
   public LeftCatapult() {
     leftCatapult = new CANSparkMax(16, MotorType.kBrushless);
         leftCatapult.restoreFactoryDefaults();
@@ -68,8 +66,16 @@ public class LeftCatapult extends SubsystemBase {
     leftCatapultEnc.setPosition(0);
   }
 
+  public boolean reachedUpperSoftLimit(){
+    return Math.abs(leftCatapult.getSoftLimit(CANSparkMax.SoftLimitDirection.kForward) - leftCatapult.getEncoder().getPosition()) < 0.1;
+  }
+
+  public boolean reachedLowerSoftLimit(){
+    return Math.abs(leftCatapult.getSoftLimit(CANSparkMax.SoftLimitDirection.kReverse) - leftCatapult.getEncoder().getPosition()) < 0.1;
+  }
+
   public void run(double speed) {
-    Color detectedColorLeft = colorSensorLeft.getColor();
+    /*Color detectedColorLeft = colorSensorLeft.getColor();
     matchLeft = colorMatcher.matchColor(detectedColorLeft);
         
     if((DriverStation.getAlliance() == Alliance.Blue) &&
@@ -82,8 +88,9 @@ public class LeftCatapult extends SubsystemBase {
             (matchLeft.color == redCargo)) {
       _run(speed);
     } else {
-      _run(speed/2);
-    }
+      leftCatapult.set(speed/2);
+    }*/
+    leftCatapult.set(speed);
   }
 
   public boolean isBlue() {
