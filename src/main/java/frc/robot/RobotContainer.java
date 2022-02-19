@@ -15,15 +15,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.CatapultOverrride;
 import frc.robot.commands.ClimberOverride;
-import frc.robot.commands.ClimberSequence;
 import frc.robot.commands.DriveWithJoysticks;
+import frc.robot.commands.FirstClimberSequence;
 import frc.robot.commands.FollowTrajectory;
 import frc.robot.commands.RunArm;
 import frc.robot.commands.RunIntake;
+import frc.robot.commands.SecondClimberSequence;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
@@ -166,9 +168,12 @@ public class RobotContainer {
       new InstantCommand(() -> intake.retract(), intake));
 
     new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).whenHeld(
-      new ClimberSequence(climber));
+      new FirstClimberSequence(climber, navx));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).whenPressed(
+    new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).whenHeld(
+      new SecondClimberSequence(climber, navx));
+    
+    buttonFromDPad(manipulatorController).whenPressed(
       new InstantCommand(() -> climber.armToggle()));
 
 //    new JoystickButton(manipulatorController, XboxController.Button.kBack.value).whileHeld( //LEFT SMALL BUTTON
@@ -199,4 +204,23 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
   }
+
+  private Button buttonFromDPad(XboxController controller) {
+    return new Button() {
+        @Override
+        public boolean get() {
+            if (controller.getPOV() != -1) {
+                return true;
+            }
+            else {
+                //return (controller.getPOV() == 180) || (controller.getPOV() == 225) || (controller.getPOV() == 135);
+                return false;
+            }
+        }
+    };
 }
+
+}
+
+
+

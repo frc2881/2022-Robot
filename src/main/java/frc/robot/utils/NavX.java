@@ -3,6 +3,7 @@ package frc.robot.utils;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.SPI;
 
 public class NavX extends AHRS {
@@ -21,6 +22,11 @@ public class NavX extends AHRS {
   @Override
   public double getAngle() {
     return -super.getAngle();
+  }
+
+  @Override
+  public float getRoll() {
+    return -super.getRoll();
   }
       
   /**
@@ -47,4 +53,12 @@ public class NavX extends AHRS {
   public Rotation2d getRotation2D() {
     return new Rotation2d(Math.toRadians(getYaw()));
   }
+        @Override
+        public void initSendable(SendableBuilder builder) {
+        super.initSendable(builder);
+        builder.addDoubleProperty("Yaw", this::getYaw, null);
+        builder.addDoubleProperty("Pitch", this::getPitch, null);
+        builder.addDoubleProperty("Roll", this::getRoll, null);
+    }
+
 }
