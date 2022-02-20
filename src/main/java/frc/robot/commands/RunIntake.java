@@ -12,7 +12,7 @@ import frc.robot.subsystems.Intake.Direction;
 
 public class RunIntake extends CommandBase {
   private Intake intake;
-  
+
   public RunIntake(Intake intake) {
     this.intake = intake;
   }

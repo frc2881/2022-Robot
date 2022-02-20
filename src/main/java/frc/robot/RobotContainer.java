@@ -72,7 +72,7 @@ public class RobotContainer {
   private final SendableChooser<Command> m_chooser;
 
   public boolean robotResetState = true;
-  
+
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive,
     () -> applyDeadband(driverController.getLeftY()),
@@ -86,7 +86,7 @@ public class RobotContainer {
     );
 
   public void resetRobot() {
-    if (robotResetState == true) {
+    if(robotResetState == true) {
       intake.run(0, Direction.INTAKE);
       intake.retract();
       climber.armUp();
@@ -97,7 +97,7 @@ public class RobotContainer {
   public void robotShouldReset() {
     robotResetState = true;
   }
- 
+
   public RobotContainer() {
     double maxVelocity = 2;
     double maxAcceleration = 2;

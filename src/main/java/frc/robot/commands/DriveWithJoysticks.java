@@ -15,7 +15,7 @@ public class DriveWithJoysticks extends CommandBase {
 
   public DriveWithJoysticks(Drive drive, DoubleSupplier leftForward, DoubleSupplier rightForward, DoubleSupplier rotation) {
     m_leftForward = leftForward;
-    m_rightForward = rightForward; 
+    m_rightForward = rightForward;
     m_rotation = rotation;
 
     m_drive = drive;

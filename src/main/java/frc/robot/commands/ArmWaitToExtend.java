@@ -11,7 +11,7 @@ import frc.robot.utils.NavX;
 
 public class ArmWaitToExtend extends CommandBase {
 
-  private final NavX m_navx; 
+  private final NavX m_navx;
   private final double a;
   private int counter;
   private ArrayList<Float> roll;
@@ -22,25 +22,21 @@ public class ArmWaitToExtend extends CommandBase {
     m_navx = navx;
     roll = new ArrayList<Float>();
     lpfRoll = new ArrayList<Double>();
-    a = .5;
+    a = 0.5;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  
     roll.clear();
     lpfRoll.clear();
     counter = 0;
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     roll.add(m_navx.getRoll());
-
 
     if(roll.size() > 1){
       lpfRoll.add((roll.get(counter)*a) + (roll.get(counter-1)*(1 - a)));
@@ -50,14 +46,11 @@ public class ArmWaitToExtend extends CommandBase {
     }
     counter++;
 
-
-
     while(roll.size() > 5){
       roll.remove(0);
       lpfRoll.remove(0);
-      counter--; 
+      counter--;
     }
-
   }
 
   // Called once the command ends or is interrupted.
@@ -76,10 +69,5 @@ public class ArmWaitToExtend extends CommandBase {
     else{
         return false;
     }
-    
-
-    // y(i) = y(i-1)*a + x(i)*(1-a)
-
-    // 0 <= a <= 1
   }
 }

@@ -40,5 +40,5 @@ public class Eject extends SequentialCommandGroup {
     } else {
       return false;
     }
-  }  
+  }
 }

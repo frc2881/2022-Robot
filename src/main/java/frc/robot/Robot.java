@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
-  
+
   public static boolean isCompetitionMode() {
     // In Practice mode and in a real competition getMatchTime() returns time left in this
     // part of the match.  Otherwise it just returns -1.0.

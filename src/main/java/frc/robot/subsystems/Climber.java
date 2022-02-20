@@ -46,7 +46,7 @@ public class Climber extends SubsystemBase {
 
   /**
    * Extends or retracts the arm
-   * 
+   *
    * @param speed positive value extends
    */
   public void moveArm(double speed) {

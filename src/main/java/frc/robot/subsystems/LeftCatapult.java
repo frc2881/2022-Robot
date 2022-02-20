@@ -109,7 +109,7 @@ public class LeftCatapult extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
-    builder.addDoubleProperty("Left Distance", () -> colorSensor.getProximity(),  null);   
+    builder.addDoubleProperty("Left Distance", () -> colorSensor.getProximity(),  null);
     builder.addBooleanProperty("Left Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Left Red", () -> isRed(), null);
     builder.addDoubleProperty("Left Catapult position", () -> encoder.getPosition(), null);

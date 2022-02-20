@@ -29,7 +29,7 @@ public class Drive extends SubsystemBase {
   private final DifferentialDrive driveTrain;
 
   public Drive(NavX navx) {
-    m_navx = navx; 
+    m_navx = navx;
 
     leftFront = new CANSparkMax(11, MotorType.kBrushless);
         leftFront.restoreFactoryDefaults();
@@ -44,7 +44,7 @@ public class Drive extends SubsystemBase {
         leftRear.setIdleMode(IdleMode.kBrake);
         leftRear.setSmartCurrentLimit(Constants.Drive.kCurrentLimit);
         leftRear.setOpenLoopRampRate(0.08);
-        
+
     rightFront = new CANSparkMax(13, MotorType.kBrushless);
         rightFront.restoreFactoryDefaults();
         rightFront.setInverted(true);
@@ -58,15 +58,15 @@ public class Drive extends SubsystemBase {
         rightRear.setIdleMode(IdleMode.kBrake);
         rightRear.setSmartCurrentLimit(Constants.Drive.kCurrentLimit);
         rightRear.setOpenLoopRampRate(0.08);
-        
+
     driveTrain = new DifferentialDrive(leftFront, rightFront);
-        
+
     leftenc = leftRear.getEncoder();
     rightenc = rightRear.getEncoder();
 
     leftenc.setPositionConversionFactor(GearRatio.measureDist(1, 10, 50, 4));
     rightenc.setPositionConversionFactor(GearRatio.measureDist(1, 10, 50, 4));
-        
+
     leftenc.setVelocityConversionFactor(GearRatio.measureDist(1, 10, 50, 4) / 60);
     rightenc.setVelocityConversionFactor(GearRatio.measureDist(1, 10, 50, 4) / 60);
 
@@ -122,7 +122,7 @@ public class Drive extends SubsystemBase {
   }
 
   @Override
-  public void initSendable(SendableBuilder builder) {  
+  public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
     builder.addDoubleProperty("Left Position", () -> -leftenc.getPosition(),  null);
     builder.addDoubleProperty("Right Position", () -> -rightenc.getPosition(),  null);

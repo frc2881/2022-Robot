@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
 
   public enum Direction { INTAKE, EJECT }
   public enum State { EXTEND, RETRACT }
-  
+
   public Intake() {
     intake = new CANSparkMax(15, MotorType.kBrushless);
         intake.restoreFactoryDefaults();

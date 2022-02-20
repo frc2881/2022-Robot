@@ -7,7 +7,7 @@ public class EjectRight extends CommandBase {
   private RightCatapult catapult;
 
   public EjectRight(RightCatapult catapult) {
-    this.catapult = catapult; 
+    this.catapult = catapult;
     addRequirements(catapult);
   }
 
@@ -18,7 +18,7 @@ public class EjectRight extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    catapult.run(0.0);           
+    catapult.run(0.0);
   }
 
   @Override

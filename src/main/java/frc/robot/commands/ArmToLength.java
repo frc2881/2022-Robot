@@ -28,8 +28,8 @@ public class ArmToLength extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_climber.moveArm(0.0);
-  } 
-  
+  }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

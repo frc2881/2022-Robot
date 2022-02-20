@@ -18,7 +18,7 @@ public class EjectLeft extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    catapult.run(0.0);     
+    catapult.run(0.0);
   }
 
   @Override

@@ -11,7 +11,7 @@ import frc.robot.subsystems.RightCatapult;
 public class CatapultOverrride extends CommandBase {
   private LeftCatapult m_leftCatapult;
   private RightCatapult m_rightCatapult;
-  
+
   public CatapultOverrride(LeftCatapult leftCatapult, RightCatapult rightCatapult) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_leftCatapult = leftCatapult;
