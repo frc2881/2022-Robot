@@ -1,8 +1,7 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
-// runs intake when kB is held on XboxController, ends when kB is released
+// Copyright (c) 2022 FRC Team 2881 - The Lady Cans
+//
+// Open Source Software; you can modify and/or share it under the terms of BSD
+// license file in the root directory of this project.
 
 package frc.robot.commands;
 

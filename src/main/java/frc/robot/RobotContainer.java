@@ -1,6 +1,7 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2022 FRC Team 2881 - The Lady Cans
+//
+// Open Source Software; you can modify and/or share it under the terms of BSD
+// license file in the root directory of this project.
 
 package frc.robot;
 
@@ -84,19 +85,6 @@ public class RobotContainer {
     climber,
     () -> applyDeadband(-manipulatorController.getLeftY())
     );
-
-  public void resetRobot() {
-    if(robotResetState == true) {
-      intake.run(0, Direction.INTAKE);
-      intake.retract();
-      climber.armUp();
-       robotResetState = false;
-    }
-  }
-
-  public void robotShouldReset() {
-    robotResetState = true;
-  }
 
   public RobotContainer() {
     double maxVelocity = 2;
@@ -188,11 +176,37 @@ public class RobotContainer {
       whenHeld(new CatapultOverrride(leftCatapult, rightCatapult));
   }
 
+  public void resetRobot() {
+    if(robotResetState == true) {
+      intake.run(0, Direction.INTAKE);
+      intake.retract();
+      climber.armUp();
+       robotResetState = false;
+    }
+  }
+
+  public void robotShouldReset() {
+    robotResetState = true;
+  }
+
   private Button buttonFromDouble(DoubleSupplier value) {
     return new Button() {
       @Override
       public boolean get() {
         return Math.abs(value.getAsDouble()) > 0.1;
+      }
+    };
+  }
+
+  private Button buttonFromDPad(XboxController controller) {
+    return new Button() {
+      @Override
+      public boolean get() {
+        if(controller.getPOV() != -1) {
+          return true;
+        } else {
+          return false;
+        }
       }
     };
   }
@@ -207,18 +221,5 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
-  }
-
-  private Button buttonFromDPad(XboxController controller) {
-    return new Button() {
-      @Override
-      public boolean get() {
-        if(controller.getPOV() != -1) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    };
   }
 }
