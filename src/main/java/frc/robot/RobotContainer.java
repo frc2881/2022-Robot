@@ -38,24 +38,23 @@ import frc.robot.subsystems.Intake.Direction;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.RightCatapult;
-// import frc.robot.subsystems.Pneumatics;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  XboxController driverController = new XboxController(0);
-  XboxController manipulatorController = new XboxController(1);
+  private final XboxController driverController = new XboxController(0);
+  private final XboxController manipulatorController = new XboxController(1);
 
+  private final PowerDistribution powerHub = new PowerDistribution(2, ModuleType.kRev);
   private final Pneumatics pneumatics = new Pneumatics();
-  private final Climber climber = new Climber();
-
-  private final Intake intake = new Intake();
-  private final LeftCatapult leftCatapult = new LeftCatapult();
-  private final RightCatapult rightCatapult = new RightCatapult();
 
   private final NavX navx = new NavX();
 
+  private final Climber climber = new Climber();
+  private final Intake intake = new Intake();
+  private final LeftCatapult leftCatapult = new LeftCatapult();
+  private final RightCatapult rightCatapult = new RightCatapult();
   private final Drive drive = new Drive(navx);
 
   private final Trajectory straight;
@@ -74,10 +73,6 @@ public class RobotContainer {
 
   public boolean robotResetState = true;
   
-  //Arcade drive 
-  PowerDistribution powerHub = new PowerDistribution(2, ModuleType.kRev);
-
-  //Split Arcade drive 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive,
     () -> applyDeadband(driverController.getLeftY()),
@@ -85,21 +80,17 @@ public class RobotContainer {
     () -> applyDeadband(-driverController.getRightX())
     );
 
-
   private final RunArm runArm = new RunArm(
-    climber, 
+    climber,
     () -> applyDeadband(-manipulatorController.getLeftY())
     );
-
-  //public final boolean competitionMode = new 
 
   public void resetRobot() {
     if (robotResetState == true) {
       intake.run(0, Direction.INTAKE);
       intake.retract();
-      climber.armUp(); 
-      System.out.println("reset robot");
-      robotResetState = false;
+      climber.armUp();
+       robotResetState = false;
     }
   }
 
@@ -146,7 +137,7 @@ public class RobotContainer {
     climber.setDefaultCommand(runArm);
 
     // Use the scheduler to log the scheduling and execution of commands.
-    // This way we don't need to put logging in every command
+    // This way we don't need to put logging in every command.
     CommandScheduler.getInstance().
       onCommandInitialize(command -> Log.init(command));
     CommandScheduler.getInstance().
@@ -154,63 +145,53 @@ public class RobotContainer {
     CommandScheduler.getInstance().
       onCommandFinish(command -> Log.end(command, false));
 
-    //Smart Dashboard Commands 
+    //Smart Dashboard Commands
     SmartDashboard.putData(m_chooser);
   }
 
   private void configureButtonBindings() {
-    //DRIVER PS4 CONTROLLER
+    // Driver Xbox Controller
 
-    //MANIPULATOR XBOX CONTROLLER
+    // Manipulator Xbox Controller
 
-    new JoystickButton(manipulatorController, XboxController.Button.kX.value).whileHeld(
-      new RunIntake(intake));
-    
-    new JoystickButton(manipulatorController, XboxController.Button.kY.value).whenPressed(
-      new InstantCommand(() -> intake.extend(), intake));
-    
-    new JoystickButton(manipulatorController, XboxController.Button.kA.value).whenPressed(
-      new InstantCommand(() -> intake.retract(), intake));
+    new JoystickButton(manipulatorController, XboxController.Button.kX.value).
+      whileHeld(new RunIntake(intake));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kB.value).whenPressed(
-      new Eject(leftCatapult, rightCatapult));
+    new JoystickButton(manipulatorController, XboxController.Button.kY.value).
+      whenPressed(new InstantCommand(() -> intake.extend(), intake));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).whenHeld(
-      new FirstClimberSequence(climber, navx));
+    new JoystickButton(manipulatorController, XboxController.Button.kA.value).
+      whenPressed(new InstantCommand(() -> intake.retract(), intake));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).whenHeld(
-      new SecondClimberSequence(climber, navx));
-    
-    buttonFromDPad(manipulatorController).whenPressed(
-      new InstantCommand(() -> climber.armToggle()));
-    
-    buttonFromDouble(() -> manipulatorController.getLeftTriggerAxis()).whenPressed(
-      new ScoreLeft(leftCatapult));
-    
-    buttonFromDouble(() -> manipulatorController.getRightTriggerAxis()).whenPressed(
-      new ScoreRight(rightCatapult));
+    new JoystickButton(manipulatorController, XboxController.Button.kB.value).
+      whenPressed(new Eject(leftCatapult, rightCatapult));
 
-//    new JoystickButton(manipulatorController, XboxController.Button.kBack.value).whileHeld( //LEFT SMALL BUTTON
-//      new LaunchCatapult(intake_catapult, Catapult_Direction.LAUNCH, Catapult_Direction.LAUNCH));
+    new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).
+      whenHeld(new FirstClimberSequence(climber, navx));
 
-    //new JoystickButton(manipulatorController, XboxController.Button.kStart.value).whileHeld( 
-      //new LaunchSequence(intake_catapult));
+    new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).
+      whenHeld(new SecondClimberSequence(climber, navx));
 
-//    new JoystickButton(manipulatorController, XboxController.Button.kRightStick.value).whileHeld(  
-//      new LaunchCatapult(intake_catapult, Catapult_Direction.RESET, Catapult_Direction.RESET));
-    
+    buttonFromDPad(manipulatorController).
+      whenPressed(new InstantCommand(() -> climber.armToggle()));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kStart.value).whenHeld(
-      new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
+    buttonFromDouble(() -> manipulatorController.getLeftTriggerAxis()).
+      whenPressed(new ScoreLeft(leftCatapult));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kBack.value).whenHeld(
-      new CatapultOverrride(leftCatapult, rightCatapult));
+    buttonFromDouble(() -> manipulatorController.getRightTriggerAxis()).
+      whenPressed(new ScoreRight(rightCatapult));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kStart.value).
+      whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kBack.value).
+      whenHeld(new CatapultOverrride(leftCatapult, rightCatapult));
   }
 
-  private Button buttonFromDouble(DoubleSupplier value){
-    return new Button(){
+  private Button buttonFromDouble(DoubleSupplier value) {
+    return new Button() {
       @Override
-      public boolean get(){
+      public boolean get() {
         return Math.abs(value.getAsDouble()) > 0.1;
       }
     };
@@ -230,20 +211,14 @@ public class RobotContainer {
 
   private Button buttonFromDPad(XboxController controller) {
     return new Button() {
-        @Override
-        public boolean get() {
-            if (controller.getPOV() != -1) {
-                return true;
-            }
-            else {
-                //return (controller.getPOV() == 180) || (controller.getPOV() == 225) || (controller.getPOV() == 135);
-                return false;
-            }
+      @Override
+      public boolean get() {
+        if(controller.getPOV() != -1) {
+          return true;
+        } else {
+          return false;
         }
+      }
     };
+  }
 }
-
-}
-
-
-

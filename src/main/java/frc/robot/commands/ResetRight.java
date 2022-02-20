@@ -6,19 +6,19 @@ import frc.robot.subsystems.RightCatapult;
 public class ResetRight extends CommandBase {
   private RightCatapult catapult;
 
-  public ResetRight(RightCatapult rightCatapult) {
-    this.catapult = rightCatapult;     
-    addRequirements(rightCatapult);
+  public ResetRight(RightCatapult catapult) {
+    this.catapult = catapult;
+    addRequirements(catapult);
   }
 
   @Override
   public void execute() {
-      catapult.run(-.1);
+    catapult.run(-0.1);
   }
 
   @Override
   public void end(boolean interrupted) {
-    catapult.run(0);           
+    catapult.run(0.0);
   }
 
   @Override

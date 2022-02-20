@@ -6,15 +6,14 @@ import frc.robot.subsystems.LeftCatapult;
 public class ResetLeft extends CommandBase {
   private LeftCatapult catapult;
 
-  public ResetLeft(LeftCatapult leftCatapult) {
-    this.catapult = leftCatapult;
-    addRequirements(leftCatapult);
+  public ResetLeft(LeftCatapult catapult) {
+    this.catapult = catapult;
+    addRequirements(catapult);
   }
 
   @Override
   public void execute() {
-        catapult.run(-.1);
-    
+    catapult.run(-0.1);
   }
 
   @Override

@@ -6,19 +6,19 @@ import frc.robot.subsystems.LeftCatapult;
 public class EjectLeft extends CommandBase {
   private LeftCatapult catapult;
 
-  public EjectLeft(LeftCatapult leftCatapult) {
-    this.catapult = leftCatapult;
-    addRequirements(leftCatapult);
+  public EjectLeft(LeftCatapult catapult) {
+    this.catapult = catapult;
+    addRequirements(catapult);
   }
 
   @Override
   public void execute() {
-        catapult.run(0.6);
+    catapult.run(0.6);
   }
 
   @Override
   public void end(boolean interrupted) {
-    catapult.run(0);     
+    catapult.run(0.0);     
   }
 
   @Override

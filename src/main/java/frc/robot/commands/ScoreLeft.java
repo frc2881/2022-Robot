@@ -8,24 +8,19 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.LeftCatapult;
 
 public class ScoreLeft extends SequentialCommandGroup {
-
   public ScoreLeft(LeftCatapult leftCatapult) {
-{
     addCommands(
         new ConditionalCommand(new ShootLeft(leftCatapult).withTimeout(1).
-                                andThen(new ResetLeft(leftCatapult).withTimeout(2)), 
-                              new WaitCommand(0.0001), () -> Shoot(leftCatapult))
-        );
+                                andThen(new ResetLeft(leftCatapult).withTimeout(2)),
+                               new WaitCommand(0.001), () -> Shoot(leftCatapult)));
+  }
+
+  public boolean Shoot(LeftCatapult leftCatapult) {
+    if(((DriverStation.getAlliance() == Alliance.Red) && (leftCatapult.isRed() == true)) ||
+       ((DriverStation.getAlliance() == Alliance.Blue) && (leftCatapult.isBlue() == true))) {
+      return true;
+    } else {
+      return false;
     }
   }
-
-public boolean Shoot(LeftCatapult leftCatapult){
-  if (((DriverStation.getAlliance() == Alliance.Red) && (leftCatapult.isRed() == true)) 
-  || ((DriverStation.getAlliance() == Alliance.Blue) && (leftCatapult.isBlue() == true))) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 }

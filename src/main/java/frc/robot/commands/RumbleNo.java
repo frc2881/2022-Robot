@@ -16,7 +16,6 @@ public class RumbleNo extends CommandBase {
   public RumbleNo(XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_controller = controller;
-    
   }
 
   // Called when the command is initially scheduled.
@@ -25,19 +24,14 @@ public class RumbleNo extends CommandBase {
     m_controller.setRumble(RumbleType.kLeftRumble, 1);
     time = System.currentTimeMillis();
   }
-  
-  
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (System.currentTimeMillis() - time >= 400){
+    if((System.currentTimeMillis() - time) >= 400) {
       m_controller.setRumble(RumbleType.kLeftRumble, 1);
-    
-    } else {
-      if (System.currentTimeMillis() - time >= 200){
-        m_controller.setRumble(RumbleType.kLeftRumble, 0);
-    }
-      
+    } else if((System.currentTimeMillis() - time) >= 200) {
+      m_controller.setRumble(RumbleType.kLeftRumble, 0);
     }
   }
 
@@ -50,13 +44,10 @@ public class RumbleNo extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-  if (System.currentTimeMillis() - time >= 600){
-    return true;
-
-  } else {
-    return false;
-  }
-
-
+    if((System.currentTimeMillis() - time) >= 600) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -22,7 +22,7 @@ public class Intake extends SubsystemBase {
         intake.setInverted(false);
         intake.setIdleMode(IdleMode.kBrake);
         intake.setSmartCurrentLimit(16);
-            
+
     solenoid = new Solenoid(PneumaticsModuleType.REVPH, 0);
   }
 

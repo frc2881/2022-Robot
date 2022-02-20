@@ -16,26 +16,28 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
-
+  private final CANSparkMax leadScrew;
   private final RelativeEncoder climbenc;
+  private final Solenoid climberSolenoid;
 
-  private final Solenoid climberSolenoid = new Solenoid(PneumaticsModuleType.REVPH, 1);
-  private CANSparkMax leadScrew;
+  private final double matchSafety = 35.0;
 
   public Climber() {
     leadScrew = new CANSparkMax(18, MotorType.kBrushless);
         leadScrew.restoreFactoryDefaults();
         leadScrew.setInverted(false);
-        leadScrew.setIdleMode(IdleMode.kBrake);   
+        leadScrew.setIdleMode(IdleMode.kBrake);
         leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-        leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)26);
+        leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)26.0);
         leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
         leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)0.25);
         leadScrew.setOpenLoopRampRate(0.08);
 
     climbenc = leadScrew.getEncoder();
 
-    climbenc.setPositionConversionFactor((1.0/2.0) / 3.0);
+    climbenc.setPositionConversionFactor((1.0 / 2.0) / 3.0);
+
+    climberSolenoid = new Solenoid(PneumaticsModuleType.REVPH, 1);
   }
 
   public void _moveArm(double speed) {
@@ -48,7 +50,7 @@ public class Climber extends SubsystemBase {
    * @param speed positive value extends
    */
   public void moveArm(double speed) {
-    if(DriverStation.getMatchTime() < 35) {
+    if(DriverStation.getMatchTime() < matchSafety) {
       _moveArm(speed);
     }
   }
@@ -61,7 +63,7 @@ public class Climber extends SubsystemBase {
    * Brings the arm to back position
    */
   public void armBack() {
-    if(DriverStation.getMatchTime() < 35) {
+    if(DriverStation.getMatchTime() < matchSafety) {
       _armBack();
     }
   }
@@ -74,7 +76,7 @@ public class Climber extends SubsystemBase {
    * Brings the arm to upright position
    */
   public void armUp() {
-    if(DriverStation.getMatchTime() < 35) {
+    if(DriverStation.getMatchTime() < matchSafety) {
       _armUp();
     }
   }
@@ -84,7 +86,7 @@ public class Climber extends SubsystemBase {
   }
 
   public void armToggle() {
-    if(DriverStation.getMatchTime() < 35) {
+    if(DriverStation.getMatchTime() < matchSafety) {
       _armToggle();
     }
   }
@@ -94,26 +96,26 @@ public class Climber extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public Double getClimbEncoderPostion(){
+  public Double getClimbEncoderPostion() {
     return climbenc.getPosition();
   }
 
-  public void disableEncoderSoftLimit(){
+  public void disableEncoderSoftLimit() {
     leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
     leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
   }
 
-  public void enableEncoderSoftLimit(){
+  public void enableEncoderSoftLimit() {
     leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
   }
 
-  public void resetEncoder(){
+  public void resetEncoder() {
     climbenc.setPosition(0);
   }
 
   @Override
-  public void initSendable(SendableBuilder builder) {  
+  public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
     builder.addDoubleProperty("Climber Postion", () -> climbenc.getPosition(),  null);
     builder.addDoubleProperty("Current", () -> leadScrew.getOutputCurrent(),  null);

@@ -20,7 +20,7 @@ public class RunIntake extends CommandBase {
   // called when the command is initially scheduled
   @Override
   public void initialize() {
-    intake.run(1, Direction.INTAKE);
+    intake.run(1.0, Direction.INTAKE);
   }
 
   // called every time the scheduler runs while the command is scheduled
@@ -30,7 +30,7 @@ public class RunIntake extends CommandBase {
   // called once the command ends or is interrupted
   @Override
   public void end(boolean interrupted) {
-    intake.run(0, Direction.INTAKE);
+    intake.run(0.0, Direction.INTAKE);
   }
 
   // returns false when the command should end

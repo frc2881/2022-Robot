@@ -9,23 +9,20 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LeftCatapult extends SubsystemBase {
-  private CANSparkMax leftCatapult;
-  private ColorMatchResult matchLeft;
-  private ColorSensorV3 colorSensorLeft = new ColorSensorV3(Port.kMXP);
+  private final CANSparkMax catapult;
 
-  private final RelativeEncoder leftCatapultEnc;
+  private final RelativeEncoder encoder;
 
-  private final ColorMatch colorMatcher = new ColorMatch();
-                                            //R       G       B
-  private final Color blueCargo = new Color(.1436, .4070, .4499); 
-  private final Color redCargo = new Color(.5720, .3222, .1062); 
+  private final ColorSensorV3 colorSensor;
+  private final ColorMatch colorMatcher;
+
+  private final Color blueCargo = new Color(.1436, .4070, .4499);
+  private final Color redCargo = new Color(.5720, .3222, .1062);
 
   private final int distance = 600;
 
@@ -33,52 +30,51 @@ public class LeftCatapult extends SubsystemBase {
   private boolean cargoIsBlue;
 
   public LeftCatapult() {
-    leftCatapult = new CANSparkMax(16, MotorType.kBrushless);
-        leftCatapult.restoreFactoryDefaults();
-        leftCatapult.setInverted(false);
-        leftCatapult.setIdleMode(IdleMode.kBrake);
-        leftCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-        leftCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-        leftCatapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)4.5);
-        leftCatapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)0);
-        leftCatapult.getEncoder().setPosition(0);
-        leftCatapult.setSmartCurrentLimit(80);
+    catapult = new CANSparkMax(16, MotorType.kBrushless);
+        catapult.restoreFactoryDefaults();
+        catapult.setInverted(false);
+        catapult.setIdleMode(IdleMode.kBrake);
+        catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+        catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+        catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)4.5);
+        catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)0.0);
+        catapult.getEncoder().setPosition(0);
+        catapult.setSmartCurrentLimit(80);
 
+    colorSensor = new ColorSensorV3(Port.kMXP);
+
+    colorMatcher = new ColorMatch();
     colorMatcher.addColorMatch(blueCargo);
     colorMatcher.addColorMatch(redCargo);
-    colorMatcher.setConfidenceThreshold(.95);
+    colorMatcher.setConfidenceThreshold(0.95);
 
-    leftCatapultEnc = leftCatapult.getEncoder();
+    encoder = catapult.getEncoder();
   }
 
-  public void _run(double speed){
-    leftCatapult.set(speed);
+  public void disableEncoderSoftLimit() {
+    catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
+    catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
   }
 
-  public void disableEncoderSoftLimit(){
-    leftCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
-    leftCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
+  public void enableEncoderSoftLimit() {
+    catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
   }
 
-  public void enableEncoderSoftLimit(){
-    leftCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    leftCatapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+  public void resetEncoder() {
+    encoder.setPosition(0);
   }
 
-  public void resetEncoder(){
-    leftCatapultEnc.setPosition(0);
+  public boolean reachedUpperSoftLimit() {
+    return Math.abs(catapult.getSoftLimit(CANSparkMax.SoftLimitDirection.kForward) - encoder.getPosition()) < 0.1;
   }
 
-  public boolean reachedUpperSoftLimit(){
-    return Math.abs(leftCatapult.getSoftLimit(CANSparkMax.SoftLimitDirection.kForward) - leftCatapult.getEncoder().getPosition()) < 0.1;
-  }
-
-  public boolean reachedLowerSoftLimit(){
-    return Math.abs(leftCatapult.getSoftLimit(CANSparkMax.SoftLimitDirection.kReverse) - leftCatapult.getEncoder().getPosition()) < 0.1;
+  public boolean reachedLowerSoftLimit() {
+    return Math.abs(catapult.getSoftLimit(CANSparkMax.SoftLimitDirection.kReverse) - encoder.getPosition()) < 0.1;
   }
 
   public void run(double speed) {
-    leftCatapult.set(speed);
+    catapult.set(speed);
   }
 
   public boolean isBlue() {
@@ -90,29 +86,32 @@ public class LeftCatapult extends SubsystemBase {
   }
 
   @Override
-  public void periodic(){
-    Color detectedColorLeft = colorSensorLeft.getColor();
-    matchLeft = colorMatcher.matchColor(detectedColorLeft);
-    if((matchLeft != null) && (matchLeft.color == redCargo) &&
-       (colorSensorLeft.getProximity() > distance)) {
-         cargoIsRed = true;
-       } else {
-         cargoIsRed = false;
-       }
-    if((matchLeft != null) && (matchLeft.color == blueCargo) &&
-      (colorSensorLeft.getProximity() > distance)) {
-        cargoIsBlue = true;
-      } else {
-        cargoIsBlue = false;
-      }
+  public void periodic() {
+    Color detectedColor = colorSensor.getColor();
+    ColorMatchResult match = colorMatcher.matchColor(detectedColor);
+
+    if((match != null) && (match.color == redCargo) &&
+       (colorSensor.getProximity() > distance)) {
+      cargoIsRed = true;
+    } else {
+      cargoIsRed = false;
+    }
+
+    if((match != null) && (match.color == blueCargo) &&
+       (colorSensor.getProximity() > distance)) {
+      cargoIsBlue = true;
+    } else {
+      cargoIsBlue = false;
+    }
   }
 
   @Override
-  public void initSendable(SendableBuilder builder) {  
+  public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
+    builder.addDoubleProperty("Left Distance", () -> colorSensor.getProximity(),  null);   
     builder.addBooleanProperty("Left Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Left Red", () -> isRed(), null);
-    builder.addDoubleProperty("Left Catapult position", () -> leftCatapultEnc.getPosition(), null);
+    builder.addDoubleProperty("Left Catapult position", () -> encoder.getPosition(), null);
   }
 }

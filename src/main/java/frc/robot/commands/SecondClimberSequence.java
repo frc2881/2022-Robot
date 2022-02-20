@@ -9,19 +9,16 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.utils.NavX;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SecondClimberSequence extends SequentialCommandGroup {
   public SecondClimberSequence(Climber climber, NavX navx) {
     addCommands(
-        new ArmToLength(climber, -.6, 21.8),
+        new ArmToLength(climber, -0.6, 21.8),
         new ArmBack(climber),
-        new ArmToLength(climber, -.6, 17.5),
+        new ArmToLength(climber, -0.6, 17.5),
         new ArmUp(climber),
-        new ArmToLength(climber, -.6, 5.0),
-        new ArmToLength(climber, -.4, .25),
-        new WaitCommand(.5),
+        new ArmToLength(climber, -0.6, 5.0),
+        new ArmToLength(climber, -0.4, 0.25),
+        new WaitCommand(0.5),
         new ArmToLength(climber, 1.0, 5.0),
         new ArmBack(climber),
         //new ArmWaitToExtend(navx),
