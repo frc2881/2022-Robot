@@ -12,8 +12,9 @@ public class ScoreLeft extends SequentialCommandGroup {
   public ScoreLeft(LeftCatapult leftCatapult) {
 {
     addCommands(
-        new ConditionalCommand(new ShootLeft(leftCatapult).withTimeout(1), new WaitCommand(0.0001), () -> Shoot(leftCatapult)),
-        new ResetLeft(leftCatapult).withTimeout(2)
+        new ConditionalCommand(new ShootLeft(leftCatapult).withTimeout(1).
+                                andThen(new ResetLeft(leftCatapult).withTimeout(2)), 
+                              new WaitCommand(0.0001), () -> Shoot(leftCatapult))
         );
     }
   }
