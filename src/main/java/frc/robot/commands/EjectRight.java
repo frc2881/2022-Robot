@@ -13,7 +13,7 @@ public class EjectRight extends CommandBase {
 
   @Override
   public void execute() {
-      catapult.run(0.7);
+      catapult.run(0.6);
   }
 
   @Override

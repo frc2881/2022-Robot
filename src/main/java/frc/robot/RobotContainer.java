@@ -23,6 +23,7 @@ import frc.robot.commands.Autonomous;
 import frc.robot.commands.CatapultOverrride;
 import frc.robot.commands.ClimberOverride;
 import frc.robot.commands.DriveWithJoysticks;
+import frc.robot.commands.Eject;
 import frc.robot.commands.FirstClimberSequence;
 import frc.robot.commands.FollowTrajectory;
 import frc.robot.commands.RunArm;
@@ -170,6 +171,9 @@ public class RobotContainer {
     
     new JoystickButton(manipulatorController, XboxController.Button.kA.value).whenPressed(
       new InstantCommand(() -> intake.retract(), intake));
+
+    new JoystickButton(manipulatorController, XboxController.Button.kB.value).whenPressed(
+      new Eject(leftCatapult, rightCatapult));
 
     new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).whenHeld(
       new FirstClimberSequence(climber, navx));
