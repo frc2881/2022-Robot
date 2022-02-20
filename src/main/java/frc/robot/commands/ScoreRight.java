@@ -15,8 +15,9 @@ public class ScoreRight extends SequentialCommandGroup {
     //if(/*DriverStation.getAlliance() == Alliance.Red) && (rightCatapult.isRed() == true))*/
     //|| ((DriverStation.getAlliance() == Alliance.Blue) && (rightCatapult.isBlue() == true)){
     addCommands(
-      new ConditionalCommand(new ShootRight(rightCatapult).withTimeout(1), new WaitCommand(0.001), () -> Shoot(rightCatapult)),
-      new ResetRight(rightCatapult).withTimeout(2)
+      new ConditionalCommand(new ShootRight(rightCatapult).withTimeout(1).
+                              andThen(new ResetRight(rightCatapult).withTimeout(2)), 
+                            new WaitCommand(0.001), () -> Shoot(rightCatapult))
         );
 
     //}
