@@ -27,6 +27,7 @@ import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.Eject;
 import frc.robot.commands.FirstClimberSequence;
 import frc.robot.commands.FollowTrajectory;
+import frc.robot.commands.IntakeArm;
 import frc.robot.commands.RunArm;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.ScoreLeft;
@@ -146,13 +147,10 @@ public class RobotContainer {
       whileHeld(new RunIntake(intake));
 
     new JoystickButton(manipulatorController, XboxController.Button.kY.value).
-      whenPressed(new InstantCommand(() -> intake.extend(), intake));
+      whenPressed(new InstantCommand(() -> climber.armToggle()));
 
     new JoystickButton(manipulatorController, XboxController.Button.kA.value).
-      whenPressed(new InstantCommand(() -> intake.retract(), intake));
-
-    new JoystickButton(manipulatorController, XboxController.Button.kB.value).
-      whenPressed(new Eject(leftCatapult, rightCatapult));
+      whileHeld(new IntakeArm(intake));
 
     new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).
       whenHeld(new FirstClimberSequence(climber, navx));
@@ -161,7 +159,7 @@ public class RobotContainer {
       whenHeld(new SecondClimberSequence(climber, navx));
 
     buttonFromDPad(manipulatorController).
-      whenPressed(new InstantCommand(() -> climber.armToggle()));
+      whenPressed(new Eject(leftCatapult, rightCatapult));
 
     buttonFromDouble(() -> manipulatorController.getLeftTriggerAxis()).
       whenPressed(new ScoreLeft(leftCatapult));
