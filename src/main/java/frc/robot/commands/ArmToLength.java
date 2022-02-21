@@ -34,9 +34,9 @@ public class ArmToLength extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if((m_speed < 0) && (m_climber.getClimbEncoderPostion() <= m_position)) {
+    if((m_speed < 0) && (m_climber.getClimbEncoderPosition() <= m_position)) {
       return true;
-    } else if((m_speed > 0) && (m_climber.getClimbEncoderPostion() >= m_position)) {
+    } else if((m_speed > 0) && (m_climber.getClimbEncoderPosition() >= m_position)) {
       return true;
     } else {
       return false;

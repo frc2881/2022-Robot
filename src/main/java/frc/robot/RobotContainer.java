@@ -25,9 +25,9 @@ import frc.robot.commands.CatapultOverrride;
 import frc.robot.commands.ClimberOverride;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.Eject;
+import frc.robot.commands.ExtendIntake;
 import frc.robot.commands.FirstClimberSequence;
 import frc.robot.commands.FollowTrajectory;
-import frc.robot.commands.IntakeArm;
 import frc.robot.commands.RunArm;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.ScoreLeft;
@@ -36,7 +36,6 @@ import frc.robot.commands.SecondClimberSequence;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Intake.Direction;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.RightCatapult;
@@ -77,9 +76,8 @@ public class RobotContainer {
 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive,
-    () -> applyDeadband(driverController.getLeftY()),
-    () -> applyDeadband(driverController.getRightY()),
-    () -> applyDeadband(-driverController.getRightX())
+    () -> applyDeadband(-driverController.getLeftY()),
+    () -> applyDeadband(driverController.getRightX())
     );
 
   private final RunArm runArm = new RunArm(
@@ -150,7 +148,7 @@ public class RobotContainer {
       whenPressed(new InstantCommand(() -> climber.armToggle()));
 
     new JoystickButton(manipulatorController, XboxController.Button.kA.value).
-      whileHeld(new IntakeArm(intake));
+      whileHeld(new ExtendIntake(intake));
 
     new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).
       whenHeld(new FirstClimberSequence(climber, navx));
@@ -176,10 +174,12 @@ public class RobotContainer {
 
   public void resetRobot() {
     if(robotResetState == true) {
-      intake.run(0, Direction.INTAKE);
-      intake.retract();
-      climber.armUp();
-       robotResetState = false;
+      climber.reset();
+      drive.reset();
+      intake.reset();
+      leftCatapult.reset();
+      rightCatapult.reset();
+      robotResetState = false;
     }
   }
 

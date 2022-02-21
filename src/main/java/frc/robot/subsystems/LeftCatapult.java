@@ -5,6 +5,8 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.Catapult.*;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -19,94 +21,92 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LeftCatapult extends SubsystemBase {
-  private final CANSparkMax catapult;
-
-  private final RelativeEncoder encoder;
-
-  private final ColorSensorV3 colorSensor;
-  private final ColorMatch colorMatcher;
-
-  private final Color blueCargo = new Color(.1436, .4070, .4499);
-  private final Color redCargo = new Color(.5720, .3222, .1062);
-
-  private final int distance = 600;
-
-  private boolean cargoIsRed;
-  private boolean cargoIsBlue;
+  private final CANSparkMax m_catapult;
+  private final RelativeEncoder m_encoder;
+  private final ColorSensorV3 m_colorSensor;
+  private final ColorMatch m_colorMatcher;
+  private boolean m_cargoIsRed;
+  private boolean m_cargoIsBlue;
 
   public LeftCatapult() {
-    catapult = new CANSparkMax(16, MotorType.kBrushless);
-        catapult.restoreFactoryDefaults();
-        catapult.setInverted(false);
-        catapult.setIdleMode(IdleMode.kBrake);
-        catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-        catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-        catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)4.5);
-        catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)0.0);
-        catapult.getEncoder().setPosition(0);
-        catapult.setSmartCurrentLimit(80);
+    m_catapult = new CANSparkMax(kLeftMotor, MotorType.kBrushless);
+    m_catapult.restoreFactoryDefaults();
+    m_catapult.setInverted(false);
+    m_catapult.setIdleMode(IdleMode.kBrake);
+    m_catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    m_catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    m_catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
+                            (float)kForwardLimit);
+    m_catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
+                            (float)kReverseLimit);
+    m_catapult.setSmartCurrentLimit(kCurrentLimit);
 
-    colorSensor = new ColorSensorV3(Port.kMXP);
+    m_encoder = m_catapult.getEncoder();
+    m_encoder.setPosition(0);
 
-    colorMatcher = new ColorMatch();
-    colorMatcher.addColorMatch(blueCargo);
-    colorMatcher.addColorMatch(redCargo);
-    colorMatcher.setConfidenceThreshold(0.95);
+    m_colorSensor = new ColorSensorV3(Port.kMXP);
 
-    encoder = catapult.getEncoder();
+    m_colorMatcher = new ColorMatch();
+    m_colorMatcher.addColorMatch(kRedCargo);
+    m_colorMatcher.addColorMatch(kBlueCargo);
+    m_colorMatcher.setConfidenceThreshold(0.95);
+  }
+
+  public void reset() {
+    run(0.0);
   }
 
   public void disableEncoderSoftLimit() {
-    catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
-    catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
+    m_catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
+    m_catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
   }
 
   public void enableEncoderSoftLimit() {
-    catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    m_catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    m_catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
   }
 
   public void resetEncoder() {
-    encoder.setPosition(0);
+    m_encoder.setPosition(0);
   }
 
   public boolean reachedUpperSoftLimit() {
-    return Math.abs(catapult.getSoftLimit(CANSparkMax.SoftLimitDirection.kForward) - encoder.getPosition()) < 0.1;
+    return Math.abs(kForwardLimit - m_encoder.getPosition()) < 0.1;
   }
 
   public boolean reachedLowerSoftLimit() {
-    return Math.abs(catapult.getSoftLimit(CANSparkMax.SoftLimitDirection.kReverse) - encoder.getPosition()) < 0.1;
+    return Math.abs(kReverseLimit - m_encoder.getPosition()) < 0.1;
   }
 
   public void run(double speed) {
-    catapult.set(speed);
-  }
-
-  public boolean isBlue() {
-    return cargoIsBlue;
+    m_catapult.set(speed);
   }
 
   public boolean isRed() {
-    return cargoIsRed;
+    return m_cargoIsRed;
+  }
+
+  public boolean isBlue() {
+    return m_cargoIsBlue;
   }
 
   @Override
   public void periodic() {
-    Color detectedColor = colorSensor.getColor();
-    ColorMatchResult match = colorMatcher.matchColor(detectedColor);
+    Color detectedColor = m_colorSensor.getColor();
+    ColorMatchResult match = m_colorMatcher.matchColor(detectedColor);
 
-    if((match != null) && (match.color == redCargo) &&
-       (colorSensor.getProximity() > distance)) {
-      cargoIsRed = true;
+    if((match != null) && (match.color == kRedCargo) &&
+       (m_colorSensor.getProximity() > kDistance)) {
+      m_cargoIsRed = true;
     } else {
-      cargoIsRed = false;
+      m_cargoIsRed = false;
     }
 
-    if((match != null) && (match.color == blueCargo) &&
-       (colorSensor.getProximity() > distance)) {
-      cargoIsBlue = true;
+    if((match != null) && (match.color == kBlueCargo) &&
+       (m_colorSensor.getProximity() > kDistance)) {
+      m_cargoIsBlue = true;
     } else {
-      cargoIsBlue = false;
+      m_cargoIsBlue = false;
     }
   }
 
@@ -114,9 +114,11 @@ public class LeftCatapult extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
-    builder.addDoubleProperty("Left Distance", () -> colorSensor.getProximity(),  null);
+    builder.addDoubleProperty("Left Distance",
+                              () -> m_colorSensor.getProximity(), null);
     builder.addBooleanProperty("Left Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Left Red", () -> isRed(), null);
-    builder.addDoubleProperty("Left Catapult position", () -> encoder.getPosition(), null);
+    builder.addDoubleProperty("Left Catapult Position",
+                              () -> m_encoder.getPosition(), null);
   }
 }

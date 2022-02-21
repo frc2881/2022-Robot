@@ -5,6 +5,8 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.Intake.*;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -15,42 +17,41 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-  private CANSparkMax intake;
-  private Solenoid solenoid;
-
-  public enum Direction { INTAKE, EJECT }
-  public enum State { EXTEND, RETRACT }
+  private CANSparkMax m_intake;
+  private Solenoid m_solenoid;
 
   public Intake() {
-    intake = new CANSparkMax(15, MotorType.kBrushless);
-        intake.restoreFactoryDefaults();
-        intake.setInverted(false);
-        intake.setIdleMode(IdleMode.kBrake);
-        intake.setSmartCurrentLimit(7);
+    m_intake = new CANSparkMax(kMotor, MotorType.kBrushless);
+    m_intake.restoreFactoryDefaults();
+    m_intake.setInverted(false);
+    m_intake.setIdleMode(IdleMode.kBrake);
+    m_intake.setSmartCurrentLimit(kCurrentLimit);
 
-    solenoid = new Solenoid(PneumaticsModuleType.REVPH, 0);
+    m_solenoid = new Solenoid(PneumaticsModuleType.REVPH, kSolenoid);
   }
 
-  public void run(double speed, Direction state) {
-    if(state == Direction.INTAKE) {
-      intake.set(-speed);
-    } else {
-      intake.set(speed);
-    }
+  public void reset() {
+    run(0.0);
+    retract();
+  }
+
+  public void run(double speed) {
+    m_intake.set(-speed);
   }
 
   public void extend() {
-    solenoid.set(true);
+    m_solenoid.set(true);
   }
 
   public void retract() {
-    solenoid.set(false);
+    m_solenoid.set(false);
   }
 
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
-    builder.addDoubleProperty("Current", () -> intake.getOutputCurrent(),  null);
+    builder.addDoubleProperty("Current", () -> m_intake.getOutputCurrent(),
+                              null);
   }
 }

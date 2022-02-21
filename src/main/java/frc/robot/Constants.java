@@ -7,37 +7,231 @@ package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.utils.GearRatio;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean constants.  This class should not be used for any other
+ * purpose.  All constants should be declared globally (i.e. public static).
+ * Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
+ * <p>It is advised to statically import this class (or one of its inner
+ * classes) wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  /**
+   * Configuration of the catapult subsystems.
+   */
+  public static final class Catapult {
+    /**
+     * The CAN ID of the left catapult motor.
+     */
+    public static final int kLeftMotor = 16;
 
+    /**
+     * The CAN ID of the right catapult motor.
+     */
+    public static final int kRightMotor = 17;
+
+    /**
+     * The color of the red cargo, as detected by the REV Color Sensor V3.
+     */
+    public static final Color kRedCargo = new Color(0.5720, 0.3222, 0.1062);
+
+    /**
+     * The color of the blue cargo, as detected by the REV Color Sensor V3.
+     */
+    public static final Color kBlueCargo = new Color(0.1436, 0.4070, 0.4499);
+
+    /**
+     * The minimum distance to the cargo in order to consider it to be present,
+     * as detected by the REV Color Sensor V3.
+     */
+    public static final int kDistance = 600;
+
+    /**
+     * The maximum current to send to the catapult motors.
+     */
+    public static final int kCurrentLimit = 80;
+
+    /**
+     * The maximum distance (in rotations) that the catapult motor can move in
+     * the forward direction.  Adjusting this limit adjusts the launch angle of
+     * the shot.
+     */
+    public static final double kForwardLimit = 4.5;
+
+    /**
+     * The minimum distance (in rotations) that the catapult motor can move in
+     * the reverse direction.
+     */
+    public static final double kReverseLimit = 0.0;
+  }
+
+  /**
+   * Configuration of the climber subsystem.
+   */
+  public static final class Climber {
+    /**
+     * The CAN ID of the climber motor.
+     */
+    public static final int kMotor = 18;
+
+    /**
+     * The pneumatic hub channel ID of the climber solenoid.
+     */
+    public static final int kSolenoid = 1;
+
+    /**
+     * The maximum rate to ramp the climber motor from full stop to full speed.
+     */
+    public static final double kRampRate = 0.08;
+
+    /**
+     * The gear ratio for the climber that converts motor rotations into inches
+     * of travel of the climber hook.
+     */
+    public static final double kRotationsToInches = (1.0 / 2.0) / 3.0;
+
+    /**
+     * The maximum distance (in inches) that the climber arm can move in the
+     * forward direction.
+     */
+    public static final double kForwardLimit = 26.0;
+
+    /**
+     * The minimum distance (in inches) that the climber arm can move in the
+     * reverse direction.
+     */
+    public static final double kReverseLimit = 0.25;
+
+    /**
+     * The match time at which the climber is allowed to start operating.  Note
+     * that when practicing in teleoperated mode, the climber is always
+     * operational.
+     */
+    public static final double kMatchSafety = 35.0;
+  }
+
+  /**
+   * Configuration of the drive subsystem.
+   */
   public static final class Drive {
+    /**
+     * The CAN ID of the left front motor.
+     */
+    public static final int kLeftFrontMotor = 11;
 
+    /**
+     * The CAN ID of the left rear motor.
+     */
+    public static final int kLeftRearMotor = 12;
+
+    /**
+     * The CAN ID of the right front motor.
+     */
+    public static final int kRightFrontMotor = 13;
+
+    /**
+     * The CAN ID of the right rear motorl.
+     */
+    public static final int kRightRearMotor = 14;
+
+    /**
+     * The maximum current to send to the drive motors.
+     */
+    public static final int kCurrentLimit = 60;
+
+    /**
+     * The maximum rate to ramp the motors from full stop to full speed.
+     */
+    public static final double kRampRate = 0.08;
+
+    /**
+     * The gear ratio that converts motor rotations into meters of travel
+     * across the floor.
+     */
+    public static final double kRotationsToMeters =
+      GearRatio.measureDist(1, 10, 50, 4);
+
+    /**
+     * The maximum amount of time that can pass between updates of the motors
+     * before the motor safety kicks in and stops the motors (helping to
+     * prevent a runaway robot).
+     */
+    public static final double kMotorSafetyTime = 0.1;
+
+    /**
+     * The Ramsete B parameter.
+     */
     public static final double kRamseteB = 2.0;
 
+    /**
+     * The Ramsete Zeta parameter.
+     */
     public static final double kRamseteZeta = 0.7;
 
+    /**
+     * The drive train's coefficient of static friction, corresponding to the
+     * voltage required to get the drive train to just start moving.
+     */
     public static final double kS = 0.15734;
 
+    /**
+     * The drive train's velocity coefficient, corresponding to the voltage
+     * required to maintain a speed of 1 m/s.
+     */
     public static final double kV = 2.0487;
 
+    /**
+     * The drive train's acceleration coefficient, corresponding to the voltage
+     * required to accelerate by 1 m/s^2.
+     */
     public static final double kA = 0.36811;
 
+    /**
+     * The P coefficient for the drive train's feedback PID controller.
+     */
     public static final double kPDriveVel = 2.6446;
 
+    /**
+     * The D coefficient for the drive train's feedback PID controller.
+     */
     public static final double kDDriveVel = 0;
 
+    /**
+     * The width of the drive train, in meters.  This is an empirical width,
+     * and due to possible wheel slip this may not match the physical width
+     * of the drive train (it may be larger).
+     */
     public static final double kTrackWidth = Units.inchesToMeters(22.5);
 
-    public static final DifferentialDriveKinematics kKinematics = new DifferentialDriveKinematics(kTrackWidth);
+    /**
+     * The kinematics helper object that converts chassis velocities into wheel
+     * velocities.
+     */
+    public static final DifferentialDriveKinematics kKinematics =
+      new DifferentialDriveKinematics(kTrackWidth);
+  }
 
-    public static final int kCurrentLimit = 60;
+  /**
+   * Configuration of the intake subsystem.
+   */
+  public static final class Intake {
+    /**
+     * The CAN ID of the intake motor.
+     */
+    public static final int kMotor = 15;
+
+    /**
+     * The pneumatic hub channel ID of the intake solenoid.
+     */
+    public static final int kSolenoid = 0;
+
+    /**
+     * The maximum current to send to the intake motor.
+     */
+    public static final int kCurrentLimit = 7;
   }
 }

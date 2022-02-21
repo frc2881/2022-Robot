@@ -7,7 +7,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Intake.Direction;
 
 public class RunIntake extends CommandBase {
   private Intake intake;
@@ -19,7 +18,7 @@ public class RunIntake extends CommandBase {
   // called when the command is initially scheduled
   @Override
   public void initialize() {
-    intake.run(1.0, Direction.INTAKE);
+    intake.run(1.0);
   }
 
   // called every time the scheduler runs while the command is scheduled
@@ -29,7 +28,7 @@ public class RunIntake extends CommandBase {
   // called once the command ends or is interrupted
   @Override
   public void end(boolean interrupted) {
-    intake.run(0.0, Direction.INTAKE);
+    intake.run(0.0);
   }
 
   // returns false when the command should end

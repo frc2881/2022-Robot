@@ -10,20 +10,16 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Pneumatics extends SubsystemBase {
-  PneumaticHub m_ph = new PneumaticHub(1);
+  PneumaticHub m_ph = new PneumaticHub();
 
   /** Creates a new Pnuematics. */
   public Pneumatics() {
     m_ph.enableCompressorDigital();
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
-
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
-    builder.addDoubleProperty("Compressor Current", () -> m_ph.getCompressorCurrent(), null);
+    builder.addDoubleProperty("Compressor Current",
+                              () -> m_ph.getCompressorCurrent(), null);
   }
 }

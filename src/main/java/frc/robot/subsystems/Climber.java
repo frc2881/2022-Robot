@@ -5,6 +5,8 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.Climber.*;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -17,32 +19,36 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
-  private final CANSparkMax leadScrew;
-  private final RelativeEncoder climbenc;
-  private final Solenoid climberSolenoid;
-
-  private final double matchSafety = 35.0;
+  private final CANSparkMax m_arm;
+  private final RelativeEncoder m_encoder;
+  private final Solenoid m_solenoid;
 
   public Climber() {
-    leadScrew = new CANSparkMax(18, MotorType.kBrushless);
-        leadScrew.restoreFactoryDefaults();
-        leadScrew.setInverted(false);
-        leadScrew.setIdleMode(IdleMode.kBrake);
-        leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-        leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)26.0);
-        leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-        leadScrew.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)0.25);
-        leadScrew.setOpenLoopRampRate(0.08);
+    m_arm = new CANSparkMax(kMotor, MotorType.kBrushless);
+    m_arm.restoreFactoryDefaults();
+    m_arm.setInverted(false);
+    m_arm.setIdleMode(IdleMode.kBrake);
+    m_arm.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    m_arm.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
+                       (float)kForwardLimit);
+    m_arm.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    m_arm.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
+                       (float)kReverseLimit);
+    m_arm.setOpenLoopRampRate(kRampRate);
 
-    climbenc = leadScrew.getEncoder();
+    m_encoder = m_arm.getEncoder();
+    m_encoder.setPositionConversionFactor(kRotationsToInches);
 
-    climbenc.setPositionConversionFactor((1.0 / 2.0) / 3.0);
+    m_solenoid = new Solenoid(PneumaticsModuleType.REVPH, kSolenoid);
+  }
 
-    climberSolenoid = new Solenoid(PneumaticsModuleType.REVPH, 1);
+  public void reset() {
+    moveArm(0.0);
+    _armUp();
   }
 
   public void _moveArm(double speed) {
-    leadScrew.set(speed);
+    m_arm.set(speed);
   }
 
   /**
@@ -51,74 +57,70 @@ public class Climber extends SubsystemBase {
    * @param speed positive value extends
    */
   public void moveArm(double speed) {
-    if(DriverStation.getMatchTime() < matchSafety) {
+    if(DriverStation.getMatchTime() < kMatchSafety) {
       _moveArm(speed);
     }
   }
 
   public void _armBack() {
-    climberSolenoid.set(true);
+    m_solenoid.set(true);
   }
 
   /**
    * Brings the arm to back position
    */
   public void armBack() {
-    if(DriverStation.getMatchTime() < matchSafety) {
+    if(DriverStation.getMatchTime() < kMatchSafety) {
       _armBack();
     }
   }
 
   public void _armUp() {
-    climberSolenoid.set(false);
+    m_solenoid.set(false);
   }
 
   /**
    * Brings the arm to upright position
    */
   public void armUp() {
-    if(DriverStation.getMatchTime() < matchSafety) {
+    if(DriverStation.getMatchTime() < kMatchSafety) {
       _armUp();
     }
   }
 
   public void _armToggle() {
-    climberSolenoid.toggle();
+    m_solenoid.toggle();
   }
 
   public void armToggle() {
-    if(DriverStation.getMatchTime() < matchSafety) {
+    if(DriverStation.getMatchTime() < kMatchSafety) {
       _armToggle();
     }
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
-
-  public Double getClimbEncoderPostion() {
-    return climbenc.getPosition();
+  public Double getClimbEncoderPosition() {
+    return m_encoder.getPosition();
   }
 
   public void disableEncoderSoftLimit() {
-    leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
-    leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
+    m_arm.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
+    m_arm.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
   }
 
   public void enableEncoderSoftLimit() {
-    leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    leadScrew.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    m_arm.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    m_arm.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
   }
 
   public void resetEncoder() {
-    climbenc.setPosition(0);
+    m_encoder.setPosition(0);
   }
 
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
-    builder.addDoubleProperty("Climber Postion", () -> climbenc.getPosition(),  null);
-    builder.addDoubleProperty("Current", () -> leadScrew.getOutputCurrent(),  null);
+    builder.addDoubleProperty("Climber Postion", () -> m_encoder.getPosition(),
+                              null);
+    builder.addDoubleProperty("Current", () -> m_arm.getOutputCurrent(), null);
   }
 }
