@@ -3,18 +3,18 @@
 // Open Source Software; you can modify and/or share it under the terms of BSD
 // license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.feedback;
 
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class RumbleYes extends CommandBase {
+public class RumbleNo extends CommandBase {
   XboxController m_controller;
   double time = 0;
 
-  /** Creates a new RumbleYes. */
-  public RumbleYes(XboxController controller) {
+  /** Creates a new RumbleNo. */
+  public RumbleNo(XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_controller = controller;
   }
@@ -28,7 +28,13 @@ public class RumbleYes extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if((System.currentTimeMillis() - time) >= 400) {
+      m_controller.setRumble(RumbleType.kLeftRumble, 1);
+    } else if((System.currentTimeMillis() - time) >= 200) {
+      m_controller.setRumble(RumbleType.kLeftRumble, 0);
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -39,7 +45,7 @@ public class RumbleYes extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if((System.currentTimeMillis() - time) >= 200) {
+    if((System.currentTimeMillis() - time) >= 600) {
       return true;
     } else {
       return false;

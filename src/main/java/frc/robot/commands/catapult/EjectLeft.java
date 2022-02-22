@@ -3,22 +3,22 @@
 // Open Source Software; you can modify and/or share it under the terms of BSD
 // license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.catapult;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.RightCatapult;
+import frc.robot.subsystems.LeftCatapult;
 
-public class ResetRight extends CommandBase {
-  private RightCatapult catapult;
+public class EjectLeft extends CommandBase {
+  private LeftCatapult catapult;
 
-  public ResetRight(RightCatapult catapult) {
+  public EjectLeft(LeftCatapult catapult) {
     this.catapult = catapult;
     addRequirements(catapult);
   }
 
   @Override
   public void execute() {
-    catapult.run(-0.1);
+    catapult.run(0.6);
   }
 
   @Override
@@ -28,6 +28,6 @@ public class ResetRight extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return catapult.reachedLowerSoftLimit();
+    return catapult.reachedUpperSoftLimit();
   }
 }

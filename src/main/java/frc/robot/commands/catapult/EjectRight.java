@@ -3,15 +3,15 @@
 // Open Source Software; you can modify and/or share it under the terms of BSD
 // license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.catapult;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.LeftCatapult;
+import frc.robot.subsystems.RightCatapult;
 
-public class EjectLeft extends CommandBase {
-  private LeftCatapult catapult;
+public class EjectRight extends CommandBase {
+  private RightCatapult catapult;
 
-  public EjectLeft(LeftCatapult catapult) {
+  public EjectRight(RightCatapult catapult) {
     this.catapult = catapult;
     addRequirements(catapult);
   }
