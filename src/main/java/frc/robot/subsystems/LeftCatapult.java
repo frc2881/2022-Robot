@@ -36,7 +36,7 @@ public class LeftCatapult extends SubsystemBase {
     m_catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     m_catapult.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
     m_catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-                            (float)kForwardLimit);
+                            (float)kForwardLimitLeft);
     m_catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
                             (float)kReverseLimit);
     m_catapult.setSmartCurrentLimit(kCurrentLimit);
@@ -67,11 +67,11 @@ public class LeftCatapult extends SubsystemBase {
   }
 
   public void resetEncoder() {
-    m_encoder.setPosition(0);
+    m_encoder.setPosition(kResetPosition);
   }
 
   public boolean reachedUpperSoftLimit() {
-    return Math.abs(kForwardLimit - m_encoder.getPosition()) < 0.1;
+    return Math.abs(kForwardLimitLeft - m_encoder.getPosition()) < 0.1;
   }
 
   public boolean reachedLowerSoftLimit() {

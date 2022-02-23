@@ -36,6 +36,9 @@ public class Intake extends SubsystemBase {
   }
 
   public void run(double speed) {
+    if(speed > kMaxSpeed) {
+      speed = kMaxSpeed;
+    }
     m_intake.set(-speed);
   }
 

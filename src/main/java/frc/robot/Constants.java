@@ -56,17 +56,45 @@ public final class Constants {
     public static final int kCurrentLimit = 80;
 
     /**
-     * The maximum distance (in rotations) that the catapult motor can move in
-     * the forward direction.  Adjusting this limit adjusts the launch angle of
-     * the shot.
+     * The position (in rotations) that the catapult gets reset to after the
+     * override sequence.
      */
-    public static final double kForwardLimit = 4.5;
+    public static final double kResetPosition = -0.3;
+
+    /**
+     * The maximum distance (in rotations) that the left catapult motor can
+     * move in the forward direction.  Adjusting this limit adjusts the launch
+     * angle of the shot.
+     */
+    public static final double kForwardLimitLeft = 4.75;
+
+    /**
+     * The maximum distance (in rotations) that the right catapult motor can
+     * move in the forward direction.  Adjusting this limit adjusts the launch
+     * angle of the shot.
+     */
+    public static final double kForwardLimitRight = 4.5;
 
     /**
      * The minimum distance (in rotations) that the catapult motor can move in
      * the reverse direction.
      */
     public static final double kReverseLimit = 0.0;
+
+    /**
+     * The maximum amount of time to wait for the catapult to shoot a cargo.
+     */
+    public static final double kShootTimeout = 0.1;
+
+    /**
+     * The maximum amount of time to wait for the catapult to eject a cargo.
+     */
+    public static final double kEjectTimeout = 0.25;
+
+    /**
+     * The maximum amount of time to wait for the catapult to reset.
+     */
+    public static final double kResetTimeout = 1.0;
   }
 
   /**
@@ -104,7 +132,7 @@ public final class Constants {
      * The minimum distance (in inches) that the climber arm can move in the
      * reverse direction.
      */
-    public static final double kReverseLimit = 0.25;
+    public static final double kReverseLimit = 0.0;
 
     /**
      * The match time at which the climber is allowed to start operating.  Note
@@ -232,6 +260,11 @@ public final class Constants {
     /**
      * The maximum current to send to the intake motor.
      */
-    public static final int kCurrentLimit = 7;
+    public static final int kCurrentLimit = 30;
+
+    /**
+     * The maximum speed that the intake motor runs.
+     */
+    public static final double kMaxSpeed = 0.55;
   }
 }

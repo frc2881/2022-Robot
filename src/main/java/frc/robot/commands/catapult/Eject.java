@@ -5,8 +5,11 @@
 
 package frc.robot.commands.catapult;
 
+import static frc.robot.Constants.Catapult.*;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -16,27 +19,37 @@ import frc.robot.subsystems.RightCatapult;
 public class Eject extends SequentialCommandGroup {
   /** Creates a new Eject. */
   public Eject(LeftCatapult leftCatapult, RightCatapult rightCatapult) {
-    addCommands(
-      new ConditionalCommand(new EjectRight(rightCatapult).withTimeout(1).andThen(new ResetRight(rightCatapult).withTimeout(2)),
-      new ConditionalCommand(new EjectLeft(leftCatapult).withTimeout(1).andThen(new ResetLeft(leftCatapult).withTimeout(2)),
-                            new WaitCommand(0.001),
-                            () -> EjectLeftCargo(leftCatapult)),
-      () -> EjectRightCargo(rightCatapult))
-    );
+    Command ejectLeft = sequence(new EjectLeft(leftCatapult).
+                                       withTimeout(kEjectTimeout),
+                                 new ResetLeft(leftCatapult).
+                                       withTimeout(kResetTimeout));
+    Command ejectRight = sequence(new EjectRight(rightCatapult).
+                                        withTimeout(kEjectTimeout),
+                                  new ResetRight(rightCatapult).
+                                        withTimeout(kResetTimeout));
+    addCommands(new ConditionalCommand(ejectRight,
+                                       new ConditionalCommand(ejectLeft,
+                                                              new WaitCommand(0.001),
+                                                              () -> EjectLeftCargo(leftCatapult)),
+                                       () -> EjectRightCargo(rightCatapult)));
   }
 
-  public boolean EjectRightCargo(RightCatapult rightCatapult) {
-    if(((DriverStation.getAlliance() == Alliance.Red) && (rightCatapult.isBlue() == true)) ||
-       ((DriverStation.getAlliance() == Alliance.Blue) && (rightCatapult.isRed() == true))) {
+  public boolean EjectLeftCargo(LeftCatapult leftCatapult) {
+    if(((DriverStation.getAlliance() == Alliance.Red) &&
+        (leftCatapult.isBlue() == true)) ||
+       ((DriverStation.getAlliance() == Alliance.Blue) &&
+        (leftCatapult.isRed() == true))) {
       return true;
     } else {
       return false;
     }
   }
 
-  public boolean EjectLeftCargo(LeftCatapult leftCatapult) {
-    if(((DriverStation.getAlliance() == Alliance.Red) && (leftCatapult.isBlue() == true)) ||
-       ((DriverStation.getAlliance() == Alliance.Blue) && (leftCatapult.isRed() == true))) {
+  public boolean EjectRightCargo(RightCatapult rightCatapult) {
+    if(((DriverStation.getAlliance() == Alliance.Red) &&
+        (rightCatapult.isBlue() == true)) ||
+       ((DriverStation.getAlliance() == Alliance.Blue) &&
+        (rightCatapult.isRed() == true))) {
       return true;
     } else {
       return false;
