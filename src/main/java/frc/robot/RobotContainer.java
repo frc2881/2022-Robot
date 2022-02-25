@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.autonomous.Autonomous;
 import frc.robot.commands.catapult.CatapultOverrride;
 import frc.robot.commands.catapult.Eject;
+import frc.robot.commands.catapult.Score;
 import frc.robot.commands.catapult.ScoreLeft;
 import frc.robot.commands.catapult.ScoreRight;
 import frc.robot.commands.climber.ClimberOverride;
@@ -159,11 +160,8 @@ public class RobotContainer {
     buttonFromDPad(manipulatorController).
       whenPressed(new Eject(leftCatapult, rightCatapult));
 
-    buttonFromDouble(() -> manipulatorController.getLeftTriggerAxis()).
-      whenPressed(new ScoreLeft(leftCatapult));
-
     buttonFromDouble(() -> manipulatorController.getRightTriggerAxis()).
-      whenPressed(new ScoreRight(rightCatapult));
+      whenPressed(new Score(leftCatapult, rightCatapult));
 
     new JoystickButton(manipulatorController, XboxController.Button.kStart.value).
       whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
