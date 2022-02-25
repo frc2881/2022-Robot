@@ -35,13 +35,13 @@ public class Eject extends SequentialCommandGroup {
     Command ejectOurRight = sequence(new EjectRight(rightCatapult).
                                         withTimeout(kEjectTimeout),
                                   new ResetRight(rightCatapult).
-                                        withTimeout(kResetTimeout));   
+                                        withTimeout(kResetTimeout));
 
     addCommands(new ConditionalCommand(ejectOppositeRight,
                   new ConditionalCommand(ejectOppositeLeft,
-                    new ConditionalCommand(ejectOurRight, 
-                      new ConditionalCommand(ejectOurLeft, new WaitCommand(0.001), 
-                      () -> EjectLeftOurCargo(leftCatapult)), 
+                    new ConditionalCommand(ejectOurRight,
+                      new ConditionalCommand(ejectOurLeft, new WaitCommand(0.001),
+                      () -> EjectLeftOurCargo(leftCatapult)),
                     () -> EjectRightOurCargo(rightCatapult)),
                   () -> EjectLeftOppositeCargo(leftCatapult)),
                 () -> EjectRightOppositeCargo(rightCatapult)));
