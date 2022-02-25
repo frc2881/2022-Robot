@@ -15,7 +15,7 @@ public class SecondClimberSequence extends SequentialCommandGroup {
     addCommands(
         new ArmToLength(climber, -0.6, 21.8),
         new ArmBack(climber),
-        new ArmToLength(climber, -0.6, 17.5),
+        new ArmToLength(climber, -0.6, 18.5),
         new ArmUp(climber),
         new ArmToLength(climber, -0.6, 5.0),
         new ArmToLength(climber, -0.4, 0.0),
