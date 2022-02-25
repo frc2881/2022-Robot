@@ -9,14 +9,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.RightCatapult;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Score extends ParallelCommandGroup {
-  /** Creates a new Score. */
   public Score(LeftCatapult leftCatapult, RightCatapult rightCatapult) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ScoreLeft(leftCatapult),
       sequence(new WaitCommand(0.15), new ScoreRight(rightCatapult))

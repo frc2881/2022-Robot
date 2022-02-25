@@ -24,8 +24,6 @@ import frc.robot.commands.autonomous.Autonomous;
 import frc.robot.commands.catapult.CatapultOverrride;
 import frc.robot.commands.catapult.Eject;
 import frc.robot.commands.catapult.Score;
-import frc.robot.commands.catapult.ScoreLeft;
-import frc.robot.commands.catapult.ScoreRight;
 import frc.robot.commands.climber.ClimberOverride;
 import frc.robot.commands.climber.FirstClimberSequence;
 import frc.robot.commands.climber.RunArm;
