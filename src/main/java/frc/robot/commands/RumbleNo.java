@@ -7,15 +7,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.PrettyLights;
 
 public class RumbleNo extends CommandBase {
+  private PrettyLights prettylights;
   XboxController m_controller;
   double time = 0;
 
   /** Creates a new RumbleNo. */
-  public RumbleNo(XboxController controller) {
+  public RumbleNo(PrettyLights prettylights, XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_controller = controller;
+    this.prettylights = prettylights;
     
   }
 
@@ -24,6 +27,7 @@ public class RumbleNo extends CommandBase {
   public void initialize() {
     m_controller.setRumble(RumbleType.kLeftRumble, 1);
     time = System.currentTimeMillis();
+    prettylights.redColor();
   }
   
   
@@ -32,10 +36,12 @@ public class RumbleNo extends CommandBase {
   public void execute() {
     if (System.currentTimeMillis() - time >= 400){
       m_controller.setRumble(RumbleType.kLeftRumble, 1);
+      prettylights.redColor();
     
     } else {
       if (System.currentTimeMillis() - time >= 200){
         m_controller.setRumble(RumbleType.kLeftRumble, 0);
+        prettylights.defaultColor();
     }
       
     }
@@ -45,6 +51,7 @@ public class RumbleNo extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_controller.setRumble(RumbleType.kLeftRumble, 0);
+    prettylights.defaultColor();
   }
 
   // Returns true when the command should end.

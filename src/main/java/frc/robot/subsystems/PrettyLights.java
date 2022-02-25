@@ -6,12 +6,13 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.RumbleYes;
 
 public class PrettyLights extends SubsystemBase {
 
-  public static final double hotPink = 0.57;
-  public static final double green = 0.77;
-  public static final double red = -0.25;
+  public final double hotPink = 0.57;
+  public final double green = 0.77;
+  public final double red = 0.61;
 
   private final Spark lights;
   
@@ -26,17 +27,23 @@ public class PrettyLights extends SubsystemBase {
   //(no code) disabled heartbeat pink
   //Intake red cargo Solid red (1-2 seconds)
   //Intake blue cargo Solid blue (1-2 seconds)
+  //flash green once
+  //flash red twice
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+
+  public void defaultColor(){
     lights.set(hotPink);
   }
-
-
-  public void color(double Color, double flash){
-    lights.set(Color);
-
-
-
+  public void greenColor(){
+    lights.set(green);
   }
+  public void redColor(){
+    lights.set(red);
+  }
+
 }

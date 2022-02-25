@@ -23,6 +23,8 @@ import frc.robot.commands.ClimberOverride;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.FirstClimberSequence;
 import frc.robot.commands.FollowTrajectory;
+import frc.robot.commands.RumbleNo;
+import frc.robot.commands.RumbleYes;
 import frc.robot.commands.RunArm;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SecondClimberSequence;
@@ -32,6 +34,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Intake.Direction;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
 // import frc.robot.subsystems.Pneumatics;
 import frc.robot.utils.Log;
@@ -44,6 +47,7 @@ public class RobotContainer {
 
   private final Pneumatics pneumatics = new Pneumatics();
   private final Climber climber = new Climber();
+  private final PrettyLights prettylights = new PrettyLights();
 
   private final Intake intake = new Intake();
   private final LeftCatapult leftCatapult = new LeftCatapult();
@@ -155,6 +159,11 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     //DRIVER PS4 CONTROLLER
+    new JoystickButton(driverController, XboxController.Button.kB.value).whenHeld(
+      new RumbleYes(prettylights, driverController));
+
+    new JoystickButton(driverController, XboxController.Button.kA.value).whenHeld(
+      new RumbleNo(prettylights, driverController));
 
     //MANIPULATOR XBOX CONTROLLER
 
