@@ -151,10 +151,10 @@ public class RobotContainer {
       whileHeld(new ExtendIntake(intake));
 
     new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).
-      whenHeld(new FirstClimberSequence(climber, navx));
+      whenHeld(new FirstClimberSequence(climber, navx, manipulatorController));
 
     new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).
-      whenHeld(new SecondClimberSequence(climber, navx));
+      whenHeld(new SecondClimberSequence(climber, navx, manipulatorController));
 
     buttonFromDPad(manipulatorController).
       whenPressed(new Eject(leftCatapult, rightCatapult));
