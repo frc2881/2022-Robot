@@ -5,7 +5,8 @@
 
 package frc.robot.commands.catapult;
 
-import static frc.robot.Constants.Catapult.*;
+import static frc.robot.Constants.Catapult.kEjectTimeout;
+import static frc.robot.Constants.Catapult.kResetTimeout;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -19,22 +20,34 @@ import frc.robot.subsystems.RightCatapult;
 public class Eject extends SequentialCommandGroup {
   /** Creates a new Eject. */
   public Eject(LeftCatapult leftCatapult, RightCatapult rightCatapult) {
-    Command ejectLeft = sequence(new EjectLeft(leftCatapult).
+    Command ejectOppositeLeft = sequence(new EjectLeft(leftCatapult).
                                        withTimeout(kEjectTimeout),
                                  new ResetLeft(leftCatapult).
                                        withTimeout(kResetTimeout));
-    Command ejectRight = sequence(new EjectRight(rightCatapult).
+    Command ejectOppositeRight = sequence(new EjectRight(rightCatapult).
                                         withTimeout(kEjectTimeout),
                                   new ResetRight(rightCatapult).
                                         withTimeout(kResetTimeout));
-    addCommands(new ConditionalCommand(ejectRight,
-                                       new ConditionalCommand(ejectLeft,
-                                                              new WaitCommand(0.001),
-                                                              () -> EjectLeftCargo(leftCatapult)),
-                                       () -> EjectRightCargo(rightCatapult)));
+    Command ejectOurLeft = sequence(new EjectLeft(leftCatapult).
+                                       withTimeout(kEjectTimeout),
+                                 new ResetLeft(leftCatapult).
+                                       withTimeout(kResetTimeout));
+    Command ejectOurRight = sequence(new EjectRight(rightCatapult).
+                                        withTimeout(kEjectTimeout),
+                                  new ResetRight(rightCatapult).
+                                        withTimeout(kResetTimeout));   
+
+    addCommands(new ConditionalCommand(ejectOppositeRight,
+                  new ConditionalCommand(ejectOppositeLeft,
+                    new ConditionalCommand(ejectOurRight, 
+                      new ConditionalCommand(ejectOurLeft, new WaitCommand(0.001), 
+                      () -> EjectLeftOurCargo(leftCatapult)), 
+                    () -> EjectRightOurCargo(rightCatapult)),
+                  () -> EjectLeftOppositeCargo(leftCatapult)),
+                () -> EjectRightOppositeCargo(rightCatapult)));
   }
 
-  public boolean EjectLeftCargo(LeftCatapult leftCatapult) {
+  public boolean EjectLeftOppositeCargo(LeftCatapult leftCatapult) {
     if(((DriverStation.getAlliance() == Alliance.Red) &&
         (leftCatapult.isBlue() == true)) ||
        ((DriverStation.getAlliance() == Alliance.Blue) &&
@@ -45,11 +58,33 @@ public class Eject extends SequentialCommandGroup {
     }
   }
 
-  public boolean EjectRightCargo(RightCatapult rightCatapult) {
+  public boolean EjectRightOppositeCargo(RightCatapult rightCatapult) {
     if(((DriverStation.getAlliance() == Alliance.Red) &&
         (rightCatapult.isBlue() == true)) ||
        ((DriverStation.getAlliance() == Alliance.Blue) &&
         (rightCatapult.isRed() == true))) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean EjectLeftOurCargo(LeftCatapult leftCatapult) {
+    if(((DriverStation.getAlliance() == Alliance.Red) &&
+        (leftCatapult.isRed() == true)) ||
+       ((DriverStation.getAlliance() == Alliance.Blue) &&
+        (leftCatapult.isBlue() == true))) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean EjectRightOurCargo(RightCatapult rightCatapult) {
+    if(((DriverStation.getAlliance() == Alliance.Red) &&
+        (rightCatapult.isRed() == true)) ||
+       ((DriverStation.getAlliance() == Alliance.Blue) &&
+        (rightCatapult.isBlue() == true))) {
       return true;
     } else {
       return false;
