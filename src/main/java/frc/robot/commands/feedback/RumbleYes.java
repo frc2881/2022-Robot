@@ -8,15 +8,18 @@ package frc.robot.commands.feedback;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.PrettyLights;
 
 public class RumbleYes extends CommandBase {
+  private PrettyLights prettylights;
   XboxController m_controller;
   double time = 0;
 
   /** Creates a new RumbleYes. */
-  public RumbleYes(XboxController controller) {
+  public RumbleYes(PrettyLights prettylights, XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_controller = controller;
+    this.prettylights = prettylights;
   }
 
   // Called when the command is initially scheduled.
@@ -24,6 +27,7 @@ public class RumbleYes extends CommandBase {
   public void initialize() {
     m_controller.setRumble(RumbleType.kLeftRumble, 1);
     time = System.currentTimeMillis();
+    prettylights.greenColor();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,6 +38,7 @@ public class RumbleYes extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_controller.setRumble(RumbleType.kLeftRumble, 0);
+    prettylights.defaultColor();
   }
 
   // Returns true when the command should end.
