@@ -31,7 +31,12 @@ import frc.robot.commands.climber.RunArm;
 import frc.robot.commands.climber.SecondClimberSequence;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.FollowTrajectory;
+<<<<<<< HEAD
 import frc.robot.commands.drive.CameraSwitch;
+=======
+import frc.robot.commands.feedback.RumbleNo;
+import frc.robot.commands.feedback.RumbleYes;
+>>>>>>> 0e194382dca696568cd2be069b0c91086ce3d322
 import frc.robot.commands.intake.ExtendIntake;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.subsystems.Climber;
@@ -39,6 +44,7 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
@@ -50,7 +56,6 @@ public class RobotContainer {
 
   private final PowerDistribution powerHub = new PowerDistribution(2, ModuleType.kRev);
   private final Pneumatics pneumatics = new Pneumatics();
-
   private final NavX navx = new NavX();
 
   private final Climber climber = new Climber();
@@ -58,6 +63,7 @@ public class RobotContainer {
   private final LeftCatapult leftCatapult = new LeftCatapult();
   private final RightCatapult rightCatapult = new RightCatapult();
   private final Drive drive = new Drive(navx);
+  private final PrettyLights prettylights = new PrettyLights();
 
   private final Trajectory straight;
   private final Trajectory grabCargo;
@@ -140,10 +146,17 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     // Driver Xbox Controller
+    new JoystickButton(driverController, XboxController.Button.kB.value).whenHeld(
+      new RumbleYes(prettylights, driverController));
 
+<<<<<<< HEAD
     buttonFromDouble(() -> driverController.getLeftTriggerAxis()+driverController.getRightTriggerAxis()).
       whileHeld(new CameraSwitch());
 
+=======
+    new JoystickButton(driverController, XboxController.Button.kA.value).whenHeld(
+      new RumbleNo(prettylights, driverController));
+>>>>>>> 0e194382dca696568cd2be069b0c91086ce3d322
     // Manipulator Xbox Controller
 
     new JoystickButton(manipulatorController, XboxController.Button.kX.value).
@@ -156,10 +169,10 @@ public class RobotContainer {
       whileHeld(new ExtendIntake(intake));
 
     new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).
-      whenHeld(new FirstClimberSequence(climber, navx, manipulatorController));
+      whenHeld(new FirstClimberSequence(climber, prettylights, navx, manipulatorController));
 
     new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).
-      whenHeld(new SecondClimberSequence(climber, navx, manipulatorController));
+      whenHeld(new SecondClimberSequence(climber, prettylights, navx, manipulatorController));
 
     buttonFromDPad(manipulatorController).
       whenPressed(new Eject(leftCatapult, rightCatapult));

@@ -10,10 +10,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.feedback.RumbleYes;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.PrettyLights;
 import frc.robot.utils.NavX;
 
 public class SecondClimberSequence extends SequentialCommandGroup {
-  public SecondClimberSequence(Climber climber, NavX navx, XboxController controller) {
+  public SecondClimberSequence(Climber climber, PrettyLights prettylights, NavX navx, XboxController controller) {
     addCommands(
         new ArmToLength(climber, -0.6, 21.8),
         new ArmBack(climber),
@@ -27,7 +28,7 @@ public class SecondClimberSequence extends SequentialCommandGroup {
         //new ArmWaitToExtend(navx),
         new ArmToLength(climber, 1.0, 25.5),
         new ArmUp(climber),
-        new RumbleYes(controller)
+        new RumbleYes(prettylights, controller)
     );
   }
 }
