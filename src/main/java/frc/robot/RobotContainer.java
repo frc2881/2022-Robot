@@ -31,12 +31,9 @@ import frc.robot.commands.climber.RunArm;
 import frc.robot.commands.climber.SecondClimberSequence;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.FollowTrajectory;
-<<<<<<< HEAD
 import frc.robot.commands.drive.CameraSwitch;
-=======
 import frc.robot.commands.feedback.RumbleNo;
 import frc.robot.commands.feedback.RumbleYes;
->>>>>>> 0e194382dca696568cd2be069b0c91086ce3d322
 import frc.robot.commands.intake.ExtendIntake;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.subsystems.Climber;
@@ -149,14 +146,11 @@ public class RobotContainer {
     new JoystickButton(driverController, XboxController.Button.kB.value).whenHeld(
       new RumbleYes(prettylights, driverController));
 
-<<<<<<< HEAD
     buttonFromDouble(() -> driverController.getLeftTriggerAxis()+driverController.getRightTriggerAxis()).
       whileHeld(new CameraSwitch());
 
-=======
     new JoystickButton(driverController, XboxController.Button.kA.value).whenHeld(
       new RumbleNo(prettylights, driverController));
->>>>>>> 0e194382dca696568cd2be069b0c91086ce3d322
     // Manipulator Xbox Controller
 
     new JoystickButton(manipulatorController, XboxController.Button.kX.value).
