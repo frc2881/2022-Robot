@@ -4,16 +4,18 @@
 
 package frc.robot.commands.catapult;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.RightCatapult;
+import frc.robot.subsystems.PrettyLights;
 
 public class Score extends ParallelCommandGroup {
-  public Score(LeftCatapult leftCatapult, RightCatapult rightCatapult) {
+  public Score(LeftCatapult leftCatapult, RightCatapult rightCatapult, XboxController controller, PrettyLights prettyLights) {
     addCommands(
-      new ScoreLeft(leftCatapult),
-      sequence(new WaitCommand(0.15), new ScoreRight(rightCatapult))
+      new ScoreLeft(leftCatapult, controller, prettyLights),
+      sequence(new WaitCommand(0.15), new ScoreRight(rightCatapult, controller, prettyLights))
     );
   }
 }

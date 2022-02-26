@@ -26,6 +26,7 @@ public class RumbleYes extends CommandBase {
   @Override
   public void initialize() {
     m_controller.setRumble(RumbleType.kLeftRumble, 1);
+    m_controller.setRumble(RumbleType.kRightRumble, 1);
     time = System.currentTimeMillis();
     prettylights.greenColor();
   }
@@ -38,6 +39,7 @@ public class RumbleYes extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_controller.setRumble(RumbleType.kLeftRumble, 0);
+    m_controller.setRumble(RumbleType.kRightRumble, 0);
     prettylights.defaultColor();
   }
 
