@@ -180,6 +180,11 @@ public class RobotContainer {
 
     new JoystickButton(manipulatorController, XboxController.Button.kBack.value).
       whenHeld(new CatapultOverrride(leftCatapult, rightCatapult));
+
+    buttonFromBoolean(() -> leftCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettylights, driverController));
+    buttonFromBoolean(() -> leftCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettylights, driverController));
+    buttonFromBoolean(() -> rightCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettylights, driverController));
+    buttonFromBoolean(() -> rightCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettylights, driverController));
   }
 
   public void resetRobot() {

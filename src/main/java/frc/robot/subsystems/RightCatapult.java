@@ -5,7 +5,14 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Catapult.*;
+import static frc.robot.Constants.Catapult.kBlueCargo;
+import static frc.robot.Constants.Catapult.kCurrentLimit;
+import static frc.robot.Constants.Catapult.kDistance;
+import static frc.robot.Constants.Catapult.kForwardLimitRight;
+import static frc.robot.Constants.Catapult.kRedCargo;
+import static frc.robot.Constants.Catapult.kResetPosition;
+import static frc.robot.Constants.Catapult.kReverseLimit;
+import static frc.robot.Constants.Catapult.kRightMotor;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -16,6 +23,8 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,6 +36,8 @@ public class RightCatapult extends SubsystemBase {
   private final ColorMatch m_colorMatcher;
   private boolean m_cargoIsRed;
   private boolean m_cargoIsBlue;
+  private boolean m_isCorrectCargo;
+  private boolean m_isIncorrectCargo;
 
   public RightCatapult() {
     m_catapult = new CANSparkMax(kRightMotor, MotorType.kBrushless);
@@ -88,6 +99,38 @@ public class RightCatapult extends SubsystemBase {
 
   public boolean isBlue() {
     return m_cargoIsBlue;
+  }
+
+  public boolean isCorrectCargo(){
+    if(m_cargoIsRed == true || m_cargoIsBlue == true){
+      if((m_cargoIsRed == true && DriverStation.getAlliance() == Alliance.Red) || (m_cargoIsBlue == true && DriverStation.getAlliance() == Alliance.Blue)){
+        if(m_isCorrectCargo == false){
+          return m_isCorrectCargo = true;
+        } else{
+          return m_isCorrectCargo;
+        }
+      } else{
+        return m_isCorrectCargo = false;
+      }
+    } else{
+      return m_isCorrectCargo = false;
+    }
+  }
+
+  public boolean isIncorrectCargo(){
+    if(m_cargoIsRed == true || m_cargoIsBlue == true){
+      if((m_cargoIsRed == true && DriverStation.getAlliance() == Alliance.Blue) || (m_cargoIsBlue == true && DriverStation.getAlliance() == Alliance.Red)){
+        if(m_isIncorrectCargo == false){
+          return m_isIncorrectCargo = true;
+        } else{
+          return m_isIncorrectCargo;
+        }
+      } else{
+        return m_isIncorrectCargo = false;
+      }
+    } else{
+      return m_isIncorrectCargo = false;
+    }
   }
 
   @Override
