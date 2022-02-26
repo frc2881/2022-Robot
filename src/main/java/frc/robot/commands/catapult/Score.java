@@ -14,12 +14,12 @@ import frc.robot.subsystems.RightCatapult;
 import frc.robot.subsystems.PrettyLights;
 
 public class Score extends SequentialCommandGroup {
-  public Score(LeftCatapult leftCatapult, RightCatapult rightCatapult, PrettyLights prettylights, XboxController controller) {
+  public Score(LeftCatapult leftCatapult, RightCatapult rightCatapult, PrettyLights prettylights, XboxController manipulatorController) {
     addCommands(parallel(
-      new ScoreLeft(leftCatapult, controller, prettylights),
-      sequence(new WaitCommand(0.15), new ScoreRight(rightCatapult, controller, prettylights))
+      new ScoreLeft(leftCatapult, manipulatorController, prettylights),
+      sequence(new WaitCommand(0.15), new ScoreRight(rightCatapult, manipulatorController, prettylights))
     ),
-      new RumbleYes(prettylights, controller)
+      new RumbleYes(prettylights, null, manipulatorController)
     );
   }
 }

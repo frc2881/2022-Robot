@@ -12,21 +12,30 @@ import frc.robot.subsystems.PrettyLights;
 
 public class RumbleYes extends CommandBase {
   private PrettyLights prettylights;
-  XboxController m_controller;
+  XboxController m_driverController;
+  XboxController m_manipulatorController;
   double time = 0;
 
   /** Creates a new RumbleYes. */
-  public RumbleYes(PrettyLights prettylights, XboxController controller) {
+  public RumbleYes(PrettyLights prettylights, XboxController driverController, XboxController manipulatorController) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_controller = controller;
+    m_driverController = driverController;
+    m_manipulatorController = manipulatorController;
     this.prettylights = prettylights;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_controller.setRumble(RumbleType.kLeftRumble, 1);
-    m_controller.setRumble(RumbleType.kRightRumble, 1);
+    if(m_driverController != null){
+      m_driverController.setRumble(RumbleType.kLeftRumble, 1);
+      m_driverController.setRumble(RumbleType.kRightRumble, 1);
+    }
+
+    if(m_manipulatorController != null){
+      m_manipulatorController.setRumble(RumbleType.kLeftRumble, 1);
+      m_manipulatorController.setRumble(RumbleType.kRightRumble, 1);
+    }
     time = System.currentTimeMillis();
     prettylights.greenColor();
   }
@@ -38,8 +47,14 @@ public class RumbleYes extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_controller.setRumble(RumbleType.kLeftRumble, 0);
-    m_controller.setRumble(RumbleType.kRightRumble, 0);
+    if(m_driverController != null){
+    m_driverController.setRumble(RumbleType.kLeftRumble, 0);
+    m_driverController.setRumble(RumbleType.kRightRumble, 0);
+    }
+    if(m_manipulatorController != null){
+    m_manipulatorController.setRumble(RumbleType.kLeftRumble, 0);
+    m_manipulatorController.setRumble(RumbleType.kRightRumble, 0);
+    }
     prettylights.defaultColor();
   }
 

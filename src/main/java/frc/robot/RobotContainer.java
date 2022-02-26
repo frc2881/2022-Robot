@@ -145,13 +145,13 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Driver Xbox Controller
     new JoystickButton(driverController, XboxController.Button.kB.value).whenHeld(
-      new RumbleYes(prettylights, driverController));
+      new RumbleYes(prettylights, driverController, manipulatorController));
 
     buttonFromDouble(() -> driverController.getLeftTriggerAxis()+driverController.getRightTriggerAxis()).
       whileHeld(new CameraSwitch());
 
     new JoystickButton(driverController, XboxController.Button.kA.value).whenHeld(
-      new RumbleNo(prettylights, driverController));
+      new RumbleNo(prettylights, driverController, manipulatorController));
     // Manipulator Xbox Controller
 
     new JoystickButton(manipulatorController, XboxController.Button.kX.value).
@@ -181,10 +181,10 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, XboxController.Button.kBack.value).
       whenHeld(new CatapultOverrride(leftCatapult, rightCatapult));
 
-    buttonFromBoolean(() -> leftCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettylights, driverController));
-    buttonFromBoolean(() -> leftCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettylights, driverController));
-    buttonFromBoolean(() -> rightCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettylights, driverController));
-    buttonFromBoolean(() -> rightCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettylights, driverController));
+    buttonFromBoolean(() -> leftCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettylights, driverController, manipulatorController));
+    buttonFromBoolean(() -> leftCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettylights, driverController, manipulatorController));
+    buttonFromBoolean(() -> rightCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettylights, driverController, manipulatorController));
+    buttonFromBoolean(() -> rightCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettylights, driverController, manipulatorController));
   }
 
   public void resetRobot() {

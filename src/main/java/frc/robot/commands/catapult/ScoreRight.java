@@ -20,14 +20,14 @@ import frc.robot.subsystems.RightCatapult;
 import frc.robot.subsystems.PrettyLights;
 
 public class ScoreRight extends SequentialCommandGroup {
-  public ScoreRight(RightCatapult rightCatapult, XboxController controller, PrettyLights prettyLights) {
+  public ScoreRight(RightCatapult rightCatapult, XboxController manipulatorController, PrettyLights prettyLights) {
     Command score = sequence(new ShootRight(rightCatapult).
                                    withTimeout(kShootTimeout),
                              new ResetRight(rightCatapult).
                                    withTimeout(kResetTimeout));
     addCommands(new ConditionalCommand(score, new WaitCommand(0.001),
                                        () -> Shoot(rightCatapult)),
-                new RumbleYes(prettyLights, controller));
+                new RumbleYes(prettyLights, null, manipulatorController));
 
                 
   }

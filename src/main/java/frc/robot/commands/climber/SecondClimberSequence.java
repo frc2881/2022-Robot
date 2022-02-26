@@ -14,7 +14,7 @@ import frc.robot.subsystems.PrettyLights;
 import frc.robot.utils.NavX;
 
 public class SecondClimberSequence extends SequentialCommandGroup {
-  public SecondClimberSequence(Climber climber, PrettyLights prettylights, NavX navx, XboxController controller) {
+  public SecondClimberSequence(Climber climber, PrettyLights prettylights, NavX navx, XboxController manipulatorController) {
     addCommands(
         new ArmToLength(climber, -0.6, 21.8),
         new ArmBack(climber),
@@ -28,7 +28,7 @@ public class SecondClimberSequence extends SequentialCommandGroup {
         //new ArmWaitToExtend(navx),
         new ArmToLength(climber, 1.0, 25.5),
         new ArmUp(climber),
-        new RumbleYes(prettylights, controller)
+        new RumbleYes(prettylights, null, manipulatorController)
     );
   }
 }

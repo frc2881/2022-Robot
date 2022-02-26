@@ -22,6 +22,7 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -36,8 +37,8 @@ public class LeftCatapult extends SubsystemBase {
   private final ColorMatch m_colorMatcher;
   private boolean m_cargoIsRed;
   private boolean m_cargoIsBlue;
-  private boolean m_isCorrectCargo;
-  private boolean m_isIncorrectCargo;
+  Debouncer m_correctDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+  Debouncer m_incorrectDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
   
 
   public LeftCatapult() {
@@ -103,35 +104,31 @@ public class LeftCatapult extends SubsystemBase {
   }
 
   public boolean isCorrectCargo(){
-    if(m_cargoIsRed == true || m_cargoIsBlue == true){
-      if((m_cargoIsRed == true && DriverStation.getAlliance() == Alliance.Red) || (m_cargoIsBlue == true && DriverStation.getAlliance() == Alliance.Blue)){
-        if(m_isCorrectCargo == false){
-          return m_isCorrectCargo = true;
-        } else{
-          return m_isCorrectCargo;
-        }
+    boolean currentCargo;
+    if((m_cargoIsRed == true) || (m_cargoIsBlue == true)){
+      if(((m_cargoIsRed == true) && (DriverStation.getAlliance() == Alliance.Red)) || ((m_cargoIsBlue == true) && (DriverStation.getAlliance() == Alliance.Blue))){
+          currentCargo = true;
       } else{
-        return m_isCorrectCargo = false;
+        currentCargo = false;
       }
     } else{
-      return m_isCorrectCargo = false;
+      currentCargo = false;
     }
+    return m_correctDebouncer.calculate(currentCargo);
   }
 
   public boolean isIncorrectCargo(){
-    if(m_cargoIsRed == true || m_cargoIsBlue == true){
-      if((m_cargoIsRed == true && DriverStation.getAlliance() == Alliance.Blue) || (m_cargoIsBlue == true && DriverStation.getAlliance() == Alliance.Red)){
-        if(m_isIncorrectCargo == false){
-          return m_isIncorrectCargo = true;
-        } else{
-          return m_isIncorrectCargo;
-        }
+    boolean currentCargo;
+    if((m_cargoIsRed == true) || (m_cargoIsBlue == true)){
+      if(((m_cargoIsRed == true) && (DriverStation.getAlliance() == Alliance.Blue)) || ((m_cargoIsBlue == true) && (DriverStation.getAlliance() == Alliance.Red))){
+          currentCargo = true;
       } else{
-        return m_isIncorrectCargo = false;
+        currentCargo = false;
       }
     } else{
-      return m_isIncorrectCargo = false;
+      currentCargo = false;
     }
+    return m_incorrectDebouncer.calculate(currentCargo);
   }
   
 
