@@ -31,6 +31,7 @@ import frc.robot.commands.climber.RunArm;
 import frc.robot.commands.climber.SecondClimberSequence;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.FollowTrajectory;
+import frc.robot.commands.drive.CameraSwitch;
 import frc.robot.commands.intake.ExtendIntake;
 import frc.robot.commands.intake.RunIntake;
 import frc.robot.subsystems.Climber;
@@ -139,6 +140,9 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     // Driver Xbox Controller
+
+    buttonFromDouble(() -> driverController.getLeftTriggerAxis()+driverController.getRightTriggerAxis()).
+      whileHeld(new CameraSwitch());
 
     // Manipulator Xbox Controller
 
