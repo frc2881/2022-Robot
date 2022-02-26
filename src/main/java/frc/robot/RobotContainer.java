@@ -110,7 +110,7 @@ public class RobotContainer {
     // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
     m_chooser.setDefaultOption("Autonomous", new Autonomous(drive, intake, auto1part1, auto1part2));
-    m_chooser.addOption("Simple Auto", new SimpleAutonomous(drive, intake, leftCatapult, rightCatapult, manipulatorController, prettylights));
+    m_chooser.addOption("Simple Auto", new SimpleAutonomous(drive, intake, leftCatapult, rightCatapult, prettylights, driverController));
     m_chooser.addOption("Straight", new FollowTrajectory(drive, straight));
     m_chooser.addOption("Grab cargo", new FollowTrajectory(drive, grabCargo));
     m_chooser.addOption("Spiral", new FollowTrajectory(drive, spiral));
@@ -173,7 +173,7 @@ public class RobotContainer {
       whenPressed(new Eject(leftCatapult, rightCatapult));
 
     buttonFromDouble(() -> manipulatorController.getRightTriggerAxis()).
-      whenPressed(new Score(leftCatapult, rightCatapult, manipulatorController, prettylights));
+      whenPressed(new Score(leftCatapult, rightCatapult, prettylights, manipulatorController));
 
     new JoystickButton(manipulatorController, XboxController.Button.kStart.value).
       whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
