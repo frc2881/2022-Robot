@@ -21,14 +21,14 @@ import frc.robot.subsystems.RightCatapult;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SimpleAutonomous extends SequentialCommandGroup {
   /** Creates a new SimpleAutonomous. */
-  public SimpleAutonomous(Drive drive, Intake intake, LeftCatapult leftCatapult, RightCatapult rightCatapult, XboxController controller, PrettyLights prettyLights) {
+  public SimpleAutonomous(Drive drive, Intake intake, LeftCatapult leftCatapult, RightCatapult rightCatapult, PrettyLights prettylights, XboxController controller) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new WaitCommand(.1),
       new InstantCommand(() -> intake.extend(), intake),
       new WaitCommand(2),
-      new Score(leftCatapult, rightCatapult, controller, prettyLights),
+      new Score(leftCatapult, rightCatapult, prettylights, controller),
       new InstantCommand(() -> intake.retract(), intake),
       new DriveWithJoysticks(drive, () -> returnOne() , () -> returnZero()).withTimeout(2)
     );
