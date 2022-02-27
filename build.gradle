@@ -105,8 +105,8 @@ spotless {
     java {
         // Files to apply formatting
         target fileTree('.') {
-            include '**/*.java'
-            exclude '**/build/**', '**/build-*/**'
+            include 'null'
+            exclude '**/build/**', '**/build-*/**', 'frc.wpilib.robot.command.catapult.ScoreLeft', 'frc.wpilib.robot.command.catapult.ScoreRight', 'frc.robot.subsystems.LeftCatapult', 'frc.robot.subsystems.RightCatapult'
         }
 
         // If Spotless is formatting code you don't want it to touch, add 'spotless:off'

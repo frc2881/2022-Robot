@@ -5,7 +5,14 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Catapult.*;
+import static frc.robot.Constants.Catapult.kBlueCargo;
+import static frc.robot.Constants.Catapult.kCurrentLimit;
+import static frc.robot.Constants.Catapult.kDistance;
+import static frc.robot.Constants.Catapult.kForwardLimitRight;
+import static frc.robot.Constants.Catapult.kRedCargo;
+import static frc.robot.Constants.Catapult.kResetPosition;
+import static frc.robot.Constants.Catapult.kReverseLimit;
+import static frc.robot.Constants.Catapult.kRightMotor;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -15,7 +22,10 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,6 +37,8 @@ public class RightCatapult extends SubsystemBase {
   private final ColorMatch m_colorMatcher;
   private boolean m_cargoIsRed;
   private boolean m_cargoIsBlue;
+  Debouncer m_correctDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+  Debouncer m_incorrectDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
 
   public RightCatapult() {
     m_catapult = new CANSparkMax(kRightMotor, MotorType.kBrushless);
@@ -88,6 +100,34 @@ public class RightCatapult extends SubsystemBase {
 
   public boolean isBlue() {
     return m_cargoIsBlue;
+  }
+
+  public boolean isCorrectCargo(){
+    boolean currentCargo;
+    if((m_cargoIsRed == true) || (m_cargoIsBlue == true)){
+      if(((m_cargoIsRed == true) && (DriverStation.getAlliance() == Alliance.Red)) || ((m_cargoIsBlue == true) && (DriverStation.getAlliance() == Alliance.Blue))){
+          currentCargo = true;
+      } else{
+        currentCargo = false;
+      }
+    } else{
+      currentCargo = false;
+    }
+    return m_correctDebouncer.calculate(currentCargo);
+  }
+
+  public boolean isIncorrectCargo(){
+    boolean currentCargo;
+    if((m_cargoIsRed == true) || (m_cargoIsBlue == true)){
+      if(((m_cargoIsRed == true) && (DriverStation.getAlliance() == Alliance.Blue)) || ((m_cargoIsBlue == true) && (DriverStation.getAlliance() == Alliance.Red))){
+          currentCargo = true;
+      } else{
+        currentCargo = false;
+      }
+    } else{
+      currentCargo = false;
+    }
+    return m_incorrectDebouncer.calculate(currentCargo);
   }
 
   @Override

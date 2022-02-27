@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.PathPlanner;
@@ -109,7 +110,7 @@ public class RobotContainer {
     // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
     m_chooser.setDefaultOption("Autonomous", new Autonomous(drive, intake, auto1part1, auto1part2));
-    m_chooser.addOption("Simple Auto", new SimpleAutonomous(drive, intake, leftCatapult, rightCatapult));
+    m_chooser.addOption("Simple Auto", new SimpleAutonomous(drive, intake, leftCatapult, rightCatapult, prettylights, driverController));
     m_chooser.addOption("Straight", new FollowTrajectory(drive, straight));
     m_chooser.addOption("Grab cargo", new FollowTrajectory(drive, grabCargo));
     m_chooser.addOption("Spiral", new FollowTrajectory(drive, spiral));
@@ -144,13 +145,13 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Driver Xbox Controller
     new JoystickButton(driverController, XboxController.Button.kB.value).whenHeld(
-      new RumbleYes(prettylights, driverController));
+      new RumbleYes(prettylights, driverController, manipulatorController));
 
     buttonFromDouble(() -> driverController.getLeftTriggerAxis()+driverController.getRightTriggerAxis()).
       whileHeld(new CameraSwitch());
 
     new JoystickButton(driverController, XboxController.Button.kA.value).whenHeld(
-      new RumbleNo(prettylights, driverController));
+      new RumbleNo(prettylights, driverController, manipulatorController));
     // Manipulator Xbox Controller
 
     new JoystickButton(manipulatorController, XboxController.Button.kX.value).
@@ -172,13 +173,18 @@ public class RobotContainer {
       whenPressed(new Eject(leftCatapult, rightCatapult));
 
     buttonFromDouble(() -> manipulatorController.getRightTriggerAxis()).
-      whenPressed(new Score(leftCatapult, rightCatapult));
+      whenPressed(new Score(leftCatapult, rightCatapult, prettylights, manipulatorController));
 
     new JoystickButton(manipulatorController, XboxController.Button.kStart.value).
       whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
 
     new JoystickButton(manipulatorController, XboxController.Button.kBack.value).
       whenHeld(new CatapultOverrride(leftCatapult, rightCatapult));
+
+    buttonFromBoolean(() -> leftCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettylights, driverController, manipulatorController));
+    buttonFromBoolean(() -> leftCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettylights, driverController, manipulatorController));
+    buttonFromBoolean(() -> rightCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettylights, driverController, manipulatorController));
+    buttonFromBoolean(() -> rightCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettylights, driverController, manipulatorController));
   }
 
   public void resetRobot() {
@@ -218,6 +224,16 @@ public class RobotContainer {
     };
   }
 
+  public Button buttonFromBoolean(BooleanSupplier value) {
+    return new Button(){
+      @Override
+      public boolean get() {
+        return value.getAsBoolean();
+      }
+
+    };
+  }
+
   public double applyDeadband(double input) {
     if(Math.abs(input) < 0.1) {
       return 0.0;
@@ -229,4 +245,5 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
   }
+
 }

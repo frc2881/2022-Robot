@@ -13,7 +13,7 @@ import frc.robot.utils.NavX;
 
 /** Add your docs here. */
 public class FirstClimberSequence extends SequentialCommandGroup {
-  public FirstClimberSequence(Climber climber, PrettyLights prettylights, NavX navx, XboxController controller) {
+  public FirstClimberSequence(Climber climber, PrettyLights prettylights, NavX navx, XboxController manipulatorController) {
     addCommands(
         new ArmToLength(climber, -1.0, 5.0),
         new ArmToLength(climber, -0.4, 0.0),
@@ -23,7 +23,7 @@ public class FirstClimberSequence extends SequentialCommandGroup {
         //new ArmWaitToExtend(navx),
         new ArmToLength(climber, 1.0, 25.5),
         new ArmUp(climber),
-        new RumbleYes(prettylights, controller)
+        new RumbleYes(prettylights, null, manipulatorController)
     );
   }
 }
