@@ -118,7 +118,7 @@ public class RobotContainer {
     //Left Tarmac
     leftLtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
     leftMtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
-    leftMtoCargo2 =PathPlanner2.loadPath("LeftMtoCargo2", maxVelocity, maxAcceleration)
+    leftMtoCargo2 =PathPlanner2.loadPath("LeftMtoCargo2", maxVelocity, maxAcceleration);
     leftRtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
     leftRtoCargo2 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
 
