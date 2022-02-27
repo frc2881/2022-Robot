@@ -30,23 +30,29 @@ public class LeftL extends SequentialCommandGroup {
     PrettyLights prettylights, 
     XboxController controller, 
     Trajectory leftLtoCargo1,
-    Trajectory cargo1toHubL
+    Trajectory cargo1toHubL,
+    Trajectory leftMtoCargo2,
+    Trajectory cargo2toHubR,
+    Trajectory rightMtoCargo2
   ) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new WaitCommand(0),
-      //Right Tarmac, Left side, driving out to Cargo 2
+  new WaitCommand(0),
       new InstantCommand(() -> intake.extend(), intake),
       new InstantCommand(() -> intake.run(1.0), intake),
       new FollowTrajectory(drive, leftLtoCargo1),
-  new WaitCommand(0),
       new InstantCommand(() -> intake.run(0), intake),
-      new FollowTrajectory(drive, cargo1toHubL),
   new WaitCommand(0),
-      //Score
+      new FollowTrajectory(drive, cargo1toHubL),
       new Score(leftCatapult, rightCatapult, prettylights, null),
-      new InstantCommand(() -> intake.run(1.0), intake) 
+  new WaitCommand(0),
+      new InstantCommand(() -> intake.run(1.0), intake),
+      new FollowTrajectory(drive, leftMtoCargo2),
+      new InstantCommand(() -> intake.run(0), intake),
+  new WaitCommand(0),
+      new FollowTrajectory(drive, cargo2toHubR),
+      new Score(leftCatapult, rightCatapult, prettylights, null),
+  new WaitCommand(0),
+      new FollowTrajectory(drive, rightMtoCargo2)
       /*new FollowTrajectory(drive, rightMtoCargo3),
   new WaitCommand(0),
       new InstantCommand(() -> intake.run(0), intake),

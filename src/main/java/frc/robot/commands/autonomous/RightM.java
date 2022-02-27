@@ -36,7 +36,6 @@ public class RightM extends SequentialCommandGroup {
       Trajectory rightMtoCargo2) {
     addCommands(
   new WaitCommand(0),
-      //Right Tarmac, Left side, driving out to Cargo 2
       new InstantCommand(() -> intake.extend(), intake),
       new InstantCommand(() -> intake.run(1.0), intake),
       new FollowTrajectory(drive, rightMtoCargo2),

@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.autonomous.LeftL;
 import frc.robot.commands.autonomous.RightL;
 import frc.robot.commands.autonomous.RightM;
 import frc.robot.commands.autonomous.SimpleAutonomous;
@@ -134,6 +135,7 @@ public class RobotContainer {
     m_chooser = new SendableChooser<>();
     m_chooser.setDefaultOption("Auto Right L", new RightL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
     m_chooser.addOption("Auto Right M", new RightM(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
+    m_chooser.addOption("Auto Left L", new LeftL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
     m_chooser.addOption("Simple Auto", new SimpleAutonomous(drive, intake, leftCatapult, rightCatapult, prettylights, driverController));
     m_chooser.addOption("Auto 1 1/2", new FollowTrajectory(drive, auto1part1));
     m_chooser.addOption("Auto 1 2/2", new FollowTrajectory(drive, auto1part2));
