@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.autonomous.Autonomous;
+import frc.robot.commands.autonomous.RightL;
 import frc.robot.commands.autonomous.SimpleAutonomous;
 import frc.robot.commands.catapult.CatapultOverrride;
 import frc.robot.commands.catapult.Eject;
@@ -64,15 +64,23 @@ public class RobotContainer {
   private final Drive drive = new Drive(navx);
   private final PrettyLights prettylights = new PrettyLights();
 
-  private final Trajectory straight;
-  private final Trajectory grabCargo;
-  private final Trajectory spiral;
-  private final Trajectory j;
-  private final Trajectory m;
-  private final Trajectory o;
-  private final Trajectory s;
-  private final Trajectory u;
-  private final Trajectory v;
+  //Autonomous Cargo to Hub Pathways
+  private final Trajectory cargo1toHubL;
+  private final Trajectory cargo2toHubR;
+  private final Trajectory cargo3toHubR;
+
+  //Left Tarmac
+  private final Trajectory leftLtoCargo1;
+  private final Trajectory leftMtoCargo1;
+  private final Trajectory leftRtoCargo1;
+  private final Trajectory leftRtoCargo2;
+
+  //Right Tarmac
+  private final Trajectory rightLtoCargo2;
+  private final Trajectory rightMtoCargo2;
+  private final Trajectory rightMtoCargo3;
+  private final Trajectory rightRtoCargo3;
+
   private final Trajectory auto1part1;
   private final Trajectory auto1part2;
 
@@ -96,31 +104,32 @@ public class RobotContainer {
     double maxAcceleration = 2;
 
     //Trajectories from Path Planner
-    straight = PathPlanner.loadPath("Straight", maxVelocity, maxAcceleration);
-    grabCargo = PathPlanner.loadPath("Grab cargo", maxVelocity, maxAcceleration);
-    spiral = PathPlanner.loadPath("Spiral", maxVelocity, maxAcceleration);
-    j = PathPlanner2.loadPath("J", maxVelocity, maxAcceleration);
-    m = PathPlanner.loadPath("M", maxVelocity, maxAcceleration);
-    o = PathPlanner.loadPath("O", maxVelocity, maxAcceleration);
-    s = PathPlanner.loadPath("S", maxVelocity, maxAcceleration);
-    u = PathPlanner.loadPath("U", maxVelocity, maxAcceleration);
-    v = PathPlanner.loadPath("V", maxVelocity, maxAcceleration);
+    
     auto1part1 = PathPlanner.loadPath("Auto1Part1", maxVelocity, maxAcceleration);
     auto1part2 = PathPlanner.loadPath("Auto1Part2", maxVelocity, maxAcceleration, true);
 
+    //Cargo to Hub
+    cargo1toHubL = PathPlanner2.loadPath("Cargo1toHubL", maxVelocity, maxAcceleration, true);
+    cargo2toHubR = PathPlanner2.loadPath("Cargo2toHubR", maxVelocity, maxAcceleration, true);
+    cargo3toHubR = PathPlanner2.loadPath("Cargo3toHubR", maxVelocity, maxAcceleration, true);
+
+    //Left Tarmac
+    leftLtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
+    leftMtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
+    leftRtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
+    leftRtoCargo2 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
+
+    //Right Tarmac
+    rightLtoCargo2 = PathPlanner2.loadPath("RightLtoCargo2", maxVelocity, maxAcceleration);
+    rightMtoCargo2 = PathPlanner2.loadPath("RightMtoCargo2", maxVelocity, maxAcceleration);
+    rightMtoCargo3 = PathPlanner2.loadPath("RightMtoCargo3", maxVelocity, maxAcceleration);
+    rightRtoCargo3 = PathPlanner2.loadPath("RightRtoCargo3", maxVelocity, maxAcceleration);
+    
+
     // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
-    m_chooser.setDefaultOption("Autonomous", new Autonomous(drive, intake, auto1part1, auto1part2));
+    m_chooser.setDefaultOption("Auto Right L", new RightL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
     m_chooser.addOption("Simple Auto", new SimpleAutonomous(drive, intake, leftCatapult, rightCatapult, prettylights, driverController));
-    m_chooser.addOption("Straight", new FollowTrajectory(drive, straight));
-    m_chooser.addOption("Grab cargo", new FollowTrajectory(drive, grabCargo));
-    m_chooser.addOption("Spiral", new FollowTrajectory(drive, spiral));
-    m_chooser.addOption("J", new FollowTrajectory(drive, j));
-    m_chooser.addOption("M", new FollowTrajectory(drive, m));
-    m_chooser.addOption("O", new FollowTrajectory(drive, o));
-    m_chooser.addOption("S", new FollowTrajectory(drive, s));
-    m_chooser.addOption("U", new FollowTrajectory(drive, u));
-    m_chooser.addOption("V", new FollowTrajectory(drive, v));
     m_chooser.addOption("Auto 1 1/2", new FollowTrajectory(drive, auto1part1));
     m_chooser.addOption("Auto 1 2/2", new FollowTrajectory(drive, auto1part2));
 
