@@ -72,6 +72,7 @@ public class RobotContainer {
   //Left Tarmac
   private final Trajectory leftLtoCargo1;
   private final Trajectory leftMtoCargo1;
+  private final Trajectory leftMtoCargo2;
   private final Trajectory leftRtoCargo1;
   private final Trajectory leftRtoCargo2;
 
@@ -80,6 +81,7 @@ public class RobotContainer {
   private final Trajectory rightMtoCargo2;
   private final Trajectory rightMtoCargo3;
   private final Trajectory rightRtoCargo3;
+  
 
   private final Trajectory auto1part1;
   private final Trajectory auto1part2;
@@ -116,6 +118,7 @@ public class RobotContainer {
     //Left Tarmac
     leftLtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
     leftMtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
+    leftMtoCargo2 =PathPlanner2.loadPath("LeftMtoCargo2", maxVelocity, maxAcceleration);
     leftRtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
     leftRtoCargo2 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
 
