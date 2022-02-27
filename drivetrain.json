@@ -5,7 +5,7 @@
   "gearing denominator": 1.0,
   "gearing numerator": 5.0,
   "gyro": "NavX",
-  "gyro ctor": "SPI.kMXP",
+  "gyro ctor": "SPI (MXP)",
   "is drivetrain": true,
   "motor controllers": [
     "SPARK MAX (Brushless)",
