@@ -55,7 +55,7 @@ public class NavX extends AHRS {
    *
    * @return the rotation matrix.
    */
-  public Rotation2d getRotation2D() {
+  public Rotation2d getRotation2d() {
     return new Rotation2d(Math.toRadians(getYaw()));
   }
 
