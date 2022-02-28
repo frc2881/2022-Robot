@@ -75,14 +75,14 @@ public class PathPlannerTrajectory2 extends Trajectory {
 
     private static List<State> generatePath(ArrayList<Waypoint> pathPoints, double maxVel, double maxAccel, boolean reversed){
         List<PathPlannerState> joined = joinSplines(pathPoints, maxVel, PathPlanner2.resolution);
-        calculateMaxVel(joined, maxVel, maxAccel);
+        calculateMaxVel(joined, maxVel, maxAccel, reversed);
         calculateVelocity(joined, pathPoints, maxAccel);
         recalculateValues(joined, reversed);
 
         return new ArrayList<>(joined);
     }
 
-    private static void calculateMaxVel(List<PathPlannerState> states, double maxVel, double maxAccel){
+    private static void calculateMaxVel(List<PathPlannerState> states, double maxVel, double maxAccel, boolean reversed){
         for(int i = 0; i < states.size(); i++){
             double radius;
             if(i == states.size() - 1){
@@ -91,6 +91,10 @@ public class PathPlannerTrajectory2 extends Trajectory {
                 radius = calculateRadius(states.get(i), states.get(i + 1), states.get(i + 2));
             }else{
                 radius = calculateRadius(states.get(i - 1), states.get(i), states.get(i + 1));
+            }
+
+            if(reversed){
+                radius *= -1;
             }
 
             if(!Double.isFinite(radius) || Double.isNaN(radius)){
@@ -255,13 +259,10 @@ public class PathPlannerTrajectory2 extends Trajectory {
         Translation2d b = s1.poseMeters.getTranslation();
         Translation2d c = s2.poseMeters.getTranslation();
 
-        // O_z = (A_x * B_y) - (A_y * B_x)
-        double adx = a.getX() - b.getX();
-        double ady = a.getY() - b.getY();
-        double cdx = c.getX() - b.getX();
-        double cdy = c.getY() - b.getY();
-        double cross = (adx * cdy) - (ady * cdx);
-        double sign = (cross < 0) ? 1 : -1;
+        Translation2d vba = a.minus(b);
+        Translation2d vbc = c.minus(b);
+        double cross_z = (vba.getX() * vbc.getY()) - (vba.getY() * vbc.getX());
+        double sign = (cross_z < 0) ? 1 : -1;
 
         double ab = a.getDistance(b);
         double bc = b.getDistance(c);
