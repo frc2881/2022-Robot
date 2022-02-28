@@ -204,24 +204,24 @@ public final class Constants {
      * The drive train's coefficient of static friction, corresponding to the
      * voltage required to get the drive train to just start moving.
      */
-    public static final double kS = 0.15734;
+    public static final double kS = 0.16069;//0.15734; practice bot
 
     /**
      * The drive train's velocity coefficient, corresponding to the voltage
      * required to maintain a speed of 1 m/s.
      */
-    public static final double kV = 2.0487;
+    public static final double kV = 2.0217;//2.0487; practice bot
 
     /**
      * The drive train's acceleration coefficient, corresponding to the voltage
      * required to accelerate by 1 m/s^2.
      */
-    public static final double kA = 0.36811;
+    public static final double kA = 0.58189;//0.36811; practice bot
 
     /**
      * The P coefficient for the drive train's feedback PID controller.
      */
-    public static final double kPDriveVel = 2.6446;
+    public static final double kPDriveVel = 2.8036 * 2;//2.6446 * 1.45; Practice bot
 
     /**
      * The D coefficient for the drive train's feedback PID controller.

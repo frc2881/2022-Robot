@@ -30,9 +30,9 @@ import frc.robot.commands.climber.ClimberOverride;
 import frc.robot.commands.climber.FirstClimberSequence;
 import frc.robot.commands.climber.RunArm;
 import frc.robot.commands.climber.SecondClimberSequence;
+import frc.robot.commands.drive.CameraSwitch;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.FollowTrajectory;
-import frc.robot.commands.drive.CameraSwitch;
 import frc.robot.commands.feedback.RumbleNo;
 import frc.robot.commands.feedback.RumbleYes;
 import frc.robot.commands.intake.ExtendIntake;
@@ -46,6 +46,7 @@ import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
+import frc.robot.utils.PathPlanner.PathPlanner2;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -98,7 +99,7 @@ public class RobotContainer {
     straight = PathPlanner.loadPath("Straight", maxVelocity, maxAcceleration);
     grabCargo = PathPlanner.loadPath("Grab cargo", maxVelocity, maxAcceleration);
     spiral = PathPlanner.loadPath("Spiral", maxVelocity, maxAcceleration);
-    j = PathPlanner.loadPath("J", maxVelocity, maxAcceleration);
+    j = PathPlanner2.loadPath("J", maxVelocity, maxAcceleration);
     m = PathPlanner.loadPath("M", maxVelocity, maxAcceleration);
     o = PathPlanner.loadPath("O", maxVelocity, maxAcceleration);
     s = PathPlanner.loadPath("S", maxVelocity, maxAcceleration);
