@@ -275,4 +275,18 @@ public final class Constants {
      */
     public static final double kMaxSpeed = 0.55;
   }
+
+  public static final class Auto {
+
+    public static final String kStartingDel = "Starting Delay";
+
+    public static final String kSecondDel = "Second Delay";
+
+    public static final String kThirdDel = "Third Delay";
+
+    public static final String kFourthDel = "Fourth Delay";
+
+    public static final String kFifthDel = "Fifth Delay";
+
+  }
 }
