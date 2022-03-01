@@ -146,6 +146,8 @@ public class RobotContainer {
     m_chooser.addOption("Simple Auto", new SimpleAutonomous(drive, intake, leftCatapult, rightCatapult, prettylights, driverController));
     m_chooser.addOption("Auto 1 1/2", new FollowTrajectory(drive, auto1part1));
     m_chooser.addOption("Auto 1 2/2", new FollowTrajectory(drive, auto1part2));
+    m_chooser.addOption("Do Nothing", null);
+
 
     SmartDashboard.putNumber("Starting Delay", 0);
     SmartDashboard.putNumber("Second Delay", 0);
