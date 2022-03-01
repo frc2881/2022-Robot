@@ -227,8 +227,8 @@ public final class Constants {
     /**
      * The P coefficient for the drive train's feedback PID controller.
      */
-    public static final double kPDriveVel = 2.6446 * 1.45;
-          //2.8036 * 2; Competition
+    public static final double kPDriveVel = 0.3;
+          //0.3; Competition
           //2.6446 * 1.45; Practice bot
 
     /**
@@ -241,7 +241,7 @@ public final class Constants {
      * and due to possible wheel slip this may not match the physical width
      * of the drive train (it may be larger).
      */
-    public static final double kTrackWidth = Units.inchesToMeters(22.5);
+    public static final double kTrackWidth = Units.inchesToMeters(22.5 * 2.25);
 
     /**
      * The kinematics helper object that converts chassis velocities into wheel
