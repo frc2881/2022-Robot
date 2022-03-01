@@ -26,6 +26,7 @@ import frc.robot.commands.autonomous.SimpleAutonomous;
 import frc.robot.commands.catapult.CatapultOverrride;
 import frc.robot.commands.catapult.Eject;
 import frc.robot.commands.catapult.Score;
+import frc.robot.commands.catapult.ScoreNoColor;
 import frc.robot.commands.climber.ClimberOverride;
 import frc.robot.commands.climber.FirstClimberSequence;
 import frc.robot.commands.climber.RunArm;
@@ -175,6 +176,9 @@ public class RobotContainer {
 
     buttonFromDouble(() -> manipulatorController.getRightTriggerAxis()).
       whenPressed(new Score(leftCatapult, rightCatapult, prettylights, manipulatorController));
+
+    buttonFromDouble(() -> manipulatorController.getLeftTriggerAxis()).
+      whenPressed(new ScoreNoColor(leftCatapult, rightCatapult, prettylights, manipulatorController));
 
     new JoystickButton(manipulatorController, XboxController.Button.kStart.value).
       whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
