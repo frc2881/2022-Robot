@@ -292,7 +292,7 @@ public class PathPlannerTrajectory2 extends Trajectory {
                 return endVal.interpolate(this, 1 - t);
             }
 
-            lerpedState.velocityMetersPerSecond = velocityMetersPerSecond + (velocityMetersPerSecond * deltaT);
+            lerpedState.velocityMetersPerSecond = GeometryUtil2.doubleLerp(velocityMetersPerSecond, endVal.velocityMetersPerSecond, t);
             lerpedState.positionMeters = (velocityMetersPerSecond * deltaT) + (0.5 * accelerationMetersPerSecondSq * Math.pow(deltaT, 2));
             lerpedState.accelerationMetersPerSecondSq = GeometryUtil2.doubleLerp(accelerationMetersPerSecondSq, endVal.accelerationMetersPerSecondSq, t);
             Translation2d newTrans = GeometryUtil2.translationLerp(poseMeters.getTranslation(), endVal.poseMeters.getTranslation(), t);
