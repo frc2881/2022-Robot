@@ -26,9 +26,7 @@ public class ScoreLeft extends SequentialCommandGroup {
                              new ResetLeft(leftCatapult).
                                    withTimeout(kResetTimeout));
     addCommands(new ConditionalCommand(score, new WaitCommand(0.001),
-                                       () -> Shoot(leftCatapult)),
-                                      
-                new RumbleYes(prettyLights, null, manipulatorController));
+                                       () -> Shoot(leftCatapult)));
   }
 
   public boolean Shoot(LeftCatapult leftCatapult) {

@@ -26,8 +26,7 @@ public class ScoreRight extends SequentialCommandGroup {
                              new ResetRight(rightCatapult).
                                    withTimeout(kResetTimeout));
     addCommands(new ConditionalCommand(score, new WaitCommand(0.001),
-                                       () -> Shoot(rightCatapult)),
-                new RumbleYes(prettyLights, null, manipulatorController));
+                                       () -> Shoot(rightCatapult)));
 
                 
   }

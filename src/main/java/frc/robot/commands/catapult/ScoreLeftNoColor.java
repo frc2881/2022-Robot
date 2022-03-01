@@ -18,7 +18,6 @@ public class ScoreLeftNoColor extends SequentialCommandGroup {
   public ScoreLeftNoColor(LeftCatapult leftCatapult, XboxController manipulatorController, PrettyLights prettyLights) {
     addCommands(new ShootLeft(leftCatapult).withTimeout(kShootTimeout),
                              new ResetLeft(leftCatapult).
-                                   withTimeout(kResetTimeout),
-                new RumbleYes(prettyLights, null, manipulatorController));
+                                   withTimeout(kResetTimeout));
   }
 }
