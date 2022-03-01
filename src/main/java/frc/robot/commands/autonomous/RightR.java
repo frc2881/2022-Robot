@@ -20,39 +20,40 @@ import frc.robot.subsystems.RightCatapult;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class LeftL extends SequentialCommandGroup {
-  /** Creates a new LeftL. */
-  public LeftL(
+public class RightR extends SequentialCommandGroup {
+  /** Creates a new RightR. */
+  public RightR(
     Drive drive, 
     Intake intake, 
     LeftCatapult leftCatapult, 
     RightCatapult rightCatapult, 
     PrettyLights prettylights, 
     XboxController controller, 
-    Trajectory leftLtoCargo1,
-    Trajectory cargo1toHubL,
-    Trajectory leftMtoCargo2,
-    Trajectory cargo2toHubR,
+    Trajectory cargo2toHubM,
+    Trajectory rightMtoCargo3,
+    Trajectory cargo3toHubR,
+    Trajectory rightRtoCargo2,
     Trajectory rightMtoCargo2
   ) {
-    addCommands(
-  new WaitCommand(0),
-      new InstantCommand(() -> intake.extend(), intake),
-      new InstantCommand(() -> intake.run(1.0), intake),
-      new FollowTrajectory(drive, leftLtoCargo1),
-      new InstantCommand(() -> intake.run(0), intake),
-  new WaitCommand(0),
-      new FollowTrajectory(drive, cargo1toHubL),
-      new Score(leftCatapult, rightCatapult, prettylights, null),
-  new WaitCommand(0),
-      new InstantCommand(() -> intake.run(1.0), intake),
-      new FollowTrajectory(drive, leftMtoCargo2),
-      new InstantCommand(() -> intake.run(0), intake),
-  new WaitCommand(0),
-      new FollowTrajectory(drive, cargo2toHubR),
-      new Score(leftCatapult, rightCatapult, prettylights, null),
-  new WaitCommand(0),
-      new FollowTrajectory(drive, rightMtoCargo2)
-    );
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
+    addCommands(  
+new WaitCommand(0),
+    new InstantCommand(() -> intake.extend(), intake),
+    new InstantCommand(() -> intake.run(1.0), intake),
+    new FollowTrajectory(drive, rightRtoCargo2),
+    new InstantCommand(() -> intake.run(0), intake),
+new WaitCommand(0),
+    new FollowTrajectory(drive, cargo2toHubM),
+    new Score(leftCatapult, rightCatapult, prettylights, null),
+new WaitCommand(0),
+    new InstantCommand(() -> intake.run(1.0), intake), 
+    new FollowTrajectory(drive, rightMtoCargo3),
+    new InstantCommand(() -> intake.run(0), intake),
+new WaitCommand(0),
+    new FollowTrajectory(drive, cargo3toHubR),
+    new Score(leftCatapult, rightCatapult, prettylights, null),
+new WaitCommand(0),
+    new FollowTrajectory(drive, rightMtoCargo2));
   }
 }

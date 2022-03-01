@@ -20,26 +20,28 @@ import frc.robot.subsystems.RightCatapult;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class LeftL extends SequentialCommandGroup {
-  /** Creates a new LeftL. */
-  public LeftL(
+public class LeftR extends SequentialCommandGroup {
+  /** Creates a new LeftR. */
+  public LeftR(
     Drive drive, 
     Intake intake, 
     LeftCatapult leftCatapult, 
     RightCatapult rightCatapult, 
     PrettyLights prettylights, 
     XboxController controller, 
-    Trajectory leftLtoCargo1,
+    Trajectory leftRtoCargo1,
     Trajectory cargo1toHubL,
     Trajectory leftMtoCargo2,
     Trajectory cargo2toHubR,
     Trajectory rightMtoCargo2
   ) {
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
   new WaitCommand(0),
       new InstantCommand(() -> intake.extend(), intake),
       new InstantCommand(() -> intake.run(1.0), intake),
-      new FollowTrajectory(drive, leftLtoCargo1),
+      new FollowTrajectory(drive, leftRtoCargo1),
       new InstantCommand(() -> intake.run(0), intake),
   new WaitCommand(0),
       new FollowTrajectory(drive, cargo1toHubL),
