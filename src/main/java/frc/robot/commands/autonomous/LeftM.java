@@ -8,9 +8,10 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.Auto;
 import frc.robot.commands.catapult.Score;
 import frc.robot.commands.drive.FollowTrajectory;
+import frc.robot.commands.feedback.WaitCommandNT;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LeftCatapult;
@@ -37,23 +38,23 @@ public class LeftM extends SequentialCommandGroup {
   ) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-  new WaitCommand(0),
+    addCommands(         
+new WaitCommandNT(Auto.kStartingDel),
       new InstantCommand(() -> intake.extend(), intake),
       new InstantCommand(() -> intake.run(1.0), intake),
       new FollowTrajectory(drive, leftMtoCargo1),
       new InstantCommand(() -> intake.run(0), intake),
-  new WaitCommand(0),
+new WaitCommandNT(Auto.kSecondDel),
       new FollowTrajectory(drive, cargo1toHubL),
       new Score(leftCatapult, rightCatapult, prettylights, null),
-  new WaitCommand(0),
+new WaitCommandNT(Auto.kThirdDel),
       new InstantCommand(() -> intake.run(1.0), intake),
       new FollowTrajectory(drive, leftMtoCargo2),
       new InstantCommand(() -> intake.run(0), intake),
-  new WaitCommand(0),
+new WaitCommandNT(Auto.kFourthDel),
       new FollowTrajectory(drive, cargo2toHubR),
       new Score(leftCatapult, rightCatapult, prettylights, null),
-  new WaitCommand(0),
+new WaitCommandNT(Auto.kFifthDel),
       new FollowTrajectory(drive, rightMtoCargo2)
     );
   }
