@@ -30,26 +30,26 @@ public class RightM extends SequentialCommandGroup {
       RightCatapult rightCatapult, 
       PrettyLights prettylights, 
       XboxController controller, 
-      Trajectory rightLtoCargo2,
+      Trajectory rightMtoCargo2,
       Trajectory cargo2toHubR,
       Trajectory rightMtoCargo3,
-      Trajectory cargo3toHubR,
-      Trajectory rightMtoCargo2) {
+      Trajectory cargo3toHubR
+) {
     addCommands(
   new WaitCommandNT(Auto.kStartingDel),
       new InstantCommand(() -> intake.extend(), intake),
       new InstantCommand(() -> intake.run(1.0), intake),
       new FollowTrajectory(drive, rightMtoCargo2),
-      new InstantCommand(() -> intake.run(0), intake),
   new WaitCommandNT(Auto.kSecondDel),
       new FollowTrajectory(drive, cargo2toHubR),
+      new InstantCommand(() -> intake.run(0), intake),
       new Score(leftCatapult, rightCatapult, prettylights, null),
   new WaitCommandNT(Auto.kThirdDel),
       new InstantCommand(() -> intake.run(1.0), intake), 
       new FollowTrajectory(drive, rightMtoCargo3),
-      new InstantCommand(() -> intake.run(0), intake),
   new WaitCommandNT(Auto.kFourthDel),
       new FollowTrajectory(drive, cargo3toHubR),
+      new InstantCommand(() -> intake.run(0), intake),
       new Score(leftCatapult, rightCatapult, prettylights, null),
   new WaitCommandNT(Auto.kFifthDel),
       new FollowTrajectory(drive, rightMtoCargo2)

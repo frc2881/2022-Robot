@@ -227,8 +227,8 @@ public final class Constants {
     /**
      * The P coefficient for the drive train's feedback PID controller.
      */
-    public static final double kPDriveVel = 0.3;
-          //0.3; Competition
+    public static final double kPDriveVel = 0.5;
+          //0.5; Competition
           //2.6446 * 1.45; Practice bot
 
     /**

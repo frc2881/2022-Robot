@@ -8,6 +8,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Auto;
 import frc.robot.commands.catapult.Score;
 import frc.robot.commands.drive.FollowTrajectory;
@@ -39,18 +40,18 @@ public class RightL extends SequentialCommandGroup {
   new WaitCommandNT(Auto.kStartingDel),
       //Right Tarmac, Left side, driving out to Cargo 2
       new InstantCommand(() -> intake.extend(), intake),
-      new InstantCommand(() -> intake.run(1.0), intake),
+      new InstantCommand(() -> intake.run(1), intake),
       new FollowTrajectory(drive, rightLtoCargo2),
-      new InstantCommand(() -> intake.run(0), intake),
   new WaitCommandNT(Auto.kSecondDel),
       new FollowTrajectory(drive, cargo2toHubR),
+      new InstantCommand(() -> intake.run(0), intake),
       new Score(leftCatapult, rightCatapult, prettylights, null),
   new WaitCommandNT(Auto.kThirdDel),
-      new InstantCommand(() -> intake.run(1.0), intake), 
+      new InstantCommand(() -> intake.run(1), intake), 
       new FollowTrajectory(drive, rightMtoCargo3),
-      new InstantCommand(() -> intake.run(0), intake),
   new WaitCommandNT(Auto.kFourthDel),
       new FollowTrajectory(drive, cargo3toHubR),
+      new InstantCommand(() -> intake.run(0), intake),
       new Score(leftCatapult, rightCatapult, prettylights, null),
   new WaitCommandNT(Auto.kFifthDel),
       new FollowTrajectory(drive, rightMtoCargo2)

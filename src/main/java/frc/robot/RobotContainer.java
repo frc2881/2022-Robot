@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.autonomous.LeftL;
 import frc.robot.commands.autonomous.LeftM;
-import frc.robot.commands.autonomous.LeftR;
 import frc.robot.commands.autonomous.RightL;
 import frc.robot.commands.autonomous.RightM;
 import frc.robot.commands.autonomous.RightR;
@@ -79,18 +78,12 @@ public class RobotContainer {
   private final Trajectory leftLtoCargo1;
   private final Trajectory leftMtoCargo1;
   private final Trajectory leftMtoCargo2;
-  private final Trajectory leftRtoCargo1;
-  private final Trajectory leftRtoCargo2;
 
   //Right Tarmac
   private final Trajectory rightLtoCargo2;
   private final Trajectory rightMtoCargo2;
   private final Trajectory rightMtoCargo3;
   private final Trajectory rightRtoCargo3;
-  
-
-  private final Trajectory auto1part1;
-  private final Trajectory auto1part2;
 
   private final SendableChooser<Command> m_chooser;
 
@@ -112,10 +105,6 @@ public class RobotContainer {
     double maxAcceleration = 2;
 
     //Trajectories from Path Planner
-    
-    auto1part1 = PathPlanner.loadPath("Auto1Part1", maxVelocity, maxAcceleration);
-    auto1part2 = PathPlanner.loadPath("Auto1Part2", maxVelocity, maxAcceleration, true);
-
     //Cargo to Hub
     cargo1toHubL = PathPlanner2.loadPath("Cargo1toHubL", maxVelocity, maxAcceleration, true);
     cargo2toHubR = PathPlanner2.loadPath("Cargo2toHubR", maxVelocity, maxAcceleration, true);
@@ -125,8 +114,6 @@ public class RobotContainer {
     leftLtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
     leftMtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
     leftMtoCargo2 =PathPlanner2.loadPath("LeftMtoCargo2", maxVelocity, maxAcceleration);
-    leftRtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
-    leftRtoCargo2 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
 
     //Right Tarmac
     rightLtoCargo2 = PathPlanner2.loadPath("RightLtoCargo2", maxVelocity, maxAcceleration);
@@ -139,13 +126,9 @@ public class RobotContainer {
     m_chooser = new SendableChooser<>();
     m_chooser.setDefaultOption("Auto Right L", new RightL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
     m_chooser.addOption("Auto Right M", new RightM(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
-    m_chooser.addOption("Auto Right R", new RightR(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
-    m_chooser.addOption("Auto Left L", new LeftL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
+    m_chooser.addOption("Auto Right R", new RightR(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightMtoCargo3, rightRtoCargo3, cargo3toHubR, cargo2toHubR, rightMtoCargo2));
+    m_chooser.addOption("Auto Left L", new LeftL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo1, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
     m_chooser.addOption("Auto Left M", new LeftM(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
-    m_chooser.addOption("Auto Left R", new LeftR(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
-    m_chooser.addOption("Simple Auto", new SimpleAutonomous(drive, intake, leftCatapult, rightCatapult, prettylights, driverController));
-    m_chooser.addOption("Auto 1 1/2", new FollowTrajectory(drive, auto1part1));
-    m_chooser.addOption("Auto 1 2/2", new FollowTrajectory(drive, auto1part2));
     m_chooser.addOption("Do Nothing", null);
 
 

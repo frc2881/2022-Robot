@@ -32,28 +32,21 @@ public class LeftL extends SequentialCommandGroup {
     XboxController controller, 
     Trajectory leftLtoCargo1,
     Trajectory cargo1toHubL,
-    Trajectory leftMtoCargo2,
-    Trajectory cargo2toHubR,
-    Trajectory rightMtoCargo2
+    Trajectory leftMtoCargo2
   ) {
     addCommands(
   new WaitCommandNT(Auto.kStartingDel),
       new InstantCommand(() -> intake.extend(), intake),
       new InstantCommand(() -> intake.run(1.0), intake),
       new FollowTrajectory(drive, leftLtoCargo1),
-      new InstantCommand(() -> intake.run(0), intake),
   new WaitCommandNT(Auto.kSecondDel),
       new FollowTrajectory(drive, cargo1toHubL),
+      new InstantCommand(() -> intake.run(0), intake),
       new Score(leftCatapult, rightCatapult, prettylights, null),
   new WaitCommandNT(Auto.kThirdDel),
-      new InstantCommand(() -> intake.run(1.0), intake),
-      new FollowTrajectory(drive, leftMtoCargo2),
-      new InstantCommand(() -> intake.run(0), intake),
   new WaitCommandNT(Auto.kFourthDel),
-      new FollowTrajectory(drive, cargo2toHubR),
-      new Score(leftCatapult, rightCatapult, prettylights, null),
   new WaitCommandNT(Auto.kFifthDel),
-      new FollowTrajectory(drive, rightMtoCargo2)
+      new FollowTrajectory(drive, leftMtoCargo2)
     );
   }
 }
