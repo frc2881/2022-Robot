@@ -139,7 +139,7 @@ public final class Constants {
      * that when practicing in teleoperated mode, the climber is always
      * operational.
      */
-    public static final double kMatchSafety = 35.0;
+    public static final double kMatchSafety = 45.0;
   }
 
   /**
