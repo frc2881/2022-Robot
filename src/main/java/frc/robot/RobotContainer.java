@@ -125,10 +125,10 @@ public class RobotContainer {
     // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
     m_chooser.setDefaultOption("Auto Right L", new RightL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
-    m_chooser.addOption("Auto Right M", new RightM(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
-    m_chooser.addOption("Auto Right R", new RightR(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightMtoCargo3, rightRtoCargo3, cargo3toHubR, cargo2toHubR, rightMtoCargo2));
-    m_chooser.addOption("Auto Left L", new LeftL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo1, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
-    m_chooser.addOption("Auto Left M", new LeftM(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
+    m_chooser.addOption("Auto Right M", new RightM(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightMtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR));//M(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
+    m_chooser.addOption("Auto Right R", new RightR(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightRtoCargo3, cargo3toHubR, rightMtoCargo2, cargo2toHubR));//R(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightMtoCargo3, rightRtoCargo3, cargo3toHubR, cargo2toHubR, rightMtoCargo2));
+    m_chooser.addOption("Auto Left L", new LeftL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo2));//L(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo1, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
+    m_chooser.addOption("Auto Left M", new LeftM(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftMtoCargo1, cargo1toHubL, leftMtoCargo2));//M(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
     m_chooser.addOption("Do Nothing", null);
 
 

@@ -8,6 +8,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Auto;
 import frc.robot.commands.catapult.Score;
 import frc.robot.commands.drive.FollowTrajectory;
@@ -45,6 +46,7 @@ new WaitCommandNT(Auto.kStartingDel),
 new WaitCommandNT(Auto.kSecondDel),
     new FollowTrajectory(drive, cargo3toHubR),
     new InstantCommand(() -> intake.run(0), intake),
+    new WaitCommand(0.25),
     new Score(leftCatapult, rightCatapult, prettylights, null),
 new WaitCommandNT(Auto.kThirdDel),
     new InstantCommand(() -> intake.run(1.0), intake), 
@@ -52,6 +54,7 @@ new WaitCommandNT(Auto.kThirdDel),
 new WaitCommandNT(Auto.kFourthDel),
     new FollowTrajectory(drive, cargo2toHubR),
     new InstantCommand(() -> intake.run(0), intake),
+    new WaitCommand(0.25),
     new Score(leftCatapult, rightCatapult, prettylights, null),
 new WaitCommandNT(Auto.kFifthDel),
     new FollowTrajectory(drive, rightMtoCargo2));

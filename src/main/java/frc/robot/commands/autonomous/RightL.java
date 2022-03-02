@@ -45,6 +45,7 @@ public class RightL extends SequentialCommandGroup {
   new WaitCommandNT(Auto.kSecondDel),
       new FollowTrajectory(drive, cargo2toHubR),
       new InstantCommand(() -> intake.run(0), intake),
+      new WaitCommand(0.25),
       new Score(leftCatapult, rightCatapult, prettylights, null),
   new WaitCommandNT(Auto.kThirdDel),
       new InstantCommand(() -> intake.run(1), intake), 
@@ -52,6 +53,7 @@ public class RightL extends SequentialCommandGroup {
   new WaitCommandNT(Auto.kFourthDel),
       new FollowTrajectory(drive, cargo3toHubR),
       new InstantCommand(() -> intake.run(0), intake),
+      new WaitCommand(0.25),
       new Score(leftCatapult, rightCatapult, prettylights, null),
   new WaitCommandNT(Auto.kFifthDel),
       new FollowTrajectory(drive, rightMtoCargo2)

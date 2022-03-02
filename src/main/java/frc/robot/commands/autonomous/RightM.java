@@ -8,6 +8,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Auto;
 import frc.robot.commands.catapult.Score;
 import frc.robot.commands.drive.FollowTrajectory;
@@ -38,6 +39,8 @@ public class RightM extends SequentialCommandGroup {
     addCommands(
   new WaitCommandNT(Auto.kStartingDel),
       new InstantCommand(() -> intake.extend(), intake),
+      //new WaitCommand(1),
+      //new Score(leftCatapult, rightCatapult, prettylights, null),
       new InstantCommand(() -> intake.run(1.0), intake),
       new FollowTrajectory(drive, rightMtoCargo2),
   new WaitCommandNT(Auto.kSecondDel),
