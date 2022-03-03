@@ -6,6 +6,7 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.feedback.RumbleYes;
@@ -21,14 +22,15 @@ public class SecondClimberSequence extends SequentialCommandGroup {
         new ArmToLength(climber, -0.6, 18.5),
         new ArmUp(climber),
         new ArmToLength(climber, -0.6, 5.0),
-        new ArmToLength(climber, -0.4, 0.0),
+        new ArmToLength(climber, -0.3, 0.0),
         new WaitCommand(0.5),
-        new ArmToLength(climber, 1.0, 5.0),
+        new ArmToLength(climber, .9, 5.0),
         new ArmBack(climber),
         //new ArmWaitToExtend(navx),
-        new ArmToLength(climber, 1.0, 25.5),
+        new ArmToLength(climber, .9, 25.5),
         new ArmUp(climber),
-        new RumbleYes(prettylights, null, manipulatorController)
+        new RumbleYes(prettylights, null, manipulatorController),
+        new InstantCommand(() -> prettylights.partyColor(), prettylights) 
     );
   }
 }

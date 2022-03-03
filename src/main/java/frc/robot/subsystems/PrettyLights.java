@@ -14,6 +14,10 @@ public class PrettyLights extends SubsystemBase {
   public final double green = 0.77;
   public final double red = 0.61;
   public final double yellow = 0.69;
+  public final double rainbow = -0.97;
+  public final double confetti = -0.87;
+  public final double twinkles = -0.55;
+  public final double colorwave = -0.45;
   private boolean defaultColor = true;
   private final Spark lights;
 
@@ -56,6 +60,10 @@ public class PrettyLights extends SubsystemBase {
   public void redColor(){
     defaultColor = false;
     lights.set(red);
+  }
+  public void partyColor(){
+    defaultColor = false;
+    lights.set(rainbow);
   }
 
 }
