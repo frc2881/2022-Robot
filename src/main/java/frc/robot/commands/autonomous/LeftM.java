@@ -31,8 +31,8 @@ public class LeftM extends SequentialCommandGroup {
     PrettyLights prettylights, 
     XboxController controller, 
     Trajectory leftMtoCargo1,
-    Trajectory cargo1toHubL,
-    Trajectory leftMtoCargo2
+    Trajectory cargo1toHubLForLeftM,
+    Trajectory leftMOff
   ) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
@@ -42,13 +42,13 @@ new WaitCommandNT(Auto.kStartingDel),
       new InstantCommand(() -> intake.run(1.0), intake),
       new FollowTrajectory(drive, leftMtoCargo1),
 new WaitCommandNT(Auto.kSecondDel),
-      new FollowTrajectory(drive, cargo1toHubL),
+      new FollowTrajectory(drive, cargo1toHubLForLeftM),
       new InstantCommand(() -> intake.run(0), intake),
       new Score(leftCatapult, rightCatapult, prettylights, null),
 new WaitCommandNT(Auto.kThirdDel),
 new WaitCommandNT(Auto.kFourthDel),
 new WaitCommandNT(Auto.kFifthDel),
-      new FollowTrajectory(drive, leftMtoCargo2)
+      new FollowTrajectory(drive, leftMOff)
     );
   }
 }

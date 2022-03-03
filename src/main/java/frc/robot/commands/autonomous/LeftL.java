@@ -8,6 +8,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Auto;
 import frc.robot.commands.catapult.Score;
 import frc.robot.commands.drive.FollowTrajectory;
@@ -32,7 +33,8 @@ public class LeftL extends SequentialCommandGroup {
     XboxController controller, 
     Trajectory leftLtoCargo1,
     Trajectory cargo1toHubL,
-    Trajectory leftMtoCargo2
+    Trajectory leftMtoCargo1,
+    Trajectory leftMOff
   ) {
     addCommands(
   new WaitCommandNT(Auto.kStartingDel),
@@ -42,11 +44,12 @@ public class LeftL extends SequentialCommandGroup {
   new WaitCommandNT(Auto.kSecondDel),
       new FollowTrajectory(drive, cargo1toHubL),
       new InstantCommand(() -> intake.run(0), intake),
+      new WaitCommand(0.25),
       new Score(leftCatapult, rightCatapult, prettylights, null),
   new WaitCommandNT(Auto.kThirdDel),
   new WaitCommandNT(Auto.kFourthDel),
   new WaitCommandNT(Auto.kFifthDel),
-      new FollowTrajectory(drive, leftMtoCargo2)
+      new FollowTrajectory(drive, leftMOff)
     );
   }
 }

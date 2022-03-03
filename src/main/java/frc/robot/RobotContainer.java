@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import java.nio.file.Path;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -71,17 +72,19 @@ public class RobotContainer {
 
   //Autonomous Cargo to Hub Pathways
   private final Trajectory cargo1toHubL;
+  private final Trajectory cargo1toHubLForLeftM;
   private final Trajectory cargo2toHubR;
   private final Trajectory cargo3toHubR;
 
   //Left Tarmac
   private final Trajectory leftLtoCargo1;
   private final Trajectory leftMtoCargo1;
-  private final Trajectory leftMtoCargo2;
+  private final Trajectory leftMOff;
 
   //Right Tarmac
   private final Trajectory rightLtoCargo2;
   private final Trajectory rightMtoCargo2;
+  private final Trajectory rightMtoCargo2ForRightR;
   private final Trajectory rightMtoCargo3;
   private final Trajectory rightRtoCargo3;
 
@@ -107,18 +110,20 @@ public class RobotContainer {
     //Trajectories from Path Planner
     //Cargo to Hub
     cargo1toHubL = PathPlanner2.loadPath("Cargo1toHubL", maxVelocity, maxAcceleration, true);
+    cargo1toHubLForLeftM = PathPlanner2.loadPath("Cargo1toHubLForLeftM", maxVelocity, maxAcceleration, true);
     cargo2toHubR = PathPlanner2.loadPath("Cargo2toHubR", maxVelocity, maxAcceleration, true);
     cargo3toHubR = PathPlanner2.loadPath("Cargo3toHubR", maxVelocity, maxAcceleration, true);
 
     //Left Tarmac
     leftLtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
-    leftMtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
-    leftMtoCargo2 =PathPlanner2.loadPath("LeftMtoCargo2", maxVelocity, maxAcceleration);
+    leftMtoCargo1 = PathPlanner2.loadPath("LeftMtoCargo1", maxVelocity, maxAcceleration);
+    leftMOff = PathPlanner2.loadPath("LeftMOff", maxVelocity, maxAcceleration);
 
     //Right Tarmac
     rightLtoCargo2 = PathPlanner2.loadPath("RightLtoCargo2", maxVelocity, maxAcceleration);
     rightMtoCargo2 = PathPlanner2.loadPath("RightMtoCargo2", maxVelocity, maxAcceleration);
     rightMtoCargo3 = PathPlanner2.loadPath("RightMtoCargo3", maxVelocity, maxAcceleration);
+    rightMtoCargo2ForRightR = PathPlanner2.loadPath("RightMtoCargo2ForRightR", maxVelocity, maxAcceleration);
     rightRtoCargo3 = PathPlanner2.loadPath("RightRtoCargo3", maxVelocity, maxAcceleration);
     
 
@@ -126,9 +131,9 @@ public class RobotContainer {
     m_chooser = new SendableChooser<>();
     m_chooser.setDefaultOption("Auto Right L", new RightL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
     m_chooser.addOption("Auto Right M", new RightM(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightMtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR));//M(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
-    m_chooser.addOption("Auto Right R", new RightR(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightRtoCargo3, cargo3toHubR, rightMtoCargo2, cargo2toHubR));//R(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightMtoCargo3, rightRtoCargo3, cargo3toHubR, cargo2toHubR, rightMtoCargo2));
-    m_chooser.addOption("Auto Left L", new LeftL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo2));//L(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo1, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
-    m_chooser.addOption("Auto Left M", new LeftM(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftMtoCargo1, cargo1toHubL, leftMtoCargo2));//M(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
+    m_chooser.addOption("Auto Right R", new RightR(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightRtoCargo3, cargo3toHubR, rightMtoCargo2, rightMtoCargo2ForRightR, cargo2toHubR));//R(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightRtoCargo3, cargo3toHubR, rightMtoCargo2ForRightR, cargo2toHubR));//R(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightRtoCargo3, cargo3toHubR, rightMtoCargo2, cargo2toHubR));//R(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightMtoCargo3, rightRtoCargo3, cargo3toHubR, cargo2toHubR, rightMtoCargo2));
+    m_chooser.addOption("Auto Left L", new LeftL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo1, leftMOff));//(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo1));//L(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo1, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
+    m_chooser.addOption("Auto Left M", new LeftM(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftMtoCargo1, cargo1toHubLForLeftM, leftMOff));//M(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftMtoCargo1, cargo1toHubL, leftMOff));//M(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftMtoCargo1, cargo1toHubL, leftMtoCargo2));//M(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo2, cargo2toHubR, rightMtoCargo2));
     m_chooser.addOption("Do Nothing", null);
 
 

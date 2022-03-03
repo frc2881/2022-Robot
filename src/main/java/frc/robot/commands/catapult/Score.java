@@ -17,7 +17,7 @@ public class Score extends SequentialCommandGroup {
   public Score(LeftCatapult leftCatapult, RightCatapult rightCatapult, PrettyLights prettylights, XboxController manipulatorController) {
     addCommands(parallel(
       new ScoreLeft(leftCatapult, manipulatorController, prettylights),
-      sequence(new WaitCommand(0.15), new ScoreRight(rightCatapult, manipulatorController, prettylights))
+      sequence(new WaitCommand(0.5), new ScoreRight(rightCatapult, manipulatorController, prettylights))
     ),
       new RumbleYes(prettylights, null, manipulatorController)
     );

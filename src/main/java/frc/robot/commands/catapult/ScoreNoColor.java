@@ -17,7 +17,7 @@ public class ScoreNoColor extends SequentialCommandGroup {
   public ScoreNoColor(LeftCatapult leftCatapult, RightCatapult rightCatapult, PrettyLights prettylights, XboxController manipulatorController) {
     addCommands(parallel(
       new ScoreLeftNoColor(leftCatapult, manipulatorController, prettylights),
-      sequence(new WaitCommand(0.15), new ScoreRightNoColor(rightCatapult, manipulatorController, prettylights))
+      sequence(new WaitCommand(0.5), new ScoreRightNoColor(rightCatapult, manipulatorController, prettylights))
     ),
       new RumbleYes(prettylights, null, manipulatorController)
     );

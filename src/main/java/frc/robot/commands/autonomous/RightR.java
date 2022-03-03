@@ -34,6 +34,7 @@ public class RightR extends SequentialCommandGroup {
     Trajectory rightRtoCargo3,
     Trajectory cargo3toHubR,
     Trajectory rightMtoCargo2,
+    Trajectory rightMtoCargo2ForRightR,
     Trajectory cargo2toHubR
   ) {
     // Add your commands in the addCommands() call, e.g.
@@ -50,7 +51,7 @@ new WaitCommandNT(Auto.kSecondDel),
     new Score(leftCatapult, rightCatapult, prettylights, null),
 new WaitCommandNT(Auto.kThirdDel),
     new InstantCommand(() -> intake.run(1.0), intake), 
-    new FollowTrajectory(drive, rightMtoCargo2),
+    new FollowTrajectory(drive, rightMtoCargo2ForRightR),
 new WaitCommandNT(Auto.kFourthDel),
     new FollowTrajectory(drive, cargo2toHubR),
     new InstantCommand(() -> intake.run(0), intake),
