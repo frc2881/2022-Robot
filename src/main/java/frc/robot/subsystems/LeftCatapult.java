@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LeftCatapult extends SubsystemBase {
   private final CANSparkMax m_catapult;
   private final RelativeEncoder m_encoder;
-  private final ColorSensorV3 m_colorSensor;
+  private ColorSensorV3 m_colorSensor;
   private final ColorMatch m_colorMatcher;
   private boolean m_cargoIsRed;
   private boolean m_cargoIsBlue;
@@ -149,6 +149,10 @@ public class LeftCatapult extends SubsystemBase {
       m_cargoIsBlue = true;
     } else {
       m_cargoIsBlue = false;
+    }
+
+    if(m_colorSensor.hasReset() || !m_colorSensor.isConnected()){
+      m_colorSensor = new ColorSensorV3(Port.kMXP);   
     }
   }
 
