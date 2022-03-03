@@ -46,8 +46,6 @@ new WaitCommandNT(Auto.kSecondDel),
       new InstantCommand(() -> intake.run(0), intake),
       new Score(leftCatapult, rightCatapult, prettylights, null),
 new WaitCommandNT(Auto.kThirdDel),
-new WaitCommandNT(Auto.kFourthDel),
-new WaitCommandNT(Auto.kFifthDel),
       new FollowTrajectory(drive, leftMOff)
     );
   }

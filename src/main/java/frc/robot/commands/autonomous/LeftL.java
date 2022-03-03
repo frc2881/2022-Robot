@@ -47,8 +47,6 @@ public class LeftL extends SequentialCommandGroup {
       new WaitCommand(0.25),
       new Score(leftCatapult, rightCatapult, prettylights, null),
   new WaitCommandNT(Auto.kThirdDel),
-  new WaitCommandNT(Auto.kFourthDel),
-  new WaitCommandNT(Auto.kFifthDel),
       new FollowTrajectory(drive, leftMOff)
     );
   }
