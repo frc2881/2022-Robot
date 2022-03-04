@@ -40,7 +40,7 @@ public class PrettyLights extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if(defaultColor == true){
-        if(DriverStation.getMatchTime() <= 45 && DriverStation.getMatchTime() > 43){
+        if(DriverStation.getMatchTime() <= 45 && DriverStation.getMatchTime() > 35){
             lights.set(yellow);
         } else {
             lights.set(hotPink);
