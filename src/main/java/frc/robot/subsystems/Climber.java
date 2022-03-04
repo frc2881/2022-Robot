@@ -113,7 +113,7 @@ public class Climber extends SubsystemBase {
   }
 
   public void resetEncoder() {
-    m_encoder.setPosition(0);
+    m_encoder.setPosition(0.1);
   }
 
   @Override
