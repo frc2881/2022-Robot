@@ -18,12 +18,12 @@ public class EjectLeft extends CommandBase {
 
   @Override
   public void execute() {
-    catapult.run(0.6);
+    catapult.eject();
   }
 
   @Override
   public void end(boolean interrupted) {
-    catapult.run(0.0);
+    catapult.stop();
   }
 
   @Override

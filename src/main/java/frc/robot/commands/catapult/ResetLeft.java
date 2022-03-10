@@ -18,12 +18,12 @@ public class ResetLeft extends CommandBase {
 
   @Override
   public void execute() {
-    catapult.run(-0.1);
+    catapult.down();
   }
 
   @Override
   public void end(boolean interrupted) {
-    catapult.run(0);
+    catapult.stop();
   }
 
   @Override

@@ -95,6 +95,22 @@ public class LeftCatapult extends SubsystemBase {
     m_catapult.set(speed);
   }
 
+  public void score() {
+    run(1);
+  }
+
+  public void eject() {
+    run(0.6);
+  }
+
+  public void stop() {
+    run(0);
+  }
+  
+  public void down() {
+    run(-0.1);
+  }
+
   public boolean isRed() {
     return m_cargoIsRed;
   }

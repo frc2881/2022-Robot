@@ -18,12 +18,12 @@ public class ShootRight extends CommandBase {
 
   @Override
   public void execute() {
-    catapult.run(1.0);
+    catapult.score();
   }
 
   @Override
   public void end(boolean interrupted) {
-    catapult.run(0.0);
+    catapult.stop();
   }
 
   @Override
