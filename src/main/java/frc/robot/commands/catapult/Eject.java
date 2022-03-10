@@ -21,21 +21,21 @@ public class Eject extends SequentialCommandGroup {
   /** Creates a new Eject. */
   public Eject(LeftCatapult leftCatapult, RightCatapult rightCatapult) {
     Command ejectOppositeLeft = sequence(new EjectLeft(leftCatapult).
-                                       withTimeout(kEjectTimeout),
-                                 new ResetLeft(leftCatapult).
-                                       withTimeout(kResetTimeout));
+                                               withTimeout(kEjectTimeout),
+                                         new ResetLeft(leftCatapult).
+                                               withTimeout(kResetTimeout));
     Command ejectOppositeRight = sequence(new EjectRight(rightCatapult).
-                                        withTimeout(kEjectTimeout),
-                                  new ResetRight(rightCatapult).
-                                        withTimeout(kResetTimeout));
+                                                withTimeout(kEjectTimeout),
+                                          new ResetRight(rightCatapult).
+                                                withTimeout(kResetTimeout));
     Command ejectOurLeft = sequence(new EjectLeft(leftCatapult).
-                                       withTimeout(kEjectTimeout),
-                                 new ResetLeft(leftCatapult).
-                                       withTimeout(kResetTimeout));
+                                          withTimeout(kEjectTimeout),
+                                    new ResetLeft(leftCatapult).
+                                          withTimeout(kResetTimeout));
     Command ejectOurRight = sequence(new EjectRight(rightCatapult).
-                                        withTimeout(kEjectTimeout),
-                                  new ResetRight(rightCatapult).
-                                        withTimeout(kResetTimeout));
+                                           withTimeout(kEjectTimeout),
+                                     new ResetRight(rightCatapult).
+                                           withTimeout(kResetTimeout));
 
     addCommands(new ConditionalCommand(ejectOppositeRight,
                   new ConditionalCommand(ejectOppositeLeft,

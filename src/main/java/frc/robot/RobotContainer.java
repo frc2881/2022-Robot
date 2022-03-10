@@ -5,11 +5,8 @@
 
 package frc.robot;
 
-import java.nio.file.Path;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
-import com.pathplanner.lib.PathPlanner;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -27,7 +24,6 @@ import frc.robot.commands.autonomous.LeftM;
 import frc.robot.commands.autonomous.RightL;
 import frc.robot.commands.autonomous.RightM;
 import frc.robot.commands.autonomous.RightR;
-import frc.robot.commands.autonomous.SimpleAutonomous;
 import frc.robot.commands.catapult.CatapultOverrride;
 import frc.robot.commands.catapult.Eject;
 import frc.robot.commands.catapult.Score;
@@ -38,7 +34,6 @@ import frc.robot.commands.climber.RunArm;
 import frc.robot.commands.climber.SecondClimberSequence;
 import frc.robot.commands.drive.CameraSwitch;
 import frc.robot.commands.drive.DriveWithJoysticks;
-import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.feedback.RumbleNo;
 import frc.robot.commands.feedback.RumbleYes;
 import frc.robot.commands.intake.ExtendIntake;

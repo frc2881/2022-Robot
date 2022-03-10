@@ -10,17 +10,14 @@ import static frc.robot.Constants.Catapult.kShootTimeout;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.feedback.RumbleYes;
 import frc.robot.subsystems.LeftCatapult;
-import frc.robot.subsystems.PrettyLights;
 
 public class ScoreLeft extends SequentialCommandGroup {
-  public ScoreLeft(LeftCatapult leftCatapult, XboxController manipulatorController, PrettyLights prettyLights) {
+  public ScoreLeft(LeftCatapult leftCatapult) {
     Command score = sequence(new ShootLeft(leftCatapult).
                                    withTimeout(kShootTimeout),
                              new ResetLeft(leftCatapult).

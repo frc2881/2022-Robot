@@ -11,15 +11,15 @@ import frc.robot.commands.feedback.RumbleYes;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
-import frc.robot.subsystems.PrettyLights;
 
 public class ScoreNoColor extends SequentialCommandGroup {
-  public ScoreNoColor(LeftCatapult leftCatapult, RightCatapult rightCatapult, PrettyLights prettylights, XboxController manipulatorController) {
-    addCommands(parallel(
-      new ScoreLeftNoColor(leftCatapult, manipulatorController, prettylights),
-      sequence(new WaitCommand(0.5), new ScoreRightNoColor(rightCatapult, manipulatorController, prettylights))
-    ),
-      new RumbleYes(prettylights, null, manipulatorController)
+  public ScoreNoColor(LeftCatapult leftCatapult, RightCatapult rightCatapult,
+                      PrettyLights prettyLights,
+                      XboxController manipulatorController) {
+    addCommands(parallel(new ScoreLeftNoColor(leftCatapult),
+                         sequence(new WaitCommand(0.5),
+                                  new ScoreRightNoColor(rightCatapult))),
+                new RumbleYes(prettyLights, null, manipulatorController)
     );
   }
 }

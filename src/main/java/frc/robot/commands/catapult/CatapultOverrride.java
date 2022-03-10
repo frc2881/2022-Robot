@@ -32,8 +32,8 @@ public class CatapultOverrride extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_leftCatapult.run(-0.1);
-    m_rightCatapult.run(-0.1);
+    m_leftCatapult.down();
+    m_rightCatapult.down();
   }
 
   // Called once the command ends or is interrupted.
@@ -44,8 +44,8 @@ public class CatapultOverrride extends CommandBase {
     m_rightCatapult.enableEncoderSoftLimit();
     m_rightCatapult.resetEncoder();
 
-    m_leftCatapult.run(0.0);
-    m_rightCatapult.run(0.0);
+    m_leftCatapult.stop();
+    m_rightCatapult.stop();
   }
 
   // Returns true when the command should end.

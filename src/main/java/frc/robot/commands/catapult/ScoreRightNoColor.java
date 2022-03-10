@@ -8,16 +8,12 @@ package frc.robot.commands.catapult;
 import static frc.robot.Constants.Catapult.kResetTimeout;
 import static frc.robot.Constants.Catapult.kShootTimeout;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.feedback.RumbleYes;
-import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
 
 public class ScoreRightNoColor extends SequentialCommandGroup {
-  public ScoreRightNoColor(RightCatapult rightCatapult, XboxController manipulatorController, PrettyLights prettyLights) {
+  public ScoreRightNoColor(RightCatapult rightCatapult) {
     addCommands(new ShootRight(rightCatapult).withTimeout(kShootTimeout),
-                             new ResetRight(rightCatapult).
-                                   withTimeout(kResetTimeout));
+                new ResetRight(rightCatapult).withTimeout(kResetTimeout));
   }
 }

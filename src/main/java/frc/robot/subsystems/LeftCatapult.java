@@ -39,7 +39,6 @@ public class LeftCatapult extends SubsystemBase {
   private boolean m_cargoIsBlue;
   Debouncer m_correctDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
   Debouncer m_incorrectDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
-  
 
   public LeftCatapult() {
     m_catapult = new CANSparkMax(kLeftMotor, MotorType.kBrushless);
@@ -146,7 +145,6 @@ public class LeftCatapult extends SubsystemBase {
     }
     return m_incorrectDebouncer.calculate(currentCargo);
   }
-  
 
   @Override
   public void periodic() {
