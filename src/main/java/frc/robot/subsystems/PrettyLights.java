@@ -65,5 +65,8 @@ public class PrettyLights extends SubsystemBase {
     defaultColor = false;
     lights.set(rainbow);
   }
+  public void reset() {
+    lights.set(hotPink);
+  }
 
 }

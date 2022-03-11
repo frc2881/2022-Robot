@@ -214,6 +214,7 @@ public class RobotContainer {
       intake.reset();
       leftCatapult.reset();
       rightCatapult.reset();
+      prettylights.reset();
       robotResetState = false;
     }
   }
