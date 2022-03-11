@@ -53,7 +53,8 @@ public final class Constants {
     /**
      * The maximum current to send to the catapult motors.
      */
-    public static final int kCurrentLimit = 80;
+    public static final int kCurrentLimit = 120;
+    //public static final int kCurrentLimit = 80;
 
     /**
      * The position (in rotations) that the catapult gets reset to after the
@@ -66,14 +67,14 @@ public final class Constants {
      * move in the forward direction.  Adjusting this limit adjusts the launch
      * angle of the shot.
      */
-    public static final double kForwardLimitLeft = 4.75;
+    public static final double kForwardLimitLeft = 4.25;
 
     /**
      * The maximum distance (in rotations) that the right catapult motor can
      * move in the forward direction.  Adjusting this limit adjusts the launch
      * angle of the shot.
      */
-    public static final double kForwardLimitRight = 4.5;
+    public static final double kForwardLimitRight = 4;
 
     /**
      * The minimum distance (in rotations) that the catapult motor can move in
@@ -86,15 +87,25 @@ public final class Constants {
      */
     public static final double kShootTimeout = 0.1;
 
+    public static final double kShootVoltage = 10;
+
     /**
      * The maximum amount of time to wait for the catapult to eject a cargo.
      */
     public static final double kEjectTimeout = 0.25;
 
+    public static final double kEjectVoltage = 5.5;
+
     /**
      * The maximum amount of time to wait for the catapult to reset.
      */
     public static final double kResetTimeout = 1.0;
+
+    public static final double kResetVoltage = -1.0;
+
+  
+    public static final double kShootTimeDelay = 0.5;
+  
   }
 
   /**

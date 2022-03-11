@@ -11,13 +11,14 @@ import frc.robot.commands.feedback.RumbleYes;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
+import static frc.robot.Constants.Catapult.kShootTimeDelay;
 
 public class ScoreNoColor extends SequentialCommandGroup {
   public ScoreNoColor(LeftCatapult leftCatapult, RightCatapult rightCatapult,
                       PrettyLights prettyLights,
                       XboxController manipulatorController) {
     addCommands(parallel(new ScoreLeftNoColor(leftCatapult),
-                         sequence(new WaitCommand(0.5),
+                         sequence(new WaitCommand(kShootTimeDelay),
                                   new ScoreRightNoColor(rightCatapult))),
                 new RumbleYes(prettyLights, null, manipulatorController)
     );

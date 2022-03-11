@@ -13,6 +13,9 @@ import static frc.robot.Constants.Catapult.kRedCargo;
 import static frc.robot.Constants.Catapult.kResetPosition;
 import static frc.robot.Constants.Catapult.kReverseLimit;
 import static frc.robot.Constants.Catapult.kRightMotor;
+import static frc.robot.Constants.Catapult.kResetVoltage;
+import static frc.robot.Constants.Catapult.kEjectVoltage;
+import static frc.robot.Constants.Catapult.kShootVoltage;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -90,16 +93,16 @@ public class RightCatapult extends SubsystemBase {
     return Math.abs(kReverseLimit - m_encoder.getPosition()) < 0.1;
   }
 
-  public void run(double speed) {
-    m_catapult.set(speed);
+  public void run(double voltage) {
+    m_catapult.setVoltage(voltage);
   }
   
   public void score() {
-    run(1);
+    run(kShootVoltage);
   }
 
   public void eject() {
-    run(0.6);
+    run(kEjectVoltage);
   }
 
   public void stop() {
@@ -107,7 +110,7 @@ public class RightCatapult extends SubsystemBase {
   }
 
   public void down() {
-    run(-0.1);
+    run(kResetVoltage);
   }
 
   public boolean isRed() {
