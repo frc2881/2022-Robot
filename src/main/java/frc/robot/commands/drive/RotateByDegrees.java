@@ -37,10 +37,10 @@ public class RotateByDegrees extends CommandBase {
     SmartDashboard.putNumber("turn ki", 0.0004);
     SmartDashboard.putNumber("turn kd", 0.005);
     SmartDashboard.putNumber("Turn Value", 5);
-    kmax = 0.15;
+    kmax = 0.12;
     kp = kmax;
-    ki = 0;
-    kd = 0; 
+    ki = 0.0004;
+    kd = 0.005; 
     pid = new PIDController(kp, ki, kd);
     
   }
