@@ -65,5 +65,6 @@ public class NavX extends AHRS {
     builder.addDoubleProperty("Yaw", this::getYaw, null);
     builder.addDoubleProperty("Pitch", this::getPitch, null);
     builder.addDoubleProperty("Roll", this::getRoll, null);
+    builder.addDoubleProperty("Angle", this::getAngle, null);
   }
 }
