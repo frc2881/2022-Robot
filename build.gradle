@@ -106,7 +106,7 @@ spotless {
         // Files to apply formatting
         target fileTree('.') {
             include 'null'
-            exclude '**/build/**', '**/build-*/**', 'frc.wpilib.robot.command.catapult.ScoreLeft', 'frc.wpilib.robot.command.catapult.ScoreRight', 'frc.robot.subsystems.LeftCatapult', 'frc.robot.subsystems.RightCatapult'
+            exclude '**/build/**', '**/build-*/**'
         }
 
         // If Spotless is formatting code you don't want it to touch, add 'spotless:off'
@@ -117,12 +117,12 @@ spotless {
         //googleJavaFormat().aosp()
 
         // Remove unused import statements
-        removeUnusedImports()
+        //removeUnusedImports()
 
         // Remove unused whitespace that is at the end of a line
-        trimTrailingWhitespace()
+        //trimTrailingWhitespace()
 
         // End each file with a newline
-        endWithNewline()
+        //endWithNewline()
    }  
 }
