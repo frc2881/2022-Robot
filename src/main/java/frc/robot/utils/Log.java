@@ -9,6 +9,7 @@ import static java.util.stream.Collectors.joining;
 
 import java.util.stream.Stream;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -28,7 +29,7 @@ public final class Log {
    */
   public static void log(String message) {
     long time = System.currentTimeMillis() - startTime;
-    System.out.printf("[%6.2f] %s\n", time / 1000.0, message);
+    DataLogManager.log(String.format("[%6.2f] %s\n", time / 1000.0, message));
   }
 
   /**

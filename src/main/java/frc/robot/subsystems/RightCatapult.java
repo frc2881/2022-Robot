@@ -5,16 +5,17 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.kEnableDetailedLogging;
 import static frc.robot.Constants.Catapult.kBlueCargo;
 import static frc.robot.Constants.Catapult.kCurrentLimit;
 import static frc.robot.Constants.Catapult.kDistance;
+import static frc.robot.Constants.Catapult.kEjectVoltage;
 import static frc.robot.Constants.Catapult.kForwardLimitRight;
 import static frc.robot.Constants.Catapult.kRedCargo;
 import static frc.robot.Constants.Catapult.kResetPosition;
+import static frc.robot.Constants.Catapult.kResetVoltage;
 import static frc.robot.Constants.Catapult.kReverseLimit;
 import static frc.robot.Constants.Catapult.kRightMotor;
-import static frc.robot.Constants.Catapult.kResetVoltage;
-import static frc.robot.Constants.Catapult.kEjectVoltage;
 import static frc.robot.Constants.Catapult.kShootVoltage;
 
 import com.revrobotics.CANSparkMax;
@@ -26,7 +27,10 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -40,8 +44,12 @@ public class RightCatapult extends SubsystemBase {
   private final ColorMatch m_colorMatcher;
   private boolean m_cargoIsRed;
   private boolean m_cargoIsBlue;
-  Debouncer m_correctDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
-  Debouncer m_incorrectDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+  private final Debouncer m_correctDebouncer;
+  private final Debouncer m_incorrectDebouncer;
+  private final DoubleLogEntry m_logPosition;
+  private final DoubleLogEntry m_logOutput;
+  private final DoubleLogEntry m_logBusVoltage;
+  private final DoubleLogEntry m_logCurrent;
 
   public RightCatapult() {
     m_catapult = new CANSparkMax(kRightMotor, MotorType.kBrushless);
@@ -65,6 +73,22 @@ public class RightCatapult extends SubsystemBase {
     m_colorMatcher.addColorMatch(kRedCargo);
     m_colorMatcher.addColorMatch(kBlueCargo);
     m_colorMatcher.setConfidenceThreshold(0.95);
+
+    m_correctDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+    m_incorrectDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+
+    if(kEnableDetailedLogging) {
+      DataLog log = DataLogManager.getLog();
+      m_logPosition = new DoubleLogEntry(log, "/rightCatapult/position");
+      m_logOutput = new DoubleLogEntry(log, "/rightCatapult/output");
+      m_logBusVoltage = new DoubleLogEntry(log, "/rightCatapult/busVoltage");
+      m_logCurrent = new DoubleLogEntry(log, "/rightCatapult/current");
+    } else {
+      m_logPosition = null;
+      m_logOutput = null;
+      m_logBusVoltage = null;
+      m_logCurrent = null;
+    }
   }
 
   public void reset() {
@@ -171,17 +195,20 @@ public class RightCatapult extends SubsystemBase {
     if(m_colorSensor.hasReset() || !m_colorSensor.isConnected()){
       m_colorSensor = new ColorSensorV3(Port.kOnboard);   
     }
+
+    if(kEnableDetailedLogging) {
+      m_logPosition.append(m_encoder.getPosition());
+      m_logOutput.append(m_catapult.getAppliedOutput());
+      m_logBusVoltage.append(m_catapult.getBusVoltage());
+      m_logCurrent.append(m_catapult.getOutputCurrent());
+    }
   }
 
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
-    builder.addDoubleProperty("Right Distance",
-                              () -> m_colorSensor.getProximity(),  null);
     builder.addBooleanProperty("Right Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Right Red", () -> isRed(), null);
-    builder.addDoubleProperty("Right Catapult Position",
-                              () -> m_encoder.getPosition(), null);
   }
 }

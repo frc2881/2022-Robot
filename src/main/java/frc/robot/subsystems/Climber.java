@@ -5,14 +5,25 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.Climber.*;
+import static frc.robot.Constants.kEnableDetailedLogging;
+import static frc.robot.Constants.Climber.kForwardLimit;
+import static frc.robot.Constants.Climber.kMatchSafety;
+import static frc.robot.Constants.Climber.kMotor;
+import static frc.robot.Constants.Climber.kRampRate;
+import static frc.robot.Constants.Climber.kReverseLimit;
+import static frc.robot.Constants.Climber.kRotationsToInches;
+import static frc.robot.Constants.Climber.kSolenoid;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -22,6 +33,11 @@ public class Climber extends SubsystemBase {
   private final CANSparkMax m_arm;
   private final RelativeEncoder m_encoder;
   private final Solenoid m_solenoid;
+  private final DoubleLogEntry m_logPosition;
+  private final DoubleLogEntry m_logOutput;
+  private final DoubleLogEntry m_logBusVoltage;
+  private final DoubleLogEntry m_logCurrent;
+  private final BooleanLogEntry m_logSolenoid;
 
   public Climber() {
     m_arm = new CANSparkMax(kMotor, MotorType.kBrushless);
@@ -40,6 +56,31 @@ public class Climber extends SubsystemBase {
     m_encoder.setPositionConversionFactor(kRotationsToInches);
 
     m_solenoid = new Solenoid(PneumaticsModuleType.REVPH, kSolenoid);
+
+    if(kEnableDetailedLogging) {
+      DataLog log = DataLogManager.getLog();
+      m_logPosition = new DoubleLogEntry(log, "/climber/position");
+      m_logOutput = new DoubleLogEntry(log, "/climber/output");
+      m_logBusVoltage = new DoubleLogEntry(log, "/climber/busVoltage");
+      m_logCurrent = new DoubleLogEntry(log, "/climber/current");
+      m_logSolenoid = new BooleanLogEntry(log, "/climber/solenoid");
+    } else {
+      m_logPosition = null;
+      m_logOutput = null;
+      m_logBusVoltage = null;
+      m_logCurrent = null;
+      m_logSolenoid = null;
+    }
+  }
+
+  @Override
+  public void periodic() {
+    if(kEnableDetailedLogging) {
+      m_logPosition.append(m_encoder.getPosition());
+      m_logOutput.append(m_arm.getAppliedOutput());
+      m_logBusVoltage.append(m_arm.getBusVoltage());
+      m_logCurrent.append(m_arm.getOutputCurrent());
+    }
   }
 
   public void reset() {
@@ -64,6 +105,9 @@ public class Climber extends SubsystemBase {
 
   public void _armBack() {
     m_solenoid.set(true);
+    if(kEnableDetailedLogging) {
+      m_logSolenoid.append(m_solenoid.get());
+    }
   }
 
   /**
@@ -77,6 +121,9 @@ public class Climber extends SubsystemBase {
 
   public void _armUp() {
     m_solenoid.set(false);
+    if(kEnableDetailedLogging) {
+      m_logSolenoid.append(m_solenoid.get());
+    }
   }
 
   /**
@@ -90,6 +137,9 @@ public class Climber extends SubsystemBase {
 
   public void _armToggle() {
     m_solenoid.toggle();
+    if(kEnableDetailedLogging) {
+      m_logSolenoid.append(m_solenoid.get());
+    }
   }
 
   public void armToggle() {

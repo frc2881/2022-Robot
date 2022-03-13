@@ -5,6 +5,7 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.kEnableDetailedLogging;
 import static frc.robot.Constants.Catapult.kBlueCargo;
 import static frc.robot.Constants.Catapult.kCurrentLimit;
 import static frc.robot.Constants.Catapult.kDistance;
@@ -13,9 +14,9 @@ import static frc.robot.Constants.Catapult.kForwardLimitLeft;
 import static frc.robot.Constants.Catapult.kLeftMotor;
 import static frc.robot.Constants.Catapult.kRedCargo;
 import static frc.robot.Constants.Catapult.kResetPosition;
+import static frc.robot.Constants.Catapult.kResetVoltage;
 import static frc.robot.Constants.Catapult.kReverseLimit;
 import static frc.robot.Constants.Catapult.kShootVoltage;
-import static frc.robot.Constants.Catapult.kResetVoltage;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -26,7 +27,10 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -40,8 +44,12 @@ public class LeftCatapult extends SubsystemBase {
   private final ColorMatch m_colorMatcher;
   private boolean m_cargoIsRed;
   private boolean m_cargoIsBlue;
-  Debouncer m_correctDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
-  Debouncer m_incorrectDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+  private final Debouncer m_correctDebouncer;
+  private final Debouncer m_incorrectDebouncer;
+  private final DoubleLogEntry m_logPosition;
+  private final DoubleLogEntry m_logOutput;
+  private final DoubleLogEntry m_logBusVoltage;
+  private final DoubleLogEntry m_logCurrent;
 
   public LeftCatapult() {
     m_catapult = new CANSparkMax(kLeftMotor, MotorType.kBrushless);
@@ -65,6 +73,22 @@ public class LeftCatapult extends SubsystemBase {
     m_colorMatcher.addColorMatch(kRedCargo);
     m_colorMatcher.addColorMatch(kBlueCargo);
     m_colorMatcher.setConfidenceThreshold(0.95);
+
+    m_correctDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+    m_incorrectDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+
+    if(kEnableDetailedLogging) {
+      DataLog log = DataLogManager.getLog();
+      m_logPosition = new DoubleLogEntry(log, "/leftCatapult/position");
+      m_logOutput = new DoubleLogEntry(log, "/leftCatapult/output");
+      m_logBusVoltage = new DoubleLogEntry(log, "/leftCatapult/busVoltage");
+      m_logCurrent = new DoubleLogEntry(log, "/leftCatapult/current");
+    } else {
+      m_logPosition = null;
+      m_logOutput = null;
+      m_logBusVoltage = null;
+      m_logCurrent = null;
+    }
   }
 
   public void reset() {
@@ -121,12 +145,15 @@ public class LeftCatapult extends SubsystemBase {
     return m_cargoIsBlue;
   }
 
-  public boolean isCorrectCargo(){
+  public boolean isCorrectCargo() {
     boolean currentCargo;
-    if((m_cargoIsRed == true) || (m_cargoIsBlue == true)){
-      if(((m_cargoIsRed == true) && (DriverStation.getAlliance() == Alliance.Red)) || ((m_cargoIsBlue == true) && (DriverStation.getAlliance() == Alliance.Blue))){
-          currentCargo = true;
-      } else{
+    if((m_cargoIsRed == true) || (m_cargoIsBlue == true)) {
+      if(((m_cargoIsRed == true) &&
+          (DriverStation.getAlliance() == Alliance.Red)) ||
+         ((m_cargoIsBlue == true) &&
+          (DriverStation.getAlliance() == Alliance.Blue))) {
+        currentCargo = true;
+      } else {
         currentCargo = false;
       }
     } else{
@@ -135,12 +162,15 @@ public class LeftCatapult extends SubsystemBase {
     return m_correctDebouncer.calculate(currentCargo);
   }
 
-  public boolean isIncorrectCargo(){
+  public boolean isIncorrectCargo() {
     boolean currentCargo;
-    if((m_cargoIsRed == true) || (m_cargoIsBlue == true)){
-      if(((m_cargoIsRed == true) && (DriverStation.getAlliance() == Alliance.Blue)) || ((m_cargoIsBlue == true) && (DriverStation.getAlliance() == Alliance.Red))){
-          currentCargo = true;
-      } else{
+    if((m_cargoIsRed == true) || (m_cargoIsBlue == true)) {
+      if(((m_cargoIsRed == true) &&
+          (DriverStation.getAlliance() == Alliance.Blue)) ||
+         ((m_cargoIsBlue == true) &&
+          (DriverStation.getAlliance() == Alliance.Red))) {
+        currentCargo = true;
+      } else {
         currentCargo = false;
       }
     } else{
@@ -171,17 +201,20 @@ public class LeftCatapult extends SubsystemBase {
     if(m_colorSensor.hasReset() || !m_colorSensor.isConnected()){
       m_colorSensor = new ColorSensorV3(Port.kMXP);   
     }
+
+    if(kEnableDetailedLogging) {
+      m_logPosition.append(m_encoder.getPosition());
+      m_logOutput.append(m_catapult.getAppliedOutput());
+      m_logBusVoltage.append(m_catapult.getBusVoltage());
+      m_logCurrent.append(m_catapult.getOutputCurrent());
+    }
   }
 
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
-    builder.addDoubleProperty("Left Distance",
-                              () -> m_colorSensor.getProximity(), null);
     builder.addBooleanProperty("Left Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Left Red", () -> isRed(), null);
-    builder.addDoubleProperty("Left Catapult Position",
-                              () -> m_encoder.getPosition(), null);
   }
 }

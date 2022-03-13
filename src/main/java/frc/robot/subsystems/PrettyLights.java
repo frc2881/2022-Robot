@@ -1,72 +1,91 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2022 FRC Team 2881 - The Lady Cans
+//
+// Open Source Software; you can modify and/or share it under the terms of BSD
+// license file in the root directory of this project.
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.kEnableDetailedLogging;
+
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PrettyLights extends SubsystemBase {
-
-  public final double hotPink = 0.57;
-  public final double green = 0.77;
-  public final double red = 0.61;
-  public final double yellow = 0.69;
-  public final double rainbow = -0.97;
-  public final double confetti = -0.87;
-  public final double twinkles = -0.55;
-  public final double colorwave = -0.45;
-  private boolean defaultColor = true;
-  private final Spark lights;
+  private final double hotPink = 0.57;
+  private final double green = 0.77;
+  private final double red = 0.61;
+  private final double yellow = 0.69;
+  private final double rainbow = -0.97;
+  private final double confetti = -0.87;
+  private final double twinkles = -0.55;
+  private final double colorwave = -0.45;
+  private final PowerDistribution m_powerHub;
+  private final Spark m_lights;
+  private boolean m_defaultColor = true;
+  private final DoubleLogEntry m_logOutput;
+  private final DoubleLogEntry m_logCurrent;
 
   /** Creates a new PrettyLights. */
-  public PrettyLights() {
+  public PrettyLights(PowerDistribution powerHub) {
+    m_powerHub = powerHub;
 
-    lights = new Spark(0);
+    m_lights = new Spark(0);
 
-    lights.set(hotPink);
+    m_lights.set(hotPink);
+
+    if(kEnableDetailedLogging) {
+      DataLog log = DataLogManager.getLog();
+      m_logOutput = new DoubleLogEntry(log, "/prettyLight/output");
+      m_logCurrent = new DoubleLogEntry(log, "/prettyLights/current");
+    } else {
+      m_logOutput = null;
+      m_logCurrent = null;
+    }
   }
-
-  //enabled Solid Pink
-  //(no code) disabled heartbeat pink
-  //Intake red cargo Solid red (1-2 seconds)
-  //Intake blue cargo Solid blue (1-2 seconds)
-  //flash green once
-  //flash red twice
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(defaultColor == true){
-        if(DriverStation.getMatchTime() <= 45 && DriverStation.getMatchTime() > 35){
-            lights.set(yellow);
-        } else {
-            lights.set(hotPink);
-        }
+    if(m_defaultColor == true) {
+      if((DriverStation.getMatchTime() <= 45) &&
+         (DriverStation.getMatchTime() > 35)) {
+        m_lights.set(yellow);
+      } else {
+        m_lights.set(hotPink);
+      }
     }
 
+    if(kEnableDetailedLogging) {
+      m_logOutput.append(m_lights.get());
+      m_logCurrent.append(m_powerHub.getCurrent(11));
+    }
   }
 
+  public void defaultColor() {
+    m_defaultColor = true;
+  }
 
-  public void defaultColor(){
-    defaultColor = true;
+  public void greenColor() {
+    m_defaultColor = false;
+    m_lights.set(green);
   }
-  public void greenColor(){
-    defaultColor = false;
-    lights.set(green);
+
+  public void redColor() {
+    m_defaultColor = false;
+    m_lights.set(red);
   }
-  public void redColor(){
-    defaultColor = false;
-    lights.set(red);
+
+  public void partyColor() {
+    m_defaultColor = false;
+    m_lights.set(rainbow);
   }
-  public void partyColor(){
-    defaultColor = false;
-    lights.set(rainbow);
-  }
+
   public void reset() {
-    lights.set(hotPink);
+    m_lights.set(hotPink);
   }
-
 }

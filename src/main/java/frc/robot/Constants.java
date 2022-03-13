@@ -287,17 +287,43 @@ public final class Constants {
     public static final double kMaxSpeed = 0.55;
   }
 
+  /**
+   * Configuration of the autonomous sequences.
+   */
   public static final class Auto {
-
+    /**
+     * The SmartDashboard name for the first delay within the autonomous
+     * sequences.
+     */
     public static final String kStartingDel = "Starting Delay";
 
+    /**
+     * The SmartDashboard name for the second delay within the autonomous
+     * sequences.
+     */
     public static final String kSecondDel = "Second Delay";
 
+    /**
+     * The SmartDashboard name for the third delay within the autonomous
+     * sequences.
+     */
     public static final String kThirdDel = "Third Delay";
 
+    /**
+     * The SmartDashboard name for the fourth delay within the autonomous
+     * sequences.
+     */
     public static final String kFourthDel = "Fourth Delay";
 
+    /**
+     * The SmartDashboard name for the fifth delay within the autonomous
+     * sequences.
+     */
     public static final String kFifthDel = "Fifth Delay";
-
   }
+
+  /**
+   * Controls the logging of detailed information about the robot.
+   */
+  public static final boolean kEnableDetailedLogging = false;
 }

@@ -9,6 +9,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.XboxController;
@@ -63,7 +65,7 @@ public class RobotContainer {
   private final LeftCatapult leftCatapult = new LeftCatapult();
   private final RightCatapult rightCatapult = new RightCatapult();
   private final Drive drive = new Drive(navx);
-  private final PrettyLights prettylights = new PrettyLights();
+  private final PrettyLights prettyLights = new PrettyLights(powerHub);
 
   //Autonomous Cargo to Hub Pathways
   private final Trajectory cargo1toHubL;
@@ -124,11 +126,11 @@ public class RobotContainer {
 
     // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
-    m_chooser.setDefaultOption("Auto Right L", new RightL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
-    m_chooser.addOption("Auto Right M", new RightM(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightMtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR));
-    m_chooser.addOption("Auto Right R", new RightR(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, rightRtoCargo3, cargo3toHubR, rightMtoCargo2, rightMtoCargo2ForRightR, cargo2toHubR));
-    m_chooser.addOption("Auto Left L", new LeftL(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo1, leftMOff));
-    m_chooser.addOption("Auto Left M", new LeftM(drive, intake, leftCatapult, rightCatapult, prettylights, driverController, leftMtoCargo1, cargo1toHubLForLeftM, leftMOff));
+    m_chooser.setDefaultOption("Auto Right L", new RightL(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
+    m_chooser.addOption("Auto Right M", new RightM(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, rightMtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR));
+    m_chooser.addOption("Auto Right R", new RightR(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, rightRtoCargo3, cargo3toHubR, rightMtoCargo2, rightMtoCargo2ForRightR, cargo2toHubR));
+    m_chooser.addOption("Auto Left L", new LeftL(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo1, leftMOff));
+    m_chooser.addOption("Auto Left M", new LeftM(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, leftMtoCargo1, cargo1toHubLForLeftM, leftMOff));
     m_chooser.addOption("Do Nothing", null);
 
 
@@ -155,20 +157,24 @@ public class RobotContainer {
     CommandScheduler.getInstance().
       onCommandFinish(command -> Log.end(command, false));
 
-    //Smart Dashboard Commands
+    // Put the autonomous chooser onto SmartDashboard.
     SmartDashboard.putData(m_chooser);
+
+    // Start the data logger.
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
   }
 
   private void configureButtonBindings() {
     // Driver Xbox Controller
     new JoystickButton(driverController, XboxController.Button.kB.value).whenHeld(
-      new RumbleYes(prettylights, driverController, manipulatorController));
+      new RumbleYes(prettyLights, driverController, manipulatorController));
 
     buttonFromDouble(() -> driverController.getLeftTriggerAxis()+driverController.getRightTriggerAxis()).
       whileHeld(new CameraSwitch());
 
     new JoystickButton(driverController, XboxController.Button.kA.value).whenHeld(
-      new RumbleNo(prettylights, driverController, manipulatorController));
+      new RumbleNo(prettyLights, driverController, manipulatorController));
     // Manipulator Xbox Controller
 
     new JoystickButton(manipulatorController, XboxController.Button.kX.value).
@@ -181,19 +187,19 @@ public class RobotContainer {
       whileHeld(new ExtendIntake(intake));
 
     new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).
-      whenHeld(new FirstClimberSequence(climber, prettylights, navx, manipulatorController));
+      whenHeld(new FirstClimberSequence(climber, prettyLights, navx, manipulatorController));
 
     new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).
-      whenHeld(new SecondClimberSequence(climber, prettylights, navx, manipulatorController));
+      whenHeld(new SecondClimberSequence(climber, prettyLights, navx, manipulatorController));
 
     buttonFromDPad(manipulatorController).
       whenPressed(new Eject(leftCatapult, rightCatapult));
 
     buttonFromDouble(() -> manipulatorController.getRightTriggerAxis()).
-      whenPressed(new Score(leftCatapult, rightCatapult, prettylights, manipulatorController));
+      whenPressed(new Score(leftCatapult, rightCatapult, prettyLights, manipulatorController));
 
     buttonFromDouble(() -> manipulatorController.getLeftTriggerAxis()).
-      whenPressed(new ScoreNoColor(leftCatapult, rightCatapult, prettylights, manipulatorController));
+      whenPressed(new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, manipulatorController));
 
     new JoystickButton(manipulatorController, XboxController.Button.kStart.value).
       whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
@@ -201,10 +207,10 @@ public class RobotContainer {
     new JoystickButton(manipulatorController, XboxController.Button.kBack.value).
       whenHeld(new CatapultOverrride(leftCatapult, rightCatapult));
 
-    buttonFromBoolean(() -> leftCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettylights, driverController, manipulatorController));
-    buttonFromBoolean(() -> leftCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettylights, driverController, manipulatorController));
-    buttonFromBoolean(() -> rightCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettylights, driverController, manipulatorController));
-    buttonFromBoolean(() -> rightCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettylights, driverController, manipulatorController));
+    buttonFromBoolean(() -> leftCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettyLights, driverController, manipulatorController));
+    buttonFromBoolean(() -> leftCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettyLights, driverController, manipulatorController));
+    buttonFromBoolean(() -> rightCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettyLights, driverController, manipulatorController));
+    buttonFromBoolean(() -> rightCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettyLights, driverController, manipulatorController));
   }
 
   public void resetRobot() {
@@ -214,7 +220,7 @@ public class RobotContainer {
       intake.reset();
       leftCatapult.reset();
       rightCatapult.reset();
-      prettylights.reset();
+      prettyLights.reset();
       robotResetState = false;
     }
   }
@@ -266,5 +272,4 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
   }
-
 }
