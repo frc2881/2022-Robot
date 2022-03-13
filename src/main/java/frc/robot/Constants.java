@@ -48,12 +48,12 @@ public final class Constants {
      * The minimum distance to the cargo in order to consider it to be present,
      * as detected by the REV Color Sensor V3.
      */
-    public static final int kDistance = 600;
+    public static final int kDistance = 500;
 
     /**
      * The maximum current to send to the catapult motors.
      */
-    public static final int kCurrentLimit = 120;
+    public static final int kCurrentLimit = 200;
     //public static final int kCurrentLimit = 80;
 
     /**
@@ -67,14 +67,14 @@ public final class Constants {
      * move in the forward direction.  Adjusting this limit adjusts the launch
      * angle of the shot.
      */
-    public static final double kForwardLimitLeft = 4.25;
+    public static final double kForwardLimitLeft = 5;
 
     /**
      * The maximum distance (in rotations) that the right catapult motor can
      * move in the forward direction.  Adjusting this limit adjusts the launch
      * angle of the shot.
      */
-    public static final double kForwardLimitRight = 4;
+    public static final double kForwardLimitRight = 4.75;
 
     /**
      * The minimum distance (in rotations) that the catapult motor can move in
@@ -85,9 +85,9 @@ public final class Constants {
     /**
      * The maximum amount of time to wait for the catapult to shoot a cargo.
      */
-    public static final double kShootTimeout = 0.1;
+    public static final double kShootTimeout = 1.0;
 
-    public static final double kShootVoltage = 10;
+    public static final double kShootVoltage = 11;
 
     /**
      * The maximum amount of time to wait for the catapult to eject a cargo.
@@ -99,7 +99,7 @@ public final class Constants {
     /**
      * The maximum amount of time to wait for the catapult to reset.
      */
-    public static final double kResetTimeout = 1.0;
+    public static final double kResetTimeout = 2.0;
 
     public static final double kResetVoltage = -1.0;
 
