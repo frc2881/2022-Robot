@@ -37,10 +37,10 @@ public class RotateByDegrees extends CommandBase {
     SmartDashboard.putNumber("turn ki", 0.0004);
     SmartDashboard.putNumber("turn kd", 0.005);
     SmartDashboard.putNumber("Turn Value", 5);
-    kmax = 0.15;
+    kmax = 0.12;
     kp = kmax;
-    ki = 0;
-    kd = 0; 
+    ki = 0.0004;
+    kd = 0.005; 
     pid = new PIDController(kp, ki, kd);
     
   }
@@ -49,9 +49,9 @@ public class RotateByDegrees extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pid.setP(SmartDashboard.getNumber("turn kp", 0.09));
-    pid.setI(SmartDashboard.getNumber("turn ki", 0.00005));
-    pid.setD(SmartDashboard.getNumber("turn kd", 0.004));
+    pid.setP(SmartDashboard.getNumber("turn kp", 0.12));
+    pid.setI(SmartDashboard.getNumber("turn ki", 0.0004));
+    pid.setD(SmartDashboard.getNumber("turn kd", 0.005));
     target = m_navx.getAngle() - SmartDashboard.getNumber("Turn Value", 5);//m_turn.getAsDouble();
     pid.reset();
     pid.setSetpoint(target);
