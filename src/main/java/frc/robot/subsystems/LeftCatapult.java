@@ -4,7 +4,6 @@
 // license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
 import static frc.robot.Constants.kEnableDetailedLogging;
 import static frc.robot.Constants.Catapult.kBlueCargo;
 import static frc.robot.Constants.Catapult.kCurrentLimit;

@@ -36,6 +36,7 @@ import frc.robot.commands.climber.RunArm;
 import frc.robot.commands.climber.SecondClimberSequence;
 import frc.robot.commands.drive.CameraSwitch;
 import frc.robot.commands.drive.DriveWithJoysticks;
+import frc.robot.commands.drive.RotateByDegrees;
 import frc.robot.commands.feedback.RumbleNo;
 import frc.robot.commands.feedback.RumbleYes;
 import frc.robot.commands.intake.ExtendIntake;
@@ -47,6 +48,7 @@ import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
+import frc.robot.subsystems.VisionTracking;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
 import frc.robot.utils.PathPlanner.PathPlanner2;
@@ -66,6 +68,7 @@ public class RobotContainer {
   private final RightCatapult rightCatapult = new RightCatapult();
   private final Drive drive = new Drive(navx);
   private final PrettyLights prettyLights = new PrettyLights(powerHub);
+  private final VisionTracking visionTracking = new VisionTracking();
 
   //Autonomous Cargo to Hub Pathways
   private final Trajectory cargo1toHubL;
@@ -130,7 +133,7 @@ public class RobotContainer {
     m_chooser.addOption("Auto Right M", new RightM(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, rightMtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR));
     m_chooser.addOption("Auto Right R", new RightR(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, rightRtoCargo3, cargo3toHubR, rightMtoCargo2, rightMtoCargo2ForRightR, cargo2toHubR));
     m_chooser.addOption("Auto Left L", new LeftL(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo1, leftMOff));
-    m_chooser.addOption("Auto Left M", new LeftM(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, leftMtoCargo1, cargo1toHubLForLeftM, leftMOff));
+    m_chooser.addOption("Auto Left M", new LeftM(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, leftMtoCargo1, cargo1toHubLForLeftM, leftMOff)); 
     m_chooser.addOption("Do Nothing", null);
 
 
@@ -168,7 +171,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Driver Xbox Controller
     new JoystickButton(driverController, XboxController.Button.kB.value).whenHeld(
-      new RumbleYes(prettyLights, driverController, manipulatorController));
+      new RotateByDegrees(navx, drive, () -> visionTracking.getYaw()));
 
     buttonFromDouble(() -> driverController.getLeftTriggerAxis()+driverController.getRightTriggerAxis()).
       whileHeld(new CameraSwitch());
@@ -199,7 +202,7 @@ public class RobotContainer {
       whenPressed(new Score(leftCatapult, rightCatapult, prettyLights, manipulatorController));
 
     buttonFromDouble(() -> manipulatorController.getLeftTriggerAxis()).
-      whenPressed(new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, manipulatorController));
+      whenPressed(new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, manipulatorController)); 
 
     new JoystickButton(manipulatorController, XboxController.Button.kStart.value).
       whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
@@ -211,7 +214,7 @@ public class RobotContainer {
     buttonFromBoolean(() -> leftCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettyLights, driverController, manipulatorController));
     buttonFromBoolean(() -> rightCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettyLights, driverController, manipulatorController));
     buttonFromBoolean(() -> rightCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettyLights, driverController, manipulatorController));
-  }
+}
 
   public void resetRobot() {
     if(robotResetState == true) {

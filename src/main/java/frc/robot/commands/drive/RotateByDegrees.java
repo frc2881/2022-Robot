@@ -52,11 +52,12 @@ public class RotateByDegrees extends CommandBase {
     pid.setP(SmartDashboard.getNumber("turn kp", 0.09));
     pid.setI(SmartDashboard.getNumber("turn ki", 0.00005));
     pid.setD(SmartDashboard.getNumber("turn kd", 0.004));
-    target = m_navx.getAngle() - SmartDashboard.getNumber("Turn Value", 5);//m_turn.getAsDouble();
+    target = m_navx.getAngle() - m_turn.getAsDouble();
     pid.reset();
     pid.setSetpoint(target);
-    pid.setTolerance(1);
+    pid.setTolerance(.5);
     SmartDashboard.putNumber("target", target);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

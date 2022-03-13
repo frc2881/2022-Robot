@@ -105,6 +105,20 @@ public final class Constants {
 
   
     public static final double kShootTimeDelay = 0.5;
+
+
+    public static final double kLeftLowDist = 10.767;
+
+    public static final double kLeftHighDist = 16.433;
+
+    public static final double kLeftHighLim =  8.25;
+
+    public static final double kRightLowDist = 6.483;
+
+    public static final double kRightHighDist = 19.25;
+
+    public static final double kRightHighLim =  8.00;
+
   
   }
 

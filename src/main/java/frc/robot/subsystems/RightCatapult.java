@@ -89,6 +89,8 @@ public class RightCatapult extends SubsystemBase {
       m_logBusVoltage = null;
       m_logCurrent = null;
     }
+  
+
   }
 
   public void reset() {
@@ -202,6 +204,7 @@ public class RightCatapult extends SubsystemBase {
       m_logBusVoltage.append(m_catapult.getBusVoltage());
       m_logCurrent.append(m_catapult.getOutputCurrent());
     }
+  
   }
 
   @Override
@@ -211,4 +214,5 @@ public class RightCatapult extends SubsystemBase {
     builder.addBooleanProperty("Right Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Right Red", () -> isRed(), null);
   }
+
 }
