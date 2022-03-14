@@ -23,8 +23,8 @@ public class RotateByDegrees extends CommandBase {
   private double kp;
   private double ki;
   private double kd;
-  private double kturn;
-  private double error;
+  //private double kTurn;
+  //private double error;
   private double spin;
   private PIDController pid;
 
@@ -63,7 +63,7 @@ public class RotateByDegrees extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    error = target - m_navx.getAngle();
+    //error = target - m_navx.getAngle();
     spin = pid.calculate(m_navx.getAngle());
     m_drive.arcadeDrive(0, spin);
   }

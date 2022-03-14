@@ -18,10 +18,12 @@ public class FollowTrajectory extends CommandBase {
   private final Drive m_drive;
   private final Trajectory m_trajectory;
   private final RamseteCommand m_ramsete;
+  public boolean m_resetodometry;
 
-  public FollowTrajectory(Drive drive, Trajectory trajectory) {
+  public FollowTrajectory(Drive drive, Trajectory trajectory, boolean resetodometry) {
     m_drive = drive;
     m_trajectory = trajectory;
+    m_resetodometry = resetodometry;
 
     addRequirements(m_drive);
 
@@ -38,8 +40,10 @@ public class FollowTrajectory extends CommandBase {
   @Override
   public void initialize() {
     // Reset the drive odometry to the initial pose of the trajectory.
-    m_drive.resetOdometry(m_trajectory.getInitialPose());
-
+    if (m_resetodometry == true) {
+      m_drive.resetOdometry(m_trajectory.getInitialPose());
+    }
+    
     m_ramsete.initialize();
   }
 
