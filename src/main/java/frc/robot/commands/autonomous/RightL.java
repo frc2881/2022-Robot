@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Auto;
 import frc.robot.commands.catapult.Score;
+import frc.robot.commands.catapult.ScoreNoColor;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.feedback.WaitCommandNT;
 import frc.robot.subsystems.Drive;
@@ -18,6 +19,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
+import frc.robot.utils.NavX;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -25,38 +27,41 @@ import frc.robot.subsystems.RightCatapult;
 public class RightL extends SequentialCommandGroup {
   /** Creates a new RightL. */
   public RightL(
-      Drive drive, 
-      Intake intake, 
-      LeftCatapult leftCatapult, 
-      RightCatapult rightCatapult, 
-      PrettyLights prettylights, 
-      XboxController controller, 
-      Trajectory rightLtoCargo2,
-      Trajectory cargo2toHubR,
-      Trajectory rightMtoCargo3,
-      Trajectory cargo3toHubR,
-      Trajectory rightMtoCargo2) {
+    Drive drive, 
+    Intake intake, 
+    NavX navx,
+    LeftCatapult leftCatapult, 
+    RightCatapult rightCatapult, 
+    PrettyLights prettyLights, 
+    XboxController driverController, 
+    Trajectory rightL,
+    Trajectory cargo2ToTerminal,
+    Trajectory backUpTerminal,
+    Trajectory backUpTerminalToScore
+  ) {
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-  new WaitCommandNT(Auto.kStartingDel),
-      //Right Tarmac, Left side, driving out to Cargo 2
-      new InstantCommand(() -> intake.extend(), intake),
-      new InstantCommand(() -> intake.run(1), intake),
-      new FollowTrajectory(drive, rightLtoCargo2),
-  new WaitCommandNT(Auto.kSecondDel),
-      new FollowTrajectory(drive, cargo2toHubR),
-      new InstantCommand(() -> intake.run(0), intake),
-      new WaitCommand(0.25),
-      new Score(leftCatapult, rightCatapult, prettylights, null),
-  new WaitCommandNT(Auto.kThirdDel),
-      new InstantCommand(() -> intake.run(1), intake), 
-      new FollowTrajectory(drive, rightMtoCargo3),
-  new WaitCommandNT(Auto.kFourthDel),
-      new FollowTrajectory(drive, cargo3toHubR),
-      new InstantCommand(() -> intake.run(0), intake),
-      new WaitCommand(0.25),
-      new Score(leftCatapult, rightCatapult, prettylights, null),
-  new WaitCommandNT(Auto.kFifthDel),
-      new FollowTrajectory(drive, rightMtoCargo2)
+new WaitCommandNT(Auto.kStartingDel),
+    new InstantCommand(() -> intake.extend(), intake),
+new WaitCommandNT(Auto.kSecondDel),
+    //new WaitCommand(0.1),
+    new InstantCommand(() -> intake.run(1.0), intake),
+    new FollowTrajectory(drive, rightL, true),
+    new WaitCommand(0.25),
+    new InstantCommand(() -> intake.run(0.0), intake),
+    new WaitCommand(0.25),
+    new Score(leftCatapult, rightCatapult, prettyLights, null),//(leftCatapult, rightCatapult, prettyLights, null),
+new WaitCommandNT(Auto.kThirdDel),
+    new InstantCommand(() -> intake.run(1.0), intake),
+    new FollowTrajectory(drive, cargo2ToTerminal, false),
+    new WaitCommand(0.4),
+    new FollowTrajectory(drive, backUpTerminal, false),
+    new WaitCommand(0.5),
+    new FollowTrajectory(drive, backUpTerminalToScore, false),
+    new InstantCommand(() -> intake.run(0.0), intake),
+    //new WaitCommand(0.1),
+    new Score(leftCatapult, rightCatapult, prettyLights, null)
     );
   }
 }

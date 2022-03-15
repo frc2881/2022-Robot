@@ -211,6 +211,7 @@ public class RightCatapult extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
+    builder.addDoubleProperty("Right Catapult Sensor Distance", () -> m_colorSensor.getProximity(), null);
     builder.addBooleanProperty("Right Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Right Red", () -> isRed(), null);
   }

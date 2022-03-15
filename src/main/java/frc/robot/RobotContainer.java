@@ -22,9 +22,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.autonomous.LeftL;
-import frc.robot.commands.autonomous.LeftM;
 import frc.robot.commands.autonomous.RightL;
-import frc.robot.commands.autonomous.RightM;
 import frc.robot.commands.autonomous.RightR;
 import frc.robot.commands.catapult.CatapultOverrride;
 import frc.robot.commands.catapult.Eject;
@@ -34,7 +32,6 @@ import frc.robot.commands.climber.ClimberOverride;
 import frc.robot.commands.climber.FirstClimberSequence;
 import frc.robot.commands.climber.RunArm;
 import frc.robot.commands.climber.SecondClimberSequence;
-import frc.robot.commands.drive.CameraSwitch;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.RotateByDegrees;
 import frc.robot.commands.feedback.RumbleNo;
@@ -69,24 +66,19 @@ public class RobotContainer {
   private final Drive drive = new Drive(navx);
   private final PrettyLights prettyLights = new PrettyLights(powerHub);
   private final VisionTracking visionTracking = new VisionTracking();
+ 
+  //Left Paths
+  private final Trajectory leftPath;
+  private final Trajectory toNextCargo;
 
-  //Autonomous Cargo to Hub Pathways
-  private final Trajectory cargo1toHubL;
-  private final Trajectory cargo1toHubLForLeftM;
-  private final Trajectory cargo2toHubR;
-  private final Trajectory cargo3toHubR;
-
-  //Left Tarmac
-  private final Trajectory leftLtoCargo1;
-  private final Trajectory leftMtoCargo1;
-  private final Trajectory leftMOff;
-
-  //Right Tarmac
-  private final Trajectory rightLtoCargo2;
-  private final Trajectory rightMtoCargo2;
-  private final Trajectory rightMtoCargo2ForRightR;
-  private final Trajectory rightMtoCargo3;
-  private final Trajectory rightRtoCargo3;
+  //Right Paths
+  private final Trajectory rightPath;
+  private final Trajectory toTerminal;
+  private final Trajectory terminalToScore;
+  private final Trajectory rightL;
+  private final Trajectory cargo2ToTerminal;
+  private final Trajectory backUpTerminal;
+  private final Trajectory backUpTerminalToScore;
 
   private final SendableChooser<Command> m_chooser;
 
@@ -104,39 +96,31 @@ public class RobotContainer {
     );
 
   public RobotContainer() {
-    double maxVelocity = 2;
+    double maxVelocity = 3;
     double maxAcceleration = 2;
 
-    //Trajectories from Path Planner
-    //Cargo to Hub
-    cargo1toHubL = PathPlanner2.loadPath("Cargo1toHubL", maxVelocity, maxAcceleration, true);
-    cargo1toHubLForLeftM = PathPlanner2.loadPath("Cargo1toHubLForLeftM", maxVelocity, maxAcceleration, true);
-    cargo2toHubR = PathPlanner2.loadPath("Cargo2toHubR", maxVelocity, maxAcceleration, true);
-    cargo3toHubR = PathPlanner2.loadPath("Cargo3toHubR", maxVelocity, maxAcceleration, true);
 
     //Left Tarmac
-    leftLtoCargo1 = PathPlanner2.loadPath("LeftLtoCargo1", maxVelocity, maxAcceleration);
-    leftMtoCargo1 = PathPlanner2.loadPath("LeftMtoCargo1", maxVelocity, maxAcceleration);
-    leftMOff = PathPlanner2.loadPath("LeftMOff", maxVelocity, maxAcceleration);
+    leftPath = PathPlanner2.loadPath("LeftL", maxVelocity, maxAcceleration);
+    toNextCargo = PathPlanner2.loadPath("ToNextCargo", maxVelocity, maxAcceleration, true);
 
     //Right Tarmac
-    rightLtoCargo2 = PathPlanner2.loadPath("RightLtoCargo2", maxVelocity, maxAcceleration);
-    rightMtoCargo2 = PathPlanner2.loadPath("RightMtoCargo2", maxVelocity, maxAcceleration);
-    rightMtoCargo3 = PathPlanner2.loadPath("RightMtoCargo3", maxVelocity, maxAcceleration);
-    rightMtoCargo2ForRightR = PathPlanner2.loadPath("RightMtoCargo2ForRightR", maxVelocity, maxAcceleration);
-    rightRtoCargo3 = PathPlanner2.loadPath("RightRtoCargo3", maxVelocity, maxAcceleration);
-    
+    rightPath = PathPlanner2.loadPath("RightR", maxVelocity, maxAcceleration);
+    toTerminal = PathPlanner2.loadPath("ToTerminal", 4, maxAcceleration);
+    terminalToScore = PathPlanner2.loadPath("TerminalToScore", 4, maxAcceleration, true);
+    rightL = PathPlanner2.loadPath("RightL", maxVelocity, maxAcceleration);
+    cargo2ToTerminal = PathPlanner2.loadPath("Cargo2ToTerminal", maxVelocity, maxAcceleration);
+    backUpTerminal = PathPlanner2.loadPath("BackUpTerminal", maxVelocity, maxAcceleration, true);
+    backUpTerminalToScore = PathPlanner2.loadPath("BackUpTerminalToScore", maxVelocity, maxAcceleration, true);
 
     // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
-    m_chooser.setDefaultOption("Auto Right L", new RightL(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, rightLtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR, rightMtoCargo2));
-    m_chooser.addOption("Auto Right M", new RightM(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, rightMtoCargo2, cargo2toHubR, rightMtoCargo3, cargo3toHubR));
-    m_chooser.addOption("Auto Right R", new RightR(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, rightRtoCargo3, cargo3toHubR, rightMtoCargo2, rightMtoCargo2ForRightR, cargo2toHubR));
-    m_chooser.addOption("Auto Left L", new LeftL(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, leftLtoCargo1, cargo1toHubL, leftMtoCargo1, leftMOff));
-    m_chooser.addOption("Auto Left M", new LeftM(drive, intake, leftCatapult, rightCatapult, prettyLights, driverController, leftMtoCargo1, cargo1toHubLForLeftM, leftMOff)); 
+    m_chooser.addOption("Auto Right", new RightR(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightPath, toTerminal, terminalToScore));
+    m_chooser.addOption("Auto Left", new LeftL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, leftPath, toNextCargo));
+    m_chooser.addOption("RightL", new RightL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightL, cargo2ToTerminal, backUpTerminal, backUpTerminalToScore));
     m_chooser.addOption("Do Nothing", null);
 
-
+    //Delays between the Autonomouses
     SmartDashboard.putNumber("Starting Delay", 0);
     SmartDashboard.putNumber("Second Delay", 0);
     SmartDashboard.putNumber("Third Delay", 0);
@@ -172,9 +156,6 @@ public class RobotContainer {
     // Driver Xbox Controller
     new JoystickButton(driverController, XboxController.Button.kB.value).whenHeld(
       new RotateByDegrees(navx, drive, () -> visionTracking.getYaw()));
-
-    buttonFromDouble(() -> driverController.getLeftTriggerAxis()+driverController.getRightTriggerAxis()).
-      whileHeld(new CameraSwitch());
 
     new JoystickButton(driverController, XboxController.Button.kA.value).whenHeld(
       new RumbleNo(prettyLights, driverController, manipulatorController));

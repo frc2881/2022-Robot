@@ -16,6 +16,7 @@ import static frc.robot.Constants.Catapult.kRightLowDist;
 import com.revrobotics.CANSparkMax;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,7 +34,11 @@ public class VisionTracking extends SubsystemBase {
     double pitch; 
     double yaw; 
 
-    if(m_camera.getLatestResult().getBestTarget() == null){
+    PhotonTrackedTarget target;
+
+    target = m_camera.getLatestResult().getBestTarget();
+
+    if(target == null){
 
       pitch = 0;
       yaw = 0; 
@@ -41,8 +46,8 @@ public class VisionTracking extends SubsystemBase {
     }
     else{
 
-      pitch = m_camera.getLatestResult().getBestTarget().getPitch();
-      yaw = m_camera.getLatestResult().getBestTarget().getYaw();
+      pitch = target.getPitch();
+      yaw = target.getYaw();
 
     }
 

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Auto;
 import frc.robot.commands.catapult.Score;
+import frc.robot.commands.catapult.ScoreNoColor;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.feedback.WaitCommandNT;
 import frc.robot.subsystems.Drive;
@@ -18,6 +19,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
+import frc.robot.utils.NavX;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -27,27 +29,27 @@ public class LeftL extends SequentialCommandGroup {
   public LeftL(
     Drive drive, 
     Intake intake, 
+    NavX navx,
     LeftCatapult leftCatapult, 
     RightCatapult rightCatapult, 
     PrettyLights prettylights, 
     XboxController controller, 
-    Trajectory leftLtoCargo1,
-    Trajectory cargo1toHubL,
-    Trajectory leftMtoCargo1,
-    Trajectory leftMOff
+    Trajectory leftPath,
+    Trajectory toNextCargo
   ) {
     addCommands(
   new WaitCommandNT(Auto.kStartingDel),
       new InstantCommand(() -> intake.extend(), intake),
+      new WaitCommand(0.1),
       new InstantCommand(() -> intake.run(1.0), intake),
-      new FollowTrajectory(drive, leftLtoCargo1),
-  new WaitCommandNT(Auto.kSecondDel),
-      new FollowTrajectory(drive, cargo1toHubL),
+      new FollowTrajectory(drive, leftPath, true),
+      new WaitCommand(0.5),
       new InstantCommand(() -> intake.run(0), intake),
+      //new RotateByDegrees(navx, drive, () -> visionTracking.getYaw())
       new WaitCommand(0.25),
-      new Score(leftCatapult, rightCatapult, prettylights, null),
-  new WaitCommandNT(Auto.kThirdDel),
-      new FollowTrajectory(drive, leftMOff)
+      new ScoreNoColor(leftCatapult, rightCatapult, prettylights, null),
+      new InstantCommand(() -> intake.retract(), intake),
+      new FollowTrajectory(drive, toNextCargo, false)
     );
   }
 }
