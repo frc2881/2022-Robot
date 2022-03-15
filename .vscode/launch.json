@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch VisionTracking",
+      "request": "launch",
+      "mainClass": "frc.robot.subsystems.VisionTracking",
+      "projectName": "2022RobotDrive"
+    },
+    {
+      "type": "java",
       "name": "Launch LeftCatapult",
       "request": "launch",
       "mainClass": "frc.robot.subsystems.LeftCatapult",
