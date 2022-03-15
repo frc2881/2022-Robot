@@ -83,6 +83,7 @@ public class RobotContainer {
   private final SendableChooser<Command> m_chooser;
 
   public boolean robotResetState = true;
+  public boolean disableVision = false;
 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(
     drive,
@@ -150,6 +151,8 @@ public class RobotContainer {
     // Start the data logger.
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
+
+    SmartDashboard.putBoolean("Disable Vision", disableVision);
   }
 
   private void configureButtonBindings() {
