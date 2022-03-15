@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.autonomous.LeftL;
+import frc.robot.commands.autonomous.RightL;
 import frc.robot.commands.autonomous.RightR;
 import frc.robot.commands.catapult.CatapultOverrride;
 import frc.robot.commands.catapult.Eject;
@@ -74,6 +75,10 @@ public class RobotContainer {
   private final Trajectory rightPath;
   private final Trajectory toTerminal;
   private final Trajectory terminalToScore;
+  private final Trajectory rightL;
+  private final Trajectory cargo2ToTerminal;
+  private final Trajectory backUpTerminal;
+  private final Trajectory backUpTerminalToScore;
 
   private final SendableChooser<Command> m_chooser;
 
@@ -103,11 +108,16 @@ public class RobotContainer {
     rightPath = PathPlanner2.loadPath("RightR", maxVelocity, maxAcceleration);
     toTerminal = PathPlanner2.loadPath("ToTerminal", 4, maxAcceleration);
     terminalToScore = PathPlanner2.loadPath("TerminalToScore", 4, maxAcceleration, true);
+    rightL = PathPlanner2.loadPath("RightL", maxVelocity, maxAcceleration);
+    cargo2ToTerminal = PathPlanner2.loadPath("Cargo2ToTerminal", maxVelocity, maxAcceleration);
+    backUpTerminal = PathPlanner2.loadPath("BackUpTerminal", maxVelocity, maxAcceleration, true);
+    backUpTerminalToScore = PathPlanner2.loadPath("BackUpTerminalToScore", maxVelocity, maxAcceleration, true);
 
     // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
     m_chooser.addOption("Auto Right", new RightR(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightPath, toTerminal, terminalToScore));
     m_chooser.addOption("Auto Left", new LeftL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, leftPath, toNextCargo));
+    m_chooser.addOption("RightL", new RightL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightL, cargo2ToTerminal, backUpTerminal, backUpTerminalToScore));
     m_chooser.addOption("Do Nothing", null);
 
     //Delays between the Autonomouses

@@ -10,9 +10,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Auto;
-import frc.robot.commands.catapult.ScoreLeft;
+import frc.robot.commands.catapult.Score;
 import frc.robot.commands.catapult.ScoreNoColor;
-import frc.robot.commands.catapult.ScoreRightNoColor;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.feedback.WaitCommandNT;
 import frc.robot.subsystems.Drive;
@@ -25,9 +24,9 @@ import frc.robot.utils.NavX;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class RightR extends SequentialCommandGroup {
-  /** Creates a new RightR. */
-  public RightR(
+public class RightL extends SequentialCommandGroup {
+  /** Creates a new RightL. */
+  public RightL(
     Drive drive, 
     Intake intake, 
     NavX navx,
@@ -35,34 +34,34 @@ public class RightR extends SequentialCommandGroup {
     RightCatapult rightCatapult, 
     PrettyLights prettyLights, 
     XboxController driverController, 
-    Trajectory rightPath,
-    Trajectory toTerminal,
-    Trajectory terminalToScore) 
-        {
-    addCommands(  
+    Trajectory rightL,
+    Trajectory cargo2ToTerminal,
+    Trajectory backUpTerminal,
+    Trajectory backUpTerminalToScore
+  ) {
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
+    addCommands(
 new WaitCommandNT(Auto.kStartingDel),
     new InstantCommand(() -> intake.extend(), intake),
-    new WaitCommand(1),
-    new ScoreRightNoColor(rightCatapult),
 new WaitCommandNT(Auto.kSecondDel),
-    new InstantCommand(() -> intake.run(1.0), intake),
-    new FollowTrajectory(drive, rightPath, true),
-    new InstantCommand(() -> intake.run(0.0), intake),
-    new InstantCommand(() -> intake.retract(), intake),
-    new WaitCommand(0.5),
-    new InstantCommand(() -> intake.extend(), intake),
-    new WaitCommand(1.2),
-    new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, null),
-new WaitCommandNT(Auto.kThirdDel),
     //new WaitCommand(0.1),
     new InstantCommand(() -> intake.run(1.0), intake),
-    new FollowTrajectory(drive, toTerminal, false),
-    new WaitCommand(1),
-    new FollowTrajectory(drive, terminalToScore, false),
-    new InstantCommand(() -> intake.run(0.0), intake),
-    //new RotateByDegrees(navx, drive, () -> visionTracking.getYaw())
+    new FollowTrajectory(drive, rightL, true),
     new WaitCommand(0.25),
-    new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, null)
-);
+    new InstantCommand(() -> intake.run(0.0), intake),
+    new WaitCommand(0.25),
+    new Score(leftCatapult, rightCatapult, prettyLights, null),//(leftCatapult, rightCatapult, prettyLights, null),
+new WaitCommandNT(Auto.kThirdDel),
+    new InstantCommand(() -> intake.run(1.0), intake),
+    new FollowTrajectory(drive, cargo2ToTerminal, false),
+    new WaitCommand(0.4),
+    new FollowTrajectory(drive, backUpTerminal, false),
+    new WaitCommand(0.5),
+    new FollowTrajectory(drive, backUpTerminalToScore, false),
+    new InstantCommand(() -> intake.run(0.0), intake),
+    //new WaitCommand(0.1),
+    new Score(leftCatapult, rightCatapult, prettyLights, null)
+    );
   }
 }
