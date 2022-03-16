@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.vision.VisionRunner;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -153,6 +154,7 @@ public class RobotContainer {
     DriverStation.startDataLog(DataLogManager.getLog());
 
     SmartDashboard.putBoolean("Disable Vision", disableVision);
+    SmartDashboard.putNumber("Catapult Soft Limit", 0);
   }
 
   private void configureButtonBindings() {

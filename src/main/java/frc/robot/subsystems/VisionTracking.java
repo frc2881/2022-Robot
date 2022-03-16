@@ -199,6 +199,11 @@ public double RightCatapultPitchToLim(){
   return limit;
 }
 
+//directly change the pitch :)
+public double shuffleboardPitch(double limit){
+return limit + SmartDashboard.getNumber("Catapult Soft Limit", 0);
+}
+
 
 public double getYaw(){
 

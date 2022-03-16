@@ -17,8 +17,6 @@ import static frc.robot.Constants.Catapult.kResetVoltage;
 import static frc.robot.Constants.Catapult.kReverseLimit;
 import static frc.robot.Constants.Catapult.kShootVoltage;
 
-import java.util.function.IntFunction;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -38,7 +36,6 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.VisionTracking;
 
 public class LeftCatapult extends SubsystemBase {
   private final CANSparkMax m_catapult;
@@ -134,6 +131,7 @@ public class LeftCatapult extends SubsystemBase {
 
     double limit; 
     limit = m_vision.LeftCatapultPitchToLim();
+    limit += SmartDashboard.getNumber("Catapult Soft Limit", 0);
     m_catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) limit);
     SmartDashboard.putNumber("left limit at score", limit);
     run(kShootVoltage);

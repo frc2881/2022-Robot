@@ -129,6 +129,7 @@ public class RightCatapult extends SubsystemBase {
   public void score() {
     double limit; 
     limit = m_vision.RightCatapultPitchToLim();
+    limit += SmartDashboard.getNumber("Catapult Soft Limit", 0);
     m_catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) limit);
     SmartDashboard.putNumber("right limit at score", limit);
     run(kShootVoltage);
