@@ -185,24 +185,33 @@ public class RightCatapult extends SubsystemBase {
 
   @Override
   public void periodic() {
-    Color detectedColor = m_colorSensor.getColor();
+    Color detectedColor;
+    int distance;
+
+    if(m_colorSensor.isConnected()) {
+      detectedColor = m_colorSensor.getColor();
+      distance = m_colorSensor.getProximity();
+    } else {
+      detectedColor = new Color(0, 0, 0);
+      distance = 0;
+    }
     ColorMatchResult match = m_colorMatcher.matchColor(detectedColor);
 
     if((match != null) && (match.color == kRedCargo) &&
-       (m_colorSensor.getProximity() > kDistance)) {
+       (distance > kDistance)) {
       m_cargoIsRed = true;
     } else {
       m_cargoIsRed = false;
     }
 
     if((match != null) && (match.color == kBlueCargo) &&
-       (m_colorSensor.getProximity() > kDistance)) {
+       (distance > kDistance)) {
       m_cargoIsBlue = true;
     } else {
       m_cargoIsBlue = false;
     }
 
-    if(m_colorSensor.hasReset() || !m_colorSensor.isConnected()){
+    if(m_colorSensor.isConnected() && m_colorSensor.hasReset()) {
       m_colorSensor = new ColorSensorV3(Port.kOnboard);   
     }
 
@@ -212,16 +221,16 @@ public class RightCatapult extends SubsystemBase {
       m_logBusVoltage.append(m_catapult.getBusVoltage());
       m_logCurrent.append(m_catapult.getOutputCurrent());
     }
-  
   }
 
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
-    builder.addDoubleProperty("Right Catapult Sensor Distance", () -> m_colorSensor.getProximity(), null);
+    if(m_colorSensor.isConnected()) {
+      builder.addDoubleProperty("Right Catapult Sensor Distance", () -> m_colorSensor.getProximity(), null);
+    }
     builder.addDoubleProperty("Right Catapult Limit from Vision", () -> m_vision.RightCatapultPitchToLim(), null);
     builder.addBooleanProperty("Right Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Right Red", () -> isRed(), null);
   }
-
 }
