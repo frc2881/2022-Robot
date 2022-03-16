@@ -9,11 +9,6 @@ import static frc.robot.Constants.Catapult.kForwardLimitRight;
 import static frc.robot.Constants.Catapult.kLeftHighDist;
 import static frc.robot.Constants.Catapult.kLeftHighLim;
 import static frc.robot.Constants.Catapult.kLeftLowDist;
-import static frc.robot.Constants.Catapult.kRightHighDist;
-import static frc.robot.Constants.Catapult.kRightHighLim;
-import static frc.robot.Constants.Catapult.kRightLowDist;
-
-import com.revrobotics.CANSparkMax;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -67,7 +62,7 @@ public double CatapultDistToLim(double targetDist){
 
 
 public void CatapultPitchToDist(){
-  
+
   double pitch;
 
   if(m_camera.getLatestResult().getBestTarget() == null){
@@ -91,7 +86,7 @@ public void CatapultPitchToDist(){
                         {9.0, -13.75},
                         {11.0, -18.1},
                         {12, -20.45}};
-  for(int i = 0; i <= pitches.length-1; i++){
+  for(int i = 1; i <= pitches.length-1; i++){
     if(pitches[i][1] < pitch){
       lowerPitch = pitches[i][1];
       lowerDist = pitches[i][0];
@@ -105,18 +100,19 @@ public void CatapultPitchToDist(){
   this.CatapultDistToLim(((pitch - lowerPitch)/(higherPitch - lowerPitch) * (higherDist - lowerDist) + lowerDist));
 }
 
-public double CatapultPitchToLim(){
+public double LeftCatapultPitchToLim(){
 
   double pitch;
 
-  if(m_camera.getLatestResult().getBestTarget() == null){
+  PhotonTrackedTarget target = m_camera.getLatestResult().getBestTarget();
+  if(target == null){
 
-    pitch = 0;
+    return kForwardLimitLeft;
 
   }
   else{
 
-    pitch = m_camera.getLatestResult().getBestTarget().getPitch();
+    pitch = target.getPitch();
 
   } 
 
@@ -124,19 +120,60 @@ public double CatapultPitchToLim(){
   double lowerLim=0;
   double higherPitch=0;
   double higherLim=0;
-  double[][] pitches = {{4.5, 13.24},
-                        {4.9, 0.9},
-                        {5.3, -7.8},
-                        {5.8, -13.5},
+  double[][] pitches = {{4.2, 13.24},
+                        {4.7, 0.9},
+                        {5.1, -7.8},
+                        {5.7, -13.5},
                         {6.9, -18.4},
                         {8, -20.2}};
-  for(int i = 0; i <= pitches.length-1; i++){
+  for(int i = 1; i <= pitches.length-1; i++){
     if(pitches[i][1] < pitch){
       lowerPitch = pitches[i][1];
       lowerLim = pitches[i][0];
       higherPitch = pitches[i-1][1];
       higherLim = pitches[i-1][0];
-      
+    
+      break;
+    }
+
+  }
+  double limit = (pitch - lowerPitch)/(higherPitch - lowerPitch) * (higherLim - lowerLim) + lowerLim;
+  return limit;
+}
+
+public double RightCatapultPitchToLim(){
+
+  double pitch;
+
+  PhotonTrackedTarget target = m_camera.getLatestResult().getBestTarget();
+  if(target == null){
+
+    return kForwardLimitRight;
+
+  }
+  else{
+
+    pitch = target.getPitch();
+
+  } 
+
+  double lowerPitch=0;
+  double lowerLim=0;
+  double higherPitch=0;
+  double higherLim=0;
+  double[][] pitches = {{4.2, 13.24},
+                        {4.7, 0.9},
+                        {5.15, -7.8},
+                        {5.7, -13.5},
+                        {6.8, -18.4},
+                        {7.9, -20.2}};
+  for(int i = 1; i <= pitches.length-1; i++){
+    if(pitches[i][1] < pitch){
+      lowerPitch = pitches[i][1];
+      lowerLim = pitches[i][0];
+      higherPitch = pitches[i-1][1];
+      higherLim = pitches[i-1][0];
+    
       break;
     }
 

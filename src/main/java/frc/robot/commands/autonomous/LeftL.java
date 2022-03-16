@@ -46,8 +46,8 @@ public class LeftL extends SequentialCommandGroup {
       new WaitCommand(0.5),
       new InstantCommand(() -> intake.run(0), intake),
       //new RotateByDegrees(navx, drive, () -> visionTracking.getYaw())
-      new WaitCommand(0.25),
-      new ScoreNoColor(leftCatapult, rightCatapult, prettylights, null),
+      new WaitCommand(0.50),
+      new Score(leftCatapult, rightCatapult, prettylights, null),
       new InstantCommand(() -> intake.retract(), intake),
       new FollowTrajectory(drive, toNextCargo, false)
     );

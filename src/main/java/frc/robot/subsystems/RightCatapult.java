@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -50,8 +51,10 @@ public class RightCatapult extends SubsystemBase {
   private final DoubleLogEntry m_logOutput;
   private final DoubleLogEntry m_logBusVoltage;
   private final DoubleLogEntry m_logCurrent;
+  private final VisionTracking m_vision; 
 
-  public RightCatapult() {
+  public RightCatapult(VisionTracking vision) {
+    m_vision = vision; 
     m_catapult = new CANSparkMax(kRightMotor, MotorType.kBrushless);
     m_catapult.restoreFactoryDefaults();
     m_catapult.setInverted(true);
@@ -124,6 +127,10 @@ public class RightCatapult extends SubsystemBase {
   }
   
   public void score() {
+    double limit; 
+    limit = m_vision.RightCatapultPitchToLim();
+    m_catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) limit);
+    SmartDashboard.putNumber("right limit at score", limit);
     run(kShootVoltage);
   }
 
@@ -210,8 +217,8 @@ public class RightCatapult extends SubsystemBase {
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
-
     builder.addDoubleProperty("Right Catapult Sensor Distance", () -> m_colorSensor.getProximity(), null);
+    builder.addDoubleProperty("Right Catapult Limit from Vision", () -> m_vision.RightCatapultPitchToLim(), null);
     builder.addBooleanProperty("Right Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Right Red", () -> isRed(), null);
   }

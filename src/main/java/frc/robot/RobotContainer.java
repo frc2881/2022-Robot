@@ -58,14 +58,14 @@ public class RobotContainer {
   private final PowerDistribution powerHub = new PowerDistribution(2, ModuleType.kRev);
   private final Pneumatics pneumatics = new Pneumatics();
   private final NavX navx = new NavX();
+  private final VisionTracking visionTracking = new VisionTracking();
 
   private final Climber climber = new Climber();
   private final Intake intake = new Intake();
-  private final LeftCatapult leftCatapult = new LeftCatapult();
-  private final RightCatapult rightCatapult = new RightCatapult();
+  private final LeftCatapult leftCatapult = new LeftCatapult(visionTracking);
+  private final RightCatapult rightCatapult = new RightCatapult(visionTracking);
   private final Drive drive = new Drive(navx);
   private final PrettyLights prettyLights = new PrettyLights(powerHub);
-  private final VisionTracking visionTracking = new VisionTracking();
  
   //Left Paths
   private final Trajectory leftPath;

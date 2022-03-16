@@ -17,6 +17,8 @@ import static frc.robot.Constants.Catapult.kResetVoltage;
 import static frc.robot.Constants.Catapult.kReverseLimit;
 import static frc.robot.Constants.Catapult.kShootVoltage;
 
+import java.util.function.IntFunction;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -36,6 +38,7 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.VisionTracking;
 
 public class LeftCatapult extends SubsystemBase {
   private final CANSparkMax m_catapult;
@@ -50,8 +53,11 @@ public class LeftCatapult extends SubsystemBase {
   private final DoubleLogEntry m_logOutput;
   private final DoubleLogEntry m_logBusVoltage;
   private final DoubleLogEntry m_logCurrent;
+  private final VisionTracking m_vision; 
 
-  public LeftCatapult() {
+
+  public LeftCatapult(VisionTracking vision) {
+    m_vision = vision;
     m_catapult = new CANSparkMax(kLeftMotor, MotorType.kBrushless);
     m_catapult.restoreFactoryDefaults();
     m_catapult.setInverted(false);
@@ -76,6 +82,9 @@ public class LeftCatapult extends SubsystemBase {
 
     m_correctDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
     m_incorrectDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+
+
+
 
     if(kEnableDetailedLogging) {
       DataLog log = DataLogManager.getLog();
@@ -122,7 +131,13 @@ public class LeftCatapult extends SubsystemBase {
   }
 
   public void score() {
+
+    double limit; 
+    limit = m_vision.LeftCatapultPitchToLim();
+    m_catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) limit);
+    SmartDashboard.putNumber("left limit at score", limit);
     run(kShootVoltage);
+
   }
 
   public void eject() {
@@ -214,6 +229,7 @@ public class LeftCatapult extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
     builder.addDoubleProperty("Left Catapult Sensor Distance", () -> m_colorSensor.getProximity(), null);
+    builder.addDoubleProperty("Left Catapult Limit from Vision", () -> m_vision.LeftCatapultPitchToLim(), null);
     builder.addBooleanProperty("Left Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Left Red", () -> isRed(), null);
   }
