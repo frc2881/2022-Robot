@@ -159,11 +159,10 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     // Driver Xbox Controller
-    new JoystickButton(driverController, XboxController.Button.kB.value).whenHeld(
-      new RotateByDegrees(navx, drive, () -> visionTracking.getYaw()));
 
-    new JoystickButton(driverController, XboxController.Button.kA.value).whenHeld(
-      new RumbleNo(prettyLights, driverController, manipulatorController));
+    buttonFromDouble(() -> driverController.getLeftTriggerAxis() + driverController.getRightTriggerAxis()).
+      whenHeld(new RotateByDegrees(navx, drive, () -> visionTracking.getYaw()).andThen(new RumbleYes(prettyLights, driverController, null)));
+
     // Manipulator Xbox Controller
 
     new JoystickButton(manipulatorController, XboxController.Button.kX.value).
