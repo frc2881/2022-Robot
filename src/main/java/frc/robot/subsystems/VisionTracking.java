@@ -18,10 +18,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VisionTracking extends SubsystemBase {
 
-
   private PhotonCamera m_camera = new PhotonCamera("photonvision");
+  
   /** Creates a new VisionTracking. */
-  public VisionTracking() {}
+  public VisionTracking() {
+    
+  }
 
   @Override
   public void periodic() {
@@ -33,9 +35,15 @@ public class VisionTracking extends SubsystemBase {
 
     target = m_camera.getLatestResult().getBestTarget();
 
-    if(target == null){
+    if(SmartDashboard.getBoolean("Disable Vision", false) == true){
+      //possib want diff outcome
+      pitch = 1000;
+      yaw = 0;
 
-      pitch = 0;
+    }
+    else if(target == null){
+
+      pitch = 1000;
       yaw = 0; 
 
     }
@@ -65,14 +73,23 @@ public void CatapultPitchToDist(){
 
   double pitch;
 
-  if(m_camera.getLatestResult().getBestTarget() == null){
+  PhotonTrackedTarget target;
 
-    pitch = 0;
+  target = m_camera.getLatestResult().getBestTarget();
+
+  if(SmartDashboard.getBoolean("Disable Vision", false) == true){
+    //possib want diff outcome
+    pitch = 1000;
+
+  }
+  else if(target == null){
+
+    pitch = 1000;
 
   }
   else{
 
-    pitch = m_camera.getLatestResult().getBestTarget().getPitch();
+    pitch = target.getPitch();
 
   }
 
@@ -187,14 +204,23 @@ public double getYaw(){
 
   double yaw;
 
-  if(m_camera.getLatestResult().getBestTarget() == null){
+  PhotonTrackedTarget target;
+
+  target = m_camera.getLatestResult().getBestTarget();
+
+  if(SmartDashboard.getBoolean("Disable Vision", false) == true){
+    //possib want diff outcome
+    yaw = 0;
+
+  }
+  else if(target == null){
 
     yaw = 0;
 
   }
   else{
 
-    yaw = m_camera.getLatestResult().getBestTarget().getYaw();
+    yaw = target.getYaw();
 
   }
 
