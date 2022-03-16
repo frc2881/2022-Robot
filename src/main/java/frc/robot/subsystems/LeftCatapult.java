@@ -116,7 +116,11 @@ public class LeftCatapult extends SubsystemBase {
   }
 
   public boolean reachedUpperSoftLimit() {
-    return Math.abs(kForwardLimitLeft - m_encoder.getPosition()) < 0.1;
+    double position = m_encoder.getPosition();
+    boolean difference = (m_vision.LeftCatapultPitchToLim() - position) < 0.25;
+    SmartDashboard.putNumber("L Encoder Position", position);
+    SmartDashboard.putBoolean("L Upper Soft Limit Reached", difference);
+    return difference;
   }
 
   public boolean reachedLowerSoftLimit() {
