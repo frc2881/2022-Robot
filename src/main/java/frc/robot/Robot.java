@@ -70,6 +70,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
     m_robotContainer.resetRobot();
+    m_robotContainer.resetLights();
   }
 
   /** This function is called periodically during autonomous. */
@@ -89,6 +90,7 @@ public class Robot extends TimedRobot {
     if(!isCompetitionMode()) {
       m_robotContainer.resetRobot();
     }
+    m_robotContainer.resetLights();
   }
 
   /** This function is called periodically during operator control. */
@@ -100,6 +102,7 @@ public class Robot extends TimedRobot {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.resetRobot();
+    m_robotContainer.resetLights();
   }
 
   /** This function is called periodically during test mode. */

@@ -161,7 +161,7 @@ public class RobotContainer {
     // Driver Xbox Controller
 
     buttonFromDouble(() -> driverController.getLeftTriggerAxis() + driverController.getRightTriggerAxis()).
-      whenHeld(new RotateByDegrees(navx, drive, () -> visionTracking.getYaw()).andThen(new RumbleYes(prettyLights, driverController, null)));
+      whenHeld(new RotateByDegrees(navx, drive, () -> visionTracking.getYaw()).andThen(new RumbleYes(prettyLights, driverController, manipulatorController)));
 
     // Manipulator Xbox Controller
 
@@ -208,9 +208,12 @@ public class RobotContainer {
       intake.reset();
       leftCatapult.reset();
       rightCatapult.reset();
-      prettyLights.reset();
       robotResetState = false;
     }
+  }
+
+  public void resetLights() {
+    prettyLights.reset();
   }
 
   public void robotShouldReset() {

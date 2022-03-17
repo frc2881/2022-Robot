@@ -40,6 +40,7 @@ public class LeftL extends SequentialCommandGroup {
     addCommands(
   new WaitCommandNT(Auto.kStartingDel),
       new InstantCommand(() -> intake.extend(), intake),
+      new InstantCommand(() -> prettylights.lightShow(), prettylights),
       new WaitCommand(0.1),
       new InstantCommand(() -> intake.run(1.0), intake),
       new FollowTrajectory(drive, leftPath, true),

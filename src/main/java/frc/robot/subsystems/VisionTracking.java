@@ -225,7 +225,7 @@ public double getYaw(){
   }
   else{
 
-    yaw = target.getYaw();
+    yaw = target.getYaw()-2;
 
   }
 
