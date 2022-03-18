@@ -141,8 +141,8 @@ public double LeftCatapultPitchToLim(){
                         {4.7, 0.9},
                         {5.1, -7.8},
                         {5.7, -13.5},
-                        {6.9, -18.4},
-                        {8, -20.2}};
+                        {6.85, -18.4},
+                        {7.95, -20.2}};
   for(int i = 1; i <= pitches.length-1; i++){
     if(pitches[i][1] < pitch){
       lowerPitch = pitches[i][1];
@@ -180,7 +180,7 @@ public double RightCatapultPitchToLim(){
   double higherLim=0;
   double[][] pitches = {{4.2, 13.24},
                         {4.7, 0.9},
-                        {5.1, -7.8},
+                        {5.1, -7.8}, //moved 5.15 to 5.1
                         {5.7, -13.5},
                         {6.8, -18.4},
                         {7.9, -20.2}};
