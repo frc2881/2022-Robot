@@ -180,7 +180,7 @@ public double RightCatapultPitchToLim(){
   double higherLim=0;
   double[][] pitches = {{4.2, 13.24},
                         {4.7, 0.9},
-                        {5.15, -7.8},
+                        {5.1, -7.8},
                         {5.7, -13.5},
                         {6.8, -18.4},
                         {7.9, -20.2}};
