@@ -118,8 +118,8 @@ public class RobotContainer {
     // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
     //m_chooser.addOption("Auto Right", new RightR(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightPath, toTerminal, terminalToScore));
+    m_chooser.setDefaultOption("Auto D", new RightL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightL, cargo2ToTerminal, backUpTerminal, backUpTerminalToScore));
     m_chooser.addOption("Auto B", new LeftL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, leftPath, toNextCargo));
-    m_chooser.addOption("Auto D", new RightL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightL, cargo2ToTerminal, backUpTerminal, backUpTerminalToScore));
     m_chooser.addOption("Do Nothing", null);
 
     //Delays between the Autonomouses
