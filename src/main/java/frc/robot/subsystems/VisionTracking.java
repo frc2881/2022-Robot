@@ -155,6 +155,8 @@ public double LeftCatapultPitchToLim(){
 
   }
   double limit = (pitch - lowerPitch)/(higherPitch - lowerPitch) * (higherLim - lowerLim) + lowerLim;
+  System.out.println("Left Limit: " + limit);
+  System.out.println("Left Pitch: " + pitch);
   return limit;
 }
 
@@ -196,6 +198,8 @@ public double RightCatapultPitchToLim(){
 
   }
   double limit = (pitch - lowerPitch)/(higherPitch - lowerPitch) * (higherLim - lowerLim) + lowerLim;
+  System.out.println("Right Limit: " + limit);
+  System.out.println("Right Pitch: " + pitch);
   return limit;
 }
 
