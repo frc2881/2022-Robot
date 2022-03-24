@@ -98,9 +98,11 @@ public class RobotContainer {
     );
 
   public RobotContainer() {
+
+    powerHub.setSwitchableChannel(false);
+    
     double maxVelocity = 3;
     double maxAcceleration = 2;
-
 
     //Left Tarmac
     leftPath = PathPlanner2.loadPath("LeftL", maxVelocity, maxAcceleration);
@@ -208,6 +210,7 @@ public class RobotContainer {
       intake.reset();
       leftCatapult.reset();
       rightCatapult.reset();
+      powerHub.setSwitchableChannel(true);
       robotResetState = false;
     }
   }
