@@ -51,7 +51,6 @@ public class LeftL extends SequentialCommandGroup {
       new InstantCommand(() -> intake.run(0), intake),
       //new RotateByDegrees(navx, drive, () -> visionTracking.getYaw())
       new WaitCommand(0.50),
-     // new Score(leftCatapult, rightCatapult, prettylights, null),
       new ShootLeft(leftCatapult),
       new WaitCommand(kShootTimeDelay),
       new ShootRightConditional(rightCatapult),
