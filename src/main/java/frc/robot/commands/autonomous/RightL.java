@@ -15,6 +15,7 @@ import frc.robot.commands.catapult.ResetRight;
 import frc.robot.commands.catapult.Score;
 import frc.robot.commands.catapult.ShootLeft;
 import frc.robot.commands.catapult.ShootRight;
+import frc.robot.commands.catapult.ShootRightConditional;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.feedback.WaitCommandNT;
 import frc.robot.subsystems.Drive;
@@ -41,7 +42,7 @@ public class RightL extends SequentialCommandGroup {
     Trajectory rightL,
     Trajectory cargo2ToTerminal,
     Trajectory backUpTerminal,
-    Trajectory backUpTerminalToScore
+    Trajectory terminalToScore
   ) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
@@ -57,7 +58,7 @@ new WaitCommandNT(Auto.kStartingDel),
     // new Score(leftCatapult, rightCatapult, prettylights, null),//(leftCatapult, rightCatapult, prettyLights, null),
     new ShootLeft(leftCatapult),
     new WaitCommand(kShootTimeDelay),
-    new ShootRight(rightCatapult),
+    new ShootRightConditional(rightCatapult),
     parallel(
     new ResetLeft(leftCatapult),
     new ResetRight(rightCatapult),
@@ -65,9 +66,7 @@ new WaitCommandNT(Auto.kStartingDel),
     new FollowTrajectory(drive, cargo2ToTerminal, false)
     ),
     new WaitCommand(0.4),
-    new FollowTrajectory(drive, backUpTerminal, false),
-    new WaitCommand(0.5),
-    new FollowTrajectory(drive, backUpTerminalToScore, false),
+    new FollowTrajectory(drive, terminalToScore, false),
     new InstantCommand(() -> intake.run(0.0), intake),
     //new WaitCommand(0.1),
     new Score(leftCatapult, rightCatapult, prettylights, null)
