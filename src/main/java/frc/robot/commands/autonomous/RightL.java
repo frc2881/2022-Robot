@@ -10,8 +10,12 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Auto;
+import frc.robot.commands.catapult.ResetLeft;
+import frc.robot.commands.catapult.ResetRight;
 import frc.robot.commands.catapult.Score;
-import frc.robot.commands.catapult.ScoreNoColor;
+import frc.robot.commands.catapult.ShootLeft;
+import frc.robot.commands.catapult.ShootRight;
+import frc.robot.commands.catapult.ShootRightConditional;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.feedback.WaitCommandNT;
 import frc.robot.subsystems.Drive;
@@ -20,6 +24,7 @@ import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
 import frc.robot.utils.NavX;
+import static frc.robot.Constants.Catapult.kShootTimeDelay;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -37,7 +42,7 @@ public class RightL extends SequentialCommandGroup {
     Trajectory rightL,
     Trajectory cargo2ToTerminal,
     Trajectory backUpTerminal,
-    Trajectory backUpTerminalToScore
+    Trajectory terminalToScore
   ) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
@@ -45,21 +50,23 @@ public class RightL extends SequentialCommandGroup {
 new WaitCommandNT(Auto.kStartingDel),
     new InstantCommand(() -> intake.extend(), intake),
     new InstantCommand(() -> prettylights.lightShow(), prettylights),
-new WaitCommandNT(Auto.kSecondDel),
-    ////new WaitCommand(0.1),
     new InstantCommand(() -> intake.run(1.0), intake),
     new FollowTrajectory(drive, rightL, true),
     new WaitCommand(0.25),
     new InstantCommand(() -> intake.run(0.0), intake),
     new WaitCommand(0.25),
-    new Score(leftCatapult, rightCatapult, prettylights, null),//(leftCatapult, rightCatapult, prettyLights, null),
-new WaitCommandNT(Auto.kThirdDel),
+    // new Score(leftCatapult, rightCatapult, prettylights, null),//(leftCatapult, rightCatapult, prettyLights, null),
+    new ShootLeft(leftCatapult),
+    new WaitCommand(kShootTimeDelay),
+    new ShootRightConditional(rightCatapult),
+    parallel(
+    new ResetLeft(leftCatapult),
+    new ResetRight(rightCatapult),
     new InstantCommand(() -> intake.run(1.0), intake),
-    new FollowTrajectory(drive, cargo2ToTerminal, false),
+    new FollowTrajectory(drive, cargo2ToTerminal, false)
+    ),
     new WaitCommand(0.4),
-    new FollowTrajectory(drive, backUpTerminal, false),
-    new WaitCommand(0.5),
-    new FollowTrajectory(drive, backUpTerminalToScore, false),
+    new FollowTrajectory(drive, terminalToScore, false),
     new InstantCommand(() -> intake.run(0.0), intake),
     //new WaitCommand(0.1),
     new Score(leftCatapult, rightCatapult, prettylights, null)
