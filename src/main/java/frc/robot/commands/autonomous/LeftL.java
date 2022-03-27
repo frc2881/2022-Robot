@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Auto;
-import frc.robot.commands.catapult.Score;
-import frc.robot.commands.catapult.ScoreNoColor;
+import frc.robot.commands.catapult.ResetLeft;
+import frc.robot.commands.catapult.ResetRight;
+import frc.robot.commands.catapult.ShootLeft;
+import frc.robot.commands.catapult.ShootRightConditional;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.feedback.WaitCommandNT;
 import frc.robot.subsystems.Drive;
@@ -20,6 +22,7 @@ import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
 import frc.robot.utils.NavX;
+import static frc.robot.Constants.Catapult.kShootTimeDelay;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -48,9 +51,18 @@ public class LeftL extends SequentialCommandGroup {
       new InstantCommand(() -> intake.run(0), intake),
       //new RotateByDegrees(navx, drive, () -> visionTracking.getYaw())
       new WaitCommand(0.50),
-      new Score(leftCatapult, rightCatapult, prettylights, null),
-      new InstantCommand(() -> intake.retract(), intake),
-      new FollowTrajectory(drive, toNextCargo, false)
+     // new Score(leftCatapult, rightCatapult, prettylights, null),
+      new ShootLeft(leftCatapult),
+      new WaitCommand(kShootTimeDelay),
+      new ShootRightConditional(rightCatapult),
+      parallel(
+        sequence(
+          new ResetLeft(leftCatapult),
+          new ResetRight(rightCatapult),
+          new InstantCommand(() -> intake.retract(), intake)),
+        new FollowTrajectory(drive, toNextCargo, false)
+      )
+      
     );
   }
 }
