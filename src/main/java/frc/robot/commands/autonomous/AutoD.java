@@ -29,9 +29,9 @@ import static frc.robot.Constants.Catapult.kShootTimeDelay;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class RightL extends SequentialCommandGroup {
+public class AutoD extends SequentialCommandGroup {
   /** Creates a new RightL. */
-  public RightL(
+  public AutoD(
     Drive drive, 
     Intake intake, 
     NavX navx,
@@ -39,7 +39,7 @@ public class RightL extends SequentialCommandGroup {
     RightCatapult rightCatapult, 
     PrettyLights prettylights, 
     XboxController driverController, 
-    Trajectory rightL,
+    Trajectory autoD,
     Trajectory cargo2ToTerminal,
     Trajectory backUpTerminal,
     Trajectory terminalToScore
@@ -51,19 +51,18 @@ new WaitCommandNT(Auto.kStartingDel),
     new InstantCommand(() -> intake.extend(), intake),
     new InstantCommand(() -> prettylights.lightShow(), prettylights),
     new InstantCommand(() -> intake.run(1.0), intake),
-    new FollowTrajectory(drive, rightL, true),
+    new FollowTrajectory(drive, autoD, true),
     new WaitCommand(0.25),
     new InstantCommand(() -> intake.run(0.0), intake),
     new WaitCommand(0.25),
-    // new Score(leftCatapult, rightCatapult, prettylights, null),//(leftCatapult, rightCatapult, prettyLights, null),
     new ShootLeft(leftCatapult),
     new WaitCommand(kShootTimeDelay),
     new ShootRightConditional(rightCatapult),
     parallel(
-    new ResetLeft(leftCatapult),
-    new ResetRight(rightCatapult),
-    new InstantCommand(() -> intake.run(1.0), intake),
-    new FollowTrajectory(drive, cargo2ToTerminal, false)
+      new ResetLeft(leftCatapult),
+      new ResetRight(rightCatapult),
+      new InstantCommand(() -> intake.run(1.0), intake),
+      new FollowTrajectory(drive, cargo2ToTerminal, false)
     ),
     new WaitCommand(0.4),
     new FollowTrajectory(drive, terminalToScore, false),

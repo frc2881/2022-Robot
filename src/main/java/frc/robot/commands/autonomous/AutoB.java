@@ -27,9 +27,9 @@ import static frc.robot.Constants.Catapult.kShootTimeDelay;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class LeftL extends SequentialCommandGroup {
+public class AutoB extends SequentialCommandGroup {
   /** Creates a new LeftL. */
-  public LeftL(
+  public AutoB(
     Drive drive, 
     Intake intake, 
     NavX navx,
@@ -37,8 +37,9 @@ public class LeftL extends SequentialCommandGroup {
     RightCatapult rightCatapult, 
     PrettyLights prettylights, 
     XboxController controller, 
-    Trajectory leftPath,
-    Trajectory toNextCargo
+    Trajectory autoB,
+    Trajectory toStrategicCargo,
+    Trajectory backUpStrategic
   ) {
     addCommands(
   new WaitCommandNT(Auto.kStartingDel),
@@ -46,7 +47,7 @@ public class LeftL extends SequentialCommandGroup {
       new InstantCommand(() -> prettylights.lightShow(), prettylights),
       new WaitCommand(0.1),
       new InstantCommand(() -> intake.run(1.0), intake),
-      new FollowTrajectory(drive, leftPath, true),
+      new FollowTrajectory(drive, autoB, true),
       new WaitCommand(0.5),
       new InstantCommand(() -> intake.run(0), intake),
       //new RotateByDegrees(navx, drive, () -> visionTracking.getYaw())
@@ -55,13 +56,12 @@ public class LeftL extends SequentialCommandGroup {
       new WaitCommand(kShootTimeDelay),
       new ShootRightConditional(rightCatapult),
       parallel(
-        sequence(
           new ResetLeft(leftCatapult),
           new ResetRight(rightCatapult),
-          new InstantCommand(() -> intake.retract(), intake)),
-        new FollowTrajectory(drive, toNextCargo, false)
-      )
-      
+          new InstantCommand(() -> intake.run(0.3), intake), 
+          new FollowTrajectory(drive, toStrategicCargo, false)),
+      new InstantCommand(() -> intake.runReverse(1), intake),
+      new FollowTrajectory(drive, backUpStrategic, false)
     );
   }
 }
