@@ -102,27 +102,34 @@ wpi.java.configureTestTasks(test)
 // https://docs.wpilib.org/en/stable/docs/software/advanced-gradlerio/code-formatting.html
 // ---------------------------------------------------------------------------------------
 spotless {
+    // Do not run Spotless on a build
+    enforceCheck false
+
+    // Options for Java files
     java {
         // Files to apply formatting
         target fileTree('.') {
-            include 'null'
+            include '**/*.java'
             exclude '**/build/**', '**/build-*/**'
         }
 
         // If Spotless is formatting code you don't want it to touch, add 'spotless:off'
         // and 'spotless:on' comment tags before and after the code in question
         toggleOffOn()
-      
+
+        // Indent with two spaces
+        indentWithSpaces(2)
+
         // Use the Google Java Formatter with the Android Open Source Project (AOSP) rules
         //googleJavaFormat().aosp()
 
         // Remove unused import statements
-        //removeUnusedImports()
+        removeUnusedImports()
 
         // Remove unused whitespace that is at the end of a line
-        //trimTrailingWhitespace()
+        trimTrailingWhitespace()
 
         // End each file with a newline
-        //endWithNewline()
+        endWithNewline()
    }  
 }

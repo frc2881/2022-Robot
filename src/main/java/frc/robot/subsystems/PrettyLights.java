@@ -26,7 +26,8 @@ public class PrettyLights extends SubsystemBase {
   private final double colorwave = -0.45;
   private final double sinelon = -0.77;
   private final PowerDistribution m_powerHub;
-  private final Spark m_lights;
+  private final Spark m_lights0;
+  private final Spark m_lights1;
   private boolean m_useDefault = true;
   private final DoubleLogEntry m_logOutput;
   private final DoubleLogEntry m_logCurrent;
@@ -36,13 +37,15 @@ public class PrettyLights extends SubsystemBase {
   public PrettyLights(PowerDistribution powerHub) {
     m_powerHub = powerHub;
 
-    m_lights = new Spark(0);
+    m_lights0 = new Spark(0);
+    m_lights1 = new Spark(1);
 
-    m_lights.set(m_defaultColor);
+    m_lights0.set(m_defaultColor);
+    m_lights1.set(m_defaultColor);
 
     if(kEnableDetailedLogging) {
       DataLog log = DataLogManager.getLog();
-      m_logOutput = new DoubleLogEntry(log, "/prettyLight/output");
+      m_logOutput = new DoubleLogEntry(log, "/prettyLights/output");
       m_logCurrent = new DoubleLogEntry(log, "/prettyLights/current");
     } else {
       m_logOutput = null;
@@ -56,14 +59,16 @@ public class PrettyLights extends SubsystemBase {
     if(m_useDefault == true) {
       if((DriverStation.getMatchTime() <= 35) &&
          (DriverStation.getMatchTime() > 25)) {
-        m_lights.set(yellow);
+        m_lights0.set(yellow);
       } else {
-        m_lights.set(m_defaultColor);
+        m_lights0.set(m_defaultColor);
+        m_lights1.set(m_defaultColor);
       }
     }
 
     if(kEnableDetailedLogging) {
-      m_logOutput.append(m_lights.get());
+      m_logOutput.append(m_lights0.get());
+      m_logOutput.append(m_lights1.get());
       m_logCurrent.append(m_powerHub.getCurrent(11));
     }
   }
@@ -74,17 +79,17 @@ public class PrettyLights extends SubsystemBase {
 
   public void greenColor() {
     m_useDefault = false;
-    m_lights.set(green);
+    m_lights0.set(green);
   }
 
   public void redColor() {
     m_useDefault = false;
-    m_lights.set(red);
+    m_lights0.set(red);
   }
 
   public void partyColor() {
     m_useDefault = false;
-    m_lights.set(rainbow);
+    m_lights0.set(rainbow);
   }
 
   public void lightShow(){
@@ -93,6 +98,7 @@ public class PrettyLights extends SubsystemBase {
 
   public void reset() {
     m_defaultColor = hotPink;
-    m_lights.set(m_defaultColor);
+    m_lights0.set(m_defaultColor);
+    m_lights1.set(m_defaultColor);
   }
 }

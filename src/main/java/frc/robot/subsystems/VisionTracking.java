@@ -20,6 +20,8 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class VisionTracking extends SubsystemBase {
   private final PhotonCamera m_camera = new PhotonCamera("photonvision");
@@ -27,6 +29,8 @@ public class VisionTracking extends SubsystemBase {
   private final DoubleLogEntry m_logPitch;
   private final DoubleLogEntry m_logSkew;
   private final DoubleLogEntry m_logYaw;
+  public ArrayList<Double> yawVals = new ArrayList<Double>();
+  public ArrayList<Double> pitchVals = new ArrayList<Double>();
 
   /** Creates a new VisionTracking. */
   public VisionTracking() {
@@ -75,6 +79,41 @@ public class VisionTracking extends SubsystemBase {
         m_logYaw.append(target.getYaw());
       }
     }
+  
+    yawVals.add(yaw);
+    pitchVals.add(pitch);
+    while(yawVals.size() > 5)
+    yawVals.remove(0);
+    while(pitchVals.size() > 5)
+    pitchVals.remove(0);
+  }
+  
+  public double findYawMedian(){
+    ArrayList<Double> yawValsCopy = (ArrayList<Double>)yawVals.clone();
+    Collections.sort(yawValsCopy);
+
+    if (yawVals.size() % 2 == 1)
+            return yawValsCopy.get((yawValsCopy.size() + 1) / 2 - 1);
+        else {
+            double lower = yawValsCopy.get(yawValsCopy.size() / 2 - 1);
+            double upper = yawValsCopy.get(yawValsCopy.size() / 2);
+
+            return (lower + upper) / 2.0;
+        }
+    }
+
+  public double findPitchMedian(){
+    ArrayList<Double> pitchValsCopy = (ArrayList<Double>)pitchVals.clone();
+    Collections.sort(pitchValsCopy);
+
+    if (yawVals.size() % 2 == 1)
+            return pitchValsCopy.get((pitchValsCopy.size() + 1) / 2 - 1);
+        else {
+            double lower = pitchValsCopy.get(pitchValsCopy.size() / 2 - 1);
+            double upper = pitchValsCopy.get(pitchValsCopy.size() / 2);
+
+            return (lower + upper) / 2.0;
+    }
   }
 
   public double CatapultDistToLim(double targetDist) {
@@ -121,26 +160,23 @@ public class VisionTracking extends SubsystemBase {
   }
 
   public double LeftCatapultPitchToLim() {
-    double pitch;
-    PhotonTrackedTarget target = m_camera.getLatestResult().getBestTarget();
+    //PhotonTrackedTarget target = m_camera.getLatestResult().getBestTarget();
+    double pitch = findPitchMedian();
 
     if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
-       (target == null)) {
-      return kForwardLimitLeft;
-    } else {
-      pitch = target.getPitch();
-    }
+       (pitch >= 1000)) {
+      return kForwardLimitLeft;}
 
     double lowerPitch = 0;
     double lowerLim = 0;
     double higherPitch = 0;
     double higherLim = 0;
     double[][] pitches = {{ 4.2, 13.24 },
-                          { 4.7, 0.9 },
-                          { 5.1, -7.8 },
-                          { 5.7, -13.5 },
-                          { 6.85, -18.4 },
-                          { 7.95, -20.2 }};
+                          { 4.9, 0.9 },
+                          { 5.4, -7.8 },
+                          { 5.9, -13.5 },
+                          { 7.05, -18.4 },
+                          { 8.1, -20.2 }};
     for(int i = 1; i <= (pitches.length - 1); i++) {
       if(pitches[i][1] < pitch) {
         lowerPitch = pitches[i][1];
@@ -158,26 +194,23 @@ public class VisionTracking extends SubsystemBase {
   }
 
   public double RightCatapultPitchToLim() {
-    double pitch;
-    PhotonTrackedTarget target = m_camera.getLatestResult().getBestTarget();
+    double pitch = findPitchMedian();
 
     if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
-       (target == null)) {
+       (pitch >= 1000)) {
       return kForwardLimitRight;
-    } else {
-      pitch = target.getPitch();
     }
-
+    
     double lowerPitch = 0;
     double lowerLim = 0;
     double higherPitch = 0;
     double higherLim = 0;
     double[][] pitches = {{ 4.2, 13.24 },
-                          { 4.7, 0.9 },
+                          { 4.75, 0.9 },
                           { 5.1, -7.8 }, //moved 5.15 to 5.1
-                          { 5.7, -13.5 },
-                          { 6.8, -18.4 },
-                          { 7.9, -20.2 }};
+                          { 5.75, -13.5 },
+                          { 6.85, -18.4 },
+                          { 7.95, -20.2 }};
     for(int i = 1; i <= (pitches.length - 1); i++) {
       if(pitches[i][1] < pitch) {
         lowerPitch = pitches[i][1];
@@ -200,18 +233,15 @@ public class VisionTracking extends SubsystemBase {
   }
 
   public double getYaw() {
-    PhotonTrackedTarget target;
-    double yaw;
-
-    target = m_camera.getLatestResult().getBestTarget();
+    double yaw = findYawMedian();
 
     if(SmartDashboard.getBoolean("Disable Vision", false) == true) {
       // possibly want different outcome
       yaw = 0;
-    } else if(target == null) {
+    } else if(yaw >= 1000) {
       yaw = 0;
     } else {
-      yaw = target.getYaw() - 2;
+      yaw = yaw - 2;
     }
 
     return -yaw;

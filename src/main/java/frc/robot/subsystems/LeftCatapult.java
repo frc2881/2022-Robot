@@ -51,7 +51,7 @@ public class LeftCatapult extends SubsystemBase {
   private final DoubleLogEntry m_logBusVoltage;
   private final DoubleLogEntry m_logCurrent;
   private final VisionTracking m_vision; 
-
+  public double limit;
 
   public LeftCatapult(VisionTracking vision) {
     m_vision = vision;
@@ -117,7 +117,8 @@ public class LeftCatapult extends SubsystemBase {
 
   public boolean reachedUpperSoftLimit() {
     double position = m_encoder.getPosition();
-    boolean difference = (m_vision.LeftCatapultPitchToLim() - position) < 0.25;
+    
+    boolean difference = (limit - position) < 0.25;
     SmartDashboard.putNumber("L Encoder Position", position);
     SmartDashboard.putBoolean("L Upper Soft Limit Reached", difference);
     return difference;
@@ -132,8 +133,7 @@ public class LeftCatapult extends SubsystemBase {
   }
 
   public void score() {
-
-    double limit; 
+ 
     limit = m_vision.LeftCatapultPitchToLim();
     limit += SmartDashboard.getNumber("Catapult Soft Limit", 0);
     m_catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) limit);
