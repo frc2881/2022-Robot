@@ -45,7 +45,7 @@ public class PrettyLights extends SubsystemBase {
 
     if(kEnableDetailedLogging) {
       DataLog log = DataLogManager.getLog();
-      m_logOutput = new DoubleLogEntry(log, "/prettyLight/output");
+      m_logOutput = new DoubleLogEntry(log, "/prettyLights/output");
       m_logCurrent = new DoubleLogEntry(log, "/prettyLights/current");
     } else {
       m_logOutput = null;
