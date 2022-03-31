@@ -34,6 +34,7 @@ import frc.robot.commands.climber.FirstClimberSequence;
 import frc.robot.commands.climber.RunArm;
 import frc.robot.commands.climber.SecondClimberSequence;
 import frc.robot.commands.drive.DriveWithJoysticks;
+import frc.robot.commands.drive.AimAtHub;
 import frc.robot.commands.drive.RotateByDegrees;
 import frc.robot.commands.feedback.RumbleNo;
 import frc.robot.commands.feedback.RumbleYes;
@@ -165,7 +166,7 @@ public class RobotContainer {
     // Driver Xbox Controller
 
     buttonFromDouble(() -> driverController.getLeftTriggerAxis() + driverController.getRightTriggerAxis()).
-      whenHeld(new RotateByDegrees(navx, drive, () -> visionTracking.getYaw()).andThen(new RumbleYes(prettyLights, driverController, manipulatorController)));
+      whenHeld(new AimAtHub(navx, drive, () -> visionTracking.getYaw(), prettyLights, driverController, manipulatorController));
 
     // Manipulator Xbox Controller
 
