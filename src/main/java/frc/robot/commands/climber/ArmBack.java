@@ -22,6 +22,8 @@ public class ArmBack extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climber.armBack();
+    if(m_climber.isSafe()){
+      m_climber.armBack();
+    }
   }
 }

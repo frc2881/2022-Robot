@@ -21,6 +21,9 @@ public class ArmUp extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climber.armUp();
+    if(m_climber.isSafe()){
+      m_climber.armUp();
+    }
+
   }
 }

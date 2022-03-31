@@ -27,6 +27,16 @@ public class ArmToLength extends CommandBase {
   }
 
   @Override
+  public void execute() {
+    if(!m_climber.isSafe()){
+    m_climber.moveArm(0);
+    }
+    else{
+      m_climber.moveArm(m_speed);
+    }
+  }
+
+  @Override
   public void end(boolean interrupted) {
     m_climber.moveArm(0.0);
   }
