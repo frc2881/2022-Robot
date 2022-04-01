@@ -62,7 +62,6 @@ public class PrettyLights extends SubsystemBase {
         m_lights0.set(yellow);
       } else {
         m_lights0.set(m_defaultColor);
-        m_lights1.set(m_defaultColor);
       }
     }
 
@@ -99,6 +98,5 @@ public class PrettyLights extends SubsystemBase {
   public void reset() {
     m_defaultColor = hotPink;
     m_lights0.set(m_defaultColor);
-    m_lights1.set(m_defaultColor);
   }
 }

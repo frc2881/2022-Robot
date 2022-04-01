@@ -76,6 +76,10 @@ public class Intake extends SubsystemBase {
     m_intake.set(-speed);
   }
 
+  public void runReverse(double speed) {
+    m_intake.set(speed);
+  }
+
   public void extend() {
     m_solenoid.set(true);
     if(kEnableDetailedLogging) {

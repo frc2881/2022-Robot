@@ -22,8 +22,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.autonomous.LeftL;
-import frc.robot.commands.autonomous.RightL;
+import frc.robot.commands.autonomous.AutoB;
+import frc.robot.commands.autonomous.AutoD;
 import frc.robot.commands.autonomous.RightR;
 import frc.robot.commands.catapult.CatapultOverrride;
 import frc.robot.commands.catapult.Eject;
@@ -70,17 +70,18 @@ public class RobotContainer {
   private final PrettyLights prettyLights = new PrettyLights(powerHub);
  
   //Left Paths
-  private final Trajectory leftPath;
-  private final Trajectory toNextCargo;
+  private final Trajectory autoB;
+  private final Trajectory toStrategicCargo;
 
   //Right Paths
   private final Trajectory rightPath;
   private final Trajectory toTerminal;
   private final Trajectory terminalToScore;
-  private final Trajectory rightL;
+  private final Trajectory autoD;
   private final Trajectory cargo2ToTerminal;
   private final Trajectory backUpTerminal;
   private final Trajectory backUpTerminalToScore;
+  private final Trajectory backUpStrategic;
 
   private final SendableChooser<Command> m_chooser;
 
@@ -106,14 +107,15 @@ public class RobotContainer {
     double maxAcceleration = 2;
 
     //Left Tarmac
-    leftPath = PathPlanner2.loadPath("LeftL", maxVelocity, maxAcceleration);
-    toNextCargo = PathPlanner2.loadPath("ToNextCargo", maxVelocity, maxAcceleration, true);
+    autoB = PathPlanner2.loadPath("AutoB", maxVelocity, maxAcceleration);
+    toStrategicCargo = PathPlanner2.loadPath("ToStrategicCargo", maxVelocity, maxAcceleration, true);    
+    backUpStrategic = PathPlanner2.loadPath("BackUpStrategic", maxVelocity, maxAcceleration, true);
 
     //Right Tarmac
     rightPath = PathPlanner2.loadPath("RightR", maxVelocity, maxAcceleration);
     toTerminal = PathPlanner2.loadPath("ToTerminal", 4, maxAcceleration);
     terminalToScore = PathPlanner2.loadPath("TerminalToScore", 4, maxAcceleration, true);
-    rightL = PathPlanner2.loadPath("RightL", maxVelocity, maxAcceleration);
+    autoD = PathPlanner2.loadPath("RightL", maxVelocity, maxAcceleration);
     cargo2ToTerminal = PathPlanner2.loadPath("Cargo2ToTerminal", maxVelocity, maxAcceleration);
     backUpTerminal = PathPlanner2.loadPath("BackUpTerminal", maxVelocity, maxAcceleration, true);
     backUpTerminalToScore = PathPlanner2.loadPath("BackUpTerminalToScore", maxVelocity, maxAcceleration, true);
@@ -121,8 +123,8 @@ public class RobotContainer {
     // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
     //m_chooser.addOption("Auto Right", new RightR(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightPath, toTerminal, terminalToScore));
-    m_chooser.setDefaultOption("Auto D", new RightL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightL, cargo2ToTerminal, backUpTerminal, terminalToScore));//L(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightL, cargo2ToTerminal, backUpTerminal, backUpTerminalToScore));
-    m_chooser.addOption("Auto B", new LeftL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, leftPath, toNextCargo));
+    m_chooser.setDefaultOption("Auto D", new AutoD(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, autoD, cargo2ToTerminal, backUpTerminal, terminalToScore));
+    m_chooser.addOption("Auto B", new AutoB(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, autoB, toStrategicCargo, backUpStrategic));
     m_chooser.addOption("Do Nothing", null);
 
     //Delays between the Autonomouses

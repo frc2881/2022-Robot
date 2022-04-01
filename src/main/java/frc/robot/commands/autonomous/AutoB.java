@@ -12,9 +12,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Auto;
 import frc.robot.commands.catapult.ResetLeft;
 import frc.robot.commands.catapult.ResetRight;
-import frc.robot.commands.catapult.Score;
 import frc.robot.commands.catapult.ShootLeft;
-import frc.robot.commands.catapult.ShootRight;
 import frc.robot.commands.catapult.ShootRightConditional;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.feedback.WaitCommandNT;
@@ -29,47 +27,41 @@ import static frc.robot.Constants.Catapult.kShootTimeDelay;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class RightL extends SequentialCommandGroup {
-  /** Creates a new RightL. */
-  public RightL(
+public class AutoB extends SequentialCommandGroup {
+  /** Creates a new LeftL. */
+  public AutoB(
     Drive drive, 
     Intake intake, 
     NavX navx,
     LeftCatapult leftCatapult, 
     RightCatapult rightCatapult, 
     PrettyLights prettylights, 
-    XboxController driverController, 
-    Trajectory rightL,
-    Trajectory cargo2ToTerminal,
-    Trajectory backUpTerminal,
-    Trajectory terminalToScore
+    XboxController controller, 
+    Trajectory autoB,
+    Trajectory toStrategicCargo,
+    Trajectory backUpStrategic
   ) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-new WaitCommandNT(Auto.kStartingDel),
-    new InstantCommand(() -> intake.extend(), intake),
-    new InstantCommand(() -> prettylights.lightShow(), prettylights),
-    new InstantCommand(() -> intake.run(1.0), intake),
-    new FollowTrajectory(drive, rightL, true),
-    new WaitCommand(0.25),
-    new InstantCommand(() -> intake.run(0.0), intake),
-    new WaitCommand(0.25),
-    // new Score(leftCatapult, rightCatapult, prettylights, null),//(leftCatapult, rightCatapult, prettyLights, null),
-    new ShootLeft(leftCatapult),
-    new WaitCommand(kShootTimeDelay),
-    new ShootRightConditional(rightCatapult),
-    parallel(
-    new ResetLeft(leftCatapult),
-    new ResetRight(rightCatapult),
-    new InstantCommand(() -> intake.run(1.0), intake),
-    new FollowTrajectory(drive, cargo2ToTerminal, false)
-    ),
-    new WaitCommand(0.4),
-    new FollowTrajectory(drive, terminalToScore, false),
-    new InstantCommand(() -> intake.run(0.0), intake),
-    //new WaitCommand(0.1),
-    new Score(leftCatapult, rightCatapult, prettylights, null)
+  new WaitCommandNT(Auto.kStartingDel),
+      new InstantCommand(() -> intake.extend(), intake),
+      new InstantCommand(() -> prettylights.lightShow(), prettylights),
+      new WaitCommand(0.1),
+      new InstantCommand(() -> intake.run(1.0), intake),
+      new FollowTrajectory(drive, autoB, true),
+      new WaitCommand(0.5),
+      new InstantCommand(() -> intake.run(0), intake),
+      //new RotateByDegrees(navx, drive, () -> visionTracking.getYaw())
+      new WaitCommand(0.50),
+      new ShootLeft(leftCatapult),
+      new WaitCommand(kShootTimeDelay),
+      new ShootRightConditional(rightCatapult),
+      parallel(
+          new ResetLeft(leftCatapult),
+          new ResetRight(rightCatapult),
+          new InstantCommand(() -> intake.run(0.1), intake), 
+          new FollowTrajectory(drive, toStrategicCargo, false)),
+      new InstantCommand(() -> intake.runReverse(1), intake)
+      //new FollowTrajectory(drive, backUpStrategic, false)
     );
   }
 }
