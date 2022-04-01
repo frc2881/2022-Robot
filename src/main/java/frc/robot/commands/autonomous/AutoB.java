@@ -58,10 +58,10 @@ public class AutoB extends SequentialCommandGroup {
       parallel(
           new ResetLeft(leftCatapult),
           new ResetRight(rightCatapult),
-          new InstantCommand(() -> intake.run(0.3), intake), 
+          new InstantCommand(() -> intake.run(0.1), intake), 
           new FollowTrajectory(drive, toStrategicCargo, false)),
-      new InstantCommand(() -> intake.runReverse(1), intake),
-      new FollowTrajectory(drive, backUpStrategic, false)
+      new InstantCommand(() -> intake.runReverse(1), intake)
+      //new FollowTrajectory(drive, backUpStrategic, false)
     );
   }
 }

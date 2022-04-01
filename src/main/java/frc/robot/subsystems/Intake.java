@@ -77,9 +77,6 @@ public class Intake extends SubsystemBase {
   }
 
   public void runReverse(double speed) {
-    if(speed > kMaxSpeed) {
-      speed = kMaxSpeed;
-    }
     m_intake.set(speed);
   }
 
