@@ -7,6 +7,7 @@ package frc.robot.commands.drive;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 import frc.robot.utils.NavX;
@@ -33,22 +34,30 @@ public class RotateByDegrees extends CommandBase {
     m_navx = navx;
     m_turn = turn;
     m_drive = drive;
-    kp = 0.12;
-    ki = 0.0004;
-    kd = 0.005; 
+    kp = 0.07;
+    //SmartDashboard.putNumber("RotateByDegrees kp", kp);
+    ki = 0.0017;
+    //SmartDashboard.putNumber("RotateByDegrees ki", ki);
+    kd = 0.007;
+    //SmartDashboard.putNumber("RotateByDegrees kd", kd);
     pid = new PIDController(kp, ki, kd);
-    
+
+    //SmartDashboard.putNumber("RotateByDegrees Turn Amount", 0);
   }
 
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    //target = m_navx.getAngle() - SmartDashboard.getNumber("RotateByDegrees Turn Amount", 0);
     target = m_navx.getAngle() - m_turn.getAsDouble();
     pid.reset();
     pid.setSetpoint(target);
     pid.setTolerance(.5);
     pidOn = false;
+    //pid.setP(SmartDashboard.getNumber("RotateByDegrees kp", kp));
+    //pid.setI(SmartDashboard.getNumber("RotateByDegrees ki", ki));
+    //pid.setD(SmartDashboard.getNumber("RotateByDegrees kd", kd));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
