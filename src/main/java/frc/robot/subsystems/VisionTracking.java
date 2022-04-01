@@ -91,10 +91,11 @@ public class VisionTracking extends SubsystemBase {
   public double findYawMedian(){
     ArrayList<Double> yawValsCopy = (ArrayList<Double>)yawVals.clone();
     Collections.sort(yawValsCopy);
-
+    if (yawVals.size() == 0)
+            return 0;
     if (yawVals.size() % 2 == 1)
             return yawValsCopy.get((yawValsCopy.size() + 1) / 2 - 1);
-        else {
+        else{
             double lower = yawValsCopy.get(yawValsCopy.size() / 2 - 1);
             double upper = yawValsCopy.get(yawValsCopy.size() / 2);
 
@@ -106,7 +107,9 @@ public class VisionTracking extends SubsystemBase {
     ArrayList<Double> pitchValsCopy = (ArrayList<Double>)pitchVals.clone();
     Collections.sort(pitchValsCopy);
 
-    if (yawVals.size() % 2 == 1)
+    if (pitchVals.size() == 0)
+            return 0;
+    if (pitchVals.size() % 2 == 1)
             return pitchValsCopy.get((pitchValsCopy.size() + 1) / 2 - 1);
         else {
             double lower = pitchValsCopy.get(pitchValsCopy.size() / 2 - 1);
