@@ -28,7 +28,7 @@ public class SimpleAutonomous extends SequentialCommandGroup {
       new WaitCommand(.1),
       new InstantCommand(() -> intake.extend(), intake),
       new WaitCommand(2),
-      new Score(leftCatapult, rightCatapult, prettylights, null),
+      new Score(leftCatapult, rightCatapult, prettylights, null, null),
       new InstantCommand(() -> intake.retract(), intake),
       new DriveWithJoysticks(drive, () -> returnOne() , () -> returnZero()).withTimeout(2)
     );

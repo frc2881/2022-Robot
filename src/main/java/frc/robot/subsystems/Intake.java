@@ -31,6 +31,7 @@ public class Intake extends SubsystemBase {
   private final DoubleLogEntry m_logBusVoltage;
   private final DoubleLogEntry m_logCurrent;
   private final BooleanLogEntry m_logSolenoid;
+  private int counter = 0;
 
   public Intake() {
     m_intake = new CANSparkMax(kMotor, MotorType.kBrushless);
@@ -66,6 +67,7 @@ public class Intake extends SubsystemBase {
 
   public void reset() {
     run(0.0);
+    counter = 1; 
     retract();
   }
 
@@ -81,16 +83,26 @@ public class Intake extends SubsystemBase {
   }
 
   public void extend() {
-    m_solenoid.set(true);
-    if(kEnableDetailedLogging) {
-      m_logSolenoid.append(m_solenoid.get());
+    System.out.println(counter);
+    if(counter == 0){
+      m_solenoid.set(true);
+      if(kEnableDetailedLogging) {
+        m_logSolenoid.append(m_solenoid.get());
+      }
     }
+    counter++;
   }
 
   public void retract() {
-    m_solenoid.set(false);
-    if(kEnableDetailedLogging) {
-      m_logSolenoid.append(m_solenoid.get());
+    System.out.println(counter);
+    if(counter > 0){
+    counter--;
+    }
+    if(counter == 0){ 
+      m_solenoid.set(false);
+      if(kEnableDetailedLogging) {
+        m_logSolenoid.append(m_solenoid.get());
+      }
     }
   }
 
