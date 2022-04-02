@@ -87,17 +87,15 @@ public class PrettyLights extends SubsystemBase {
     m_lights.set(rainbow);
   }
 
-<<<<<<< HEAD
   public boolean isPartyColor(){
     if(m_lights.get() == rainbow){
       return true;
     } else {
       return false;
     }
-=======
+  }
   public void lightShow(){
     m_defaultColor = confetti;
->>>>>>> origin/main
   }
 
   public void reset() {
