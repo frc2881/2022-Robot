@@ -66,14 +66,14 @@ public class Drive extends SubsystemBase {
     m_leftFront = new CANSparkMax(kLeftFrontMotor, MotorType.kBrushless);
     m_leftFront.restoreFactoryDefaults();
     m_leftFront.setInverted(true);
-    m_leftFront.setIdleMode(IdleMode.kBrake);
+    m_leftFront.setIdleMode(IdleMode.kCoast);
     m_leftFront.setSmartCurrentLimit(kCurrentLimit);
     m_leftFront.setOpenLoopRampRate(kRampRate);
 
     m_leftRear = new CANSparkMax(kLeftRearMotor, MotorType.kBrushless);
     m_leftRear.restoreFactoryDefaults();
     m_leftRear.setInverted(true);
-    m_leftRear.setIdleMode(IdleMode.kBrake);
+    m_leftRear.setIdleMode(IdleMode.kCoast);
     m_leftRear.setSmartCurrentLimit(kCurrentLimit);
     m_leftRear.setOpenLoopRampRate(kRampRate);
     m_leftRear.follow(m_leftFront);
@@ -81,14 +81,14 @@ public class Drive extends SubsystemBase {
     m_rightFront = new CANSparkMax(kRightFrontMotor, MotorType.kBrushless);
     m_rightFront.restoreFactoryDefaults();
     m_rightFront.setInverted(false);
-    m_rightFront.setIdleMode(IdleMode.kBrake);
+    m_rightFront.setIdleMode(IdleMode.kCoast);
     m_rightFront.setSmartCurrentLimit(kCurrentLimit);
     m_rightFront.setOpenLoopRampRate(kRampRate);
 
     m_rightRear = new CANSparkMax(kRightRearMotor, MotorType.kBrushless);
     m_rightRear.restoreFactoryDefaults();
     m_rightRear.setInverted(false);
-    m_rightRear.setIdleMode(IdleMode.kBrake);
+    m_rightRear.setIdleMode(IdleMode.kCoast);
     m_rightRear.setSmartCurrentLimit(kCurrentLimit);
     m_rightRear.setOpenLoopRampRate(kRampRate);
     m_rightRear.follow(m_rightFront);
@@ -158,6 +158,10 @@ public class Drive extends SubsystemBase {
 
   public void reset() {
     arcadeDrive(0.0, 0.0);
+    m_leftFront.setIdleMode(IdleMode.kBrake);
+    m_leftRear.setIdleMode(IdleMode.kBrake);
+    m_rightFront.setIdleMode(IdleMode.kBrake);
+    m_rightRear.setIdleMode(IdleMode.kBrake);
   }
 
   public void arcadeDrive(double speed, double rotation) {

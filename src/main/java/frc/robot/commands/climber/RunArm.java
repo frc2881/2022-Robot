@@ -29,6 +29,7 @@ public class RunArm extends CommandBase {
   @Override
   public void execute() {
     m_climber.moveArm(m_speed.getAsDouble());
+    
   }
 
   // Called once the command ends or is interrupted.

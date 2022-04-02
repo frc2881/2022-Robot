@@ -17,13 +17,15 @@ import frc.robot.utils.NavX;
 public class SecondClimberSequence extends SequentialCommandGroup {
   public SecondClimberSequence(Climber climber, PrettyLights prettylights, NavX navx, XboxController manipulatorController) {
     addCommands(
+        new InstantCommand(() -> climber.setBackTrue(), climber),
         new ArmToLength(climber, -0.3, 24.5), 
         //new ArmBack(climber),
-        //new ArmToLength(climber, -1.0, 18.5), 
+        new ArmToLength(climber, -0.5, 16.0),
+        new ArmToLength(climber, -1.0, 6.5), 
         //new ArmUp(climber),
-        new ArmToLength(climber, -1.0, 1.5), 
+        new ArmToLength(climber, -1.0, 2.5), 
         new ArmToLength(climber, -0.4, 0.0),
-        new WaitCommand(0.5),
+        new WaitCommand(0.2),
         new ArmToLength(climber, .9, 5.0),
         new ArmBack(climber),
         //new ArmWaitToExtend(navx),

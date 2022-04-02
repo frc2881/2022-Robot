@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.NavX;
 
 public class Climber extends SubsystemBase {
   private final CANSparkMax m_arm;
@@ -38,8 +39,13 @@ public class Climber extends SubsystemBase {
   private final DoubleLogEntry m_logBusVoltage;
   private final DoubleLogEntry m_logCurrent;
   private final BooleanLogEntry m_logSolenoid;
+  private PrettyLights m_prettyLights;
+  private final NavX m_navx;
+  private float largestVal = 0;
+  private boolean safe;
+  private boolean back = true;
 
-  public Climber() {
+  public Climber(NavX navx, PrettyLights prettyLights) {
     m_arm = new CANSparkMax(kMotor, MotorType.kBrushless);
     m_arm.restoreFactoryDefaults();
     m_arm.setInverted(false);
@@ -56,6 +62,9 @@ public class Climber extends SubsystemBase {
     m_encoder.setPositionConversionFactor(kRotationsToInches);
 
     m_solenoid = new Solenoid(PneumaticsModuleType.REVPH, kSolenoid);
+
+    m_prettyLights = prettyLights;
+    m_navx = navx;
 
     if(kEnableDetailedLogging) {
       DataLog log = DataLogManager.getLog();
@@ -81,11 +90,67 @@ public class Climber extends SubsystemBase {
       m_logBusVoltage.append(m_arm.getBusVoltage());
       m_logCurrent.append(m_arm.getOutputCurrent());
     }
-  }
+
+    float roll = m_navx.getRoll();
+
+    if(back == true){
+      if(roll > largestVal){
+        largestVal = roll;
+      }
+      else if(roll < largestVal - 3){
+        if(largestVal < 19){
+          /*
+          if(m_prettyLights.isPartyColor() == false){
+          m_prettyLights.greenColor();
+          }
+          */
+          safe = true;
+        } else{
+          /*
+          if(m_prettyLights.isPartyColor() == false){
+          m_prettyLights.redColor();
+          }
+          */
+          safe = false;
+        }
+        back = false;
+      }
+    }
+    else{
+      if(roll < largestVal){
+        largestVal = roll;
+      }
+      else if(roll > largestVal + 3){
+        if(largestVal > -24){
+          /*
+          if(m_prettyLights.isPartyColor() == false){
+          m_prettyLights.greenColor();
+          }
+          */
+          safe = true;
+        } else{
+          /*
+          if(m_prettyLights.isPartyColor() == false){
+          m_prettyLights.redColor();
+          }
+          */
+          safe = false;
+        }
+        back = true;
+      }
+    }
+  
+}
+
+public void setBackTrue(){
+  back = true;
+}
 
   public void reset() {
     moveArm(0.0);
     _armUp();
+    back = true;
+    safe = true;
   }
 
   public void _moveArm(double speed) {
@@ -164,6 +229,10 @@ public class Climber extends SubsystemBase {
 
   public void resetEncoder() {
     m_encoder.setPosition(-0.1);
+  }
+
+  public boolean isSafe(){
+    return safe;
   }
 
   @Override

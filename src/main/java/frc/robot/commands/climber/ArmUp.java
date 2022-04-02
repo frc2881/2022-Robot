@@ -22,5 +22,7 @@ public class ArmUp extends InstantCommand {
   @Override
   public void initialize() {
     m_climber.armUp();
+    
+
   }
 }
