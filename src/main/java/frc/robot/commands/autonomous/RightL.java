@@ -32,7 +32,7 @@ public class RightL extends SequentialCommandGroup {
     NavX navx,
     LeftCatapult leftCatapult, 
     RightCatapult rightCatapult, 
-    PrettyLights prettyLights, 
+    PrettyLights prettylights, 
     XboxController driverController, 
     Trajectory rightL,
     Trajectory cargo2ToTerminal,
@@ -44,14 +44,15 @@ public class RightL extends SequentialCommandGroup {
     addCommands(
 new WaitCommandNT(Auto.kStartingDel),
     new InstantCommand(() -> intake.extend(), intake),
+    new InstantCommand(() -> prettylights.lightShow(), prettylights),
 new WaitCommandNT(Auto.kSecondDel),
-    //new WaitCommand(0.1),
+    ////new WaitCommand(0.1),
     new InstantCommand(() -> intake.run(1.0), intake),
     new FollowTrajectory(drive, rightL, true),
     new WaitCommand(0.25),
     new InstantCommand(() -> intake.run(0.0), intake),
     new WaitCommand(0.25),
-    new Score(leftCatapult, rightCatapult, prettyLights, null),//(leftCatapult, rightCatapult, prettyLights, null),
+    new Score(leftCatapult, rightCatapult, prettylights, null),//(leftCatapult, rightCatapult, prettyLights, null),
 new WaitCommandNT(Auto.kThirdDel),
     new InstantCommand(() -> intake.run(1.0), intake),
     new FollowTrajectory(drive, cargo2ToTerminal, false),
@@ -61,7 +62,7 @@ new WaitCommandNT(Auto.kThirdDel),
     new FollowTrajectory(drive, backUpTerminalToScore, false),
     new InstantCommand(() -> intake.run(0.0), intake),
     //new WaitCommand(0.1),
-    new Score(leftCatapult, rightCatapult, prettyLights, null)
+    new Score(leftCatapult, rightCatapult, prettylights, null)
     );
   }
 }

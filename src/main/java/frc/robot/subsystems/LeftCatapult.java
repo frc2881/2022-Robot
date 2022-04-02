@@ -242,7 +242,7 @@ public class LeftCatapult extends SubsystemBase {
     if(m_colorSensor.isConnected()) {
       builder.addDoubleProperty("Left Catapult Sensor Distance", () -> m_colorSensor.getProximity(), null);
     }
-    builder.addDoubleProperty("Left Catapult Limit from Vision", () -> m_vision.LeftCatapultPitchToLim(), null);
+    //builder.addDoubleProperty("Left Catapult Limit from Vision", () -> m_vision.LeftCatapultPitchToLim(), null);
     builder.addBooleanProperty("Left Blue", () -> isBlue(), null);
     builder.addBooleanProperty("Left Red", () -> isRed(), null);
   }

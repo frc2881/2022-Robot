@@ -24,11 +24,13 @@ public class PrettyLights extends SubsystemBase {
   private final double confetti = -0.87;
   private final double twinkles = -0.55;
   private final double colorwave = -0.45;
+  private final double sinelon = -0.77;
   private final PowerDistribution m_powerHub;
   private final Spark m_lights;
-  private boolean m_defaultColor = true;
+  private boolean m_useDefault = true;
   private final DoubleLogEntry m_logOutput;
   private final DoubleLogEntry m_logCurrent;
+  private double m_defaultColor = hotPink;
 
   /** Creates a new PrettyLights. */
   public PrettyLights(PowerDistribution powerHub) {
@@ -36,7 +38,7 @@ public class PrettyLights extends SubsystemBase {
 
     m_lights = new Spark(0);
 
-    m_lights.set(hotPink);
+    m_lights.set(m_defaultColor);
 
     if(kEnableDetailedLogging) {
       DataLog log = DataLogManager.getLog();
@@ -51,12 +53,12 @@ public class PrettyLights extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(m_defaultColor == true) {
+    if(m_useDefault == true) {
       if((DriverStation.getMatchTime() <= 35) &&
          (DriverStation.getMatchTime() > 25)) {
         m_lights.set(yellow);
       } else {
-        m_lights.set(hotPink);
+        m_lights.set(m_defaultColor);
       }
     }
 
@@ -67,33 +69,39 @@ public class PrettyLights extends SubsystemBase {
   }
 
   public void defaultColor() {
-    m_defaultColor = true;
+    m_useDefault = true;
   }
 
   public void greenColor() {
-    m_defaultColor = false;
+    m_useDefault = false;
     m_lights.set(green);
   }
 
   public void redColor() {
-    m_defaultColor = false;
+    m_useDefault = false;
     m_lights.set(red);
   }
 
   public void partyColor() {
-    m_defaultColor = false;
+    m_useDefault = false;
     m_lights.set(rainbow);
   }
 
+<<<<<<< HEAD
   public boolean isPartyColor(){
     if(m_lights.get() == rainbow){
       return true;
     } else {
       return false;
     }
+=======
+  public void lightShow(){
+    m_defaultColor = confetti;
+>>>>>>> origin/main
   }
 
   public void reset() {
-    m_lights.set(hotPink);
+    m_defaultColor = hotPink;
+    m_lights.set(m_defaultColor);
   }
 }

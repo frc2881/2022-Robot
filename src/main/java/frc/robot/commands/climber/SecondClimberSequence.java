@@ -25,7 +25,11 @@ public class SecondClimberSequence extends SequentialCommandGroup {
         //new ArmUp(climber),
         new ArmToLength(climber, -1.0, 2.5), 
         new ArmToLength(climber, -0.4, 0.0),
+<<<<<<< HEAD
         new WaitCommand(0.2),
+=======
+        new WaitCommand(0.5),
+>>>>>>> origin/main
         new ArmToLength(climber, .9, 5.0),
         new ArmBack(climber),
         //new ArmWaitToExtend(navx),

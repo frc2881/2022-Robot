@@ -97,9 +97,11 @@ public class RobotContainer {
     );
 
   public RobotContainer() {
+
+    powerHub.setSwitchableChannel(false);
+    
     double maxVelocity = 3;
     double maxAcceleration = 2;
-
 
     //Left Tarmac
     leftPath = PathPlanner2.loadPath("LeftL", maxVelocity, maxAcceleration);
@@ -116,9 +118,9 @@ public class RobotContainer {
 
     // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
-    m_chooser.addOption("Auto Right", new RightR(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightPath, toTerminal, terminalToScore));
-    m_chooser.addOption("Auto Left", new LeftL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, leftPath, toNextCargo));
-    m_chooser.addOption("RightL", new RightL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightL, cargo2ToTerminal, backUpTerminal, backUpTerminalToScore));
+    //m_chooser.addOption("Auto Right", new RightR(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightPath, toTerminal, terminalToScore));
+    m_chooser.setDefaultOption("Auto D", new RightL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightL, cargo2ToTerminal, backUpTerminal, backUpTerminalToScore));
+    m_chooser.addOption("Auto B", new LeftL(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, leftPath, toNextCargo));
     m_chooser.addOption("Do Nothing", null);
 
     //Delays between the Autonomouses
@@ -160,7 +162,7 @@ public class RobotContainer {
     // Driver Xbox Controller
 
     buttonFromDouble(() -> driverController.getLeftTriggerAxis() + driverController.getRightTriggerAxis()).
-      whenHeld(new RotateByDegrees(navx, drive, () -> visionTracking.getYaw()).andThen(new RumbleYes(prettyLights, driverController, null)));
+      whenHeld(new RotateByDegrees(navx, drive, () -> visionTracking.getYaw()).andThen(new RumbleYes(prettyLights, driverController, manipulatorController)));
 
     // Manipulator Xbox Controller
 
@@ -207,9 +209,13 @@ public class RobotContainer {
       intake.reset();
       leftCatapult.reset();
       rightCatapult.reset();
-      prettyLights.reset();
+      powerHub.setSwitchableChannel(true);
       robotResetState = false;
     }
+  }
+
+  public void resetLights() {
+    prettyLights.reset();
   }
 
   public void robotShouldReset() {
