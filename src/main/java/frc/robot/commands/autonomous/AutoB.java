@@ -50,7 +50,6 @@ public class AutoB extends SequentialCommandGroup {
       new FollowTrajectory(drive, autoB, true),
       new WaitCommand(0.5),
       new InstantCommand(() -> intake.run(0), intake),
-      //new RotateByDegrees(navx, drive, () -> visionTracking.getYaw())
       new WaitCommand(0.50),
       new ShootLeft(leftCatapult),
       new WaitCommand(kShootTimeDelay),
@@ -60,8 +59,8 @@ public class AutoB extends SequentialCommandGroup {
           new ResetRight(rightCatapult),
           new InstantCommand(() -> intake.run(0.1), intake), 
           new FollowTrajectory(drive, toStrategicCargo, false)),
-      new InstantCommand(() -> intake.runReverse(1), intake)
-      //new FollowTrajectory(drive, backUpStrategic, false)
+      new InstantCommand(() -> intake.runReverse(0.8), intake),
+      new FollowTrajectory(drive, backUpStrategic, false)
     );
   }
 }
