@@ -4,10 +4,7 @@
 
 package frc.robot.commands.climber;
 
-import java.util.ArrayList;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.utils.NavX;
 
@@ -41,13 +38,18 @@ public class ClimbInsurance extends CommandBase {
       if(back == true){
         if(roll > largestVal){
           largestVal = roll;
+          System.out.println(largestVal);
         }
         else if(roll < largestVal - 3){
-          if(largestVal < 19){
+          if(largestVal < 23){
+            if(m_prettyLights.isPartyColor() == false){
             m_prettyLights.greenColor();
+            }
             safe = true;
           } else{
+            if(m_prettyLights.isPartyColor() == false){
             m_prettyLights.redColor();
+            }
             safe = false;
           }
           back = false;
@@ -56,19 +58,24 @@ public class ClimbInsurance extends CommandBase {
       else{
         if(roll < largestVal){
           largestVal = roll;
+          System.out.println(largestVal);
         }
         else if(roll > largestVal + 3){
           if(largestVal > -24){
+            if(m_prettyLights.isPartyColor() == false){
             m_prettyLights.greenColor();
+            }
             safe = true;
           } else{
+            if(m_prettyLights.isPartyColor() == false){
             m_prettyLights.redColor();
+            }
             safe = false;
           }
           back = true;
         }
       }
-    
+    //bring the party lights back or riley will kill :) 
   }
 
   // Called once the command ends or is interrupted.

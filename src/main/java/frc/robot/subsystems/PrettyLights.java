@@ -85,6 +85,14 @@ public class PrettyLights extends SubsystemBase {
     m_lights.set(rainbow);
   }
 
+  public boolean isPartyColor(){
+    if(m_lights.get() == rainbow){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public void reset() {
     m_lights.set(hotPink);
   }

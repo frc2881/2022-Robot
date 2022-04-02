@@ -99,10 +99,18 @@ public class Climber extends SubsystemBase {
       }
       else if(roll < largestVal - 3){
         if(largestVal < 19){
+          /*
+          if(m_prettyLights.isPartyColor() == false){
           m_prettyLights.greenColor();
+          }
+          */
           safe = true;
         } else{
+          /*
+          if(m_prettyLights.isPartyColor() == false){
           m_prettyLights.redColor();
+          }
+          */
           safe = false;
         }
         back = false;
@@ -114,10 +122,18 @@ public class Climber extends SubsystemBase {
       }
       else if(roll > largestVal + 3){
         if(largestVal > -24){
+          /*
+          if(m_prettyLights.isPartyColor() == false){
           m_prettyLights.greenColor();
+          }
+          */
           safe = true;
         } else{
+          /*
+          if(m_prettyLights.isPartyColor() == false){
           m_prettyLights.redColor();
+          }
+          */
           safe = false;
         }
         back = true;
@@ -126,9 +142,15 @@ public class Climber extends SubsystemBase {
   
 }
 
+public void setBackTrue(){
+  back = true;
+}
+
   public void reset() {
     moveArm(0.0);
     _armUp();
+    back = true;
+    safe = true;
   }
 
   public void _moveArm(double speed) {

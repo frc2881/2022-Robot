@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.vision.VisionRunner;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -61,12 +60,12 @@ public class RobotContainer {
   private final NavX navx = new NavX();
   private final VisionTracking visionTracking = new VisionTracking();
 
-  private final Climber climber = new Climber();
+  private final PrettyLights prettyLights = new PrettyLights(powerHub);
+  private final Climber climber = new Climber(navx, prettyLights);
   private final Intake intake = new Intake();
   private final LeftCatapult leftCatapult = new LeftCatapult(visionTracking);
   private final RightCatapult rightCatapult = new RightCatapult(visionTracking);
   private final Drive drive = new Drive(navx);
-  private final PrettyLights prettyLights = new PrettyLights(powerHub);
  
   //Left Paths
   private final Trajectory leftPath;
