@@ -214,6 +214,7 @@ public class RobotContainer {
       rightCatapult.reset();
       powerHub.setSwitchableChannel(true);
       robotResetState = false;
+      visionTracking.reset();
     }
   }
 
