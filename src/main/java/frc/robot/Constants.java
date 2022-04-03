@@ -266,7 +266,7 @@ public final class Constants {
      * and due to possible wheel slip this may not match the physical width
      * of the drive train (it may be larger).
      */
-    public static final double kTrackWidth = Units.inchesToMeters(22.5 * 2.25);
+    public static final double kTrackWidth = Units.inchesToMeters(22.5 * 1.5);
 
     /**
      * The kinematics helper object that converts chassis velocities into wheel
