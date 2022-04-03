@@ -104,7 +104,7 @@ public final class Constants {
     public static final double kResetVoltage = -1.0;
 
   
-    public static final double kShootTimeDelay = 0.5;
+    public static final double kShootTimeDelay = 0.15;
 
 
     public static final double kLeftLowDist = 10.767;
