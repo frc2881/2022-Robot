@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class VisionTracking extends SubsystemBase {
-  private final PhotonCamera m_camera = new PhotonCamera("photonvision");
+  private final PhotonCamera vision_camera = new PhotonCamera("photonvision");
+  private final PhotonCamera front_camera = new PhotonCamera("frontCamera");
   private final DoubleLogEntry m_logArea;
   private final DoubleLogEntry m_logPitch;
   private final DoubleLogEntry m_logSkew;
@@ -34,6 +35,7 @@ public class VisionTracking extends SubsystemBase {
 
   /** Creates a new VisionTracking. */
   public VisionTracking() {
+
     if(kEnableDetailedLogging) {
       DataLog log = DataLogManager.getLog();
       m_logArea = new DoubleLogEntry(log, "vision/area");
@@ -50,11 +52,12 @@ public class VisionTracking extends SubsystemBase {
 
   @Override
   public void periodic() {
+    
     PhotonTrackedTarget target;
     double pitch;
     double yaw;
 
-    target = m_camera.getLatestResult().getBestTarget();
+    target = vision_camera.getLatestResult().getBestTarget();
 
     if(SmartDashboard.getBoolean("Disable Vision", false) == true) {
       // possibly want different outcome
@@ -88,6 +91,11 @@ public class VisionTracking extends SubsystemBase {
     pitchVals.remove(0);
   }
   
+  public void reset(){
+    vision_camera.setDriverMode(false);
+    front_camera.setDriverMode(true);
+  }
+
   public double findYawMedian(){
     ArrayList<Double> yawValsCopy = (ArrayList<Double>)yawVals.clone();
     Collections.sort(yawValsCopy);
@@ -128,7 +136,7 @@ public class VisionTracking extends SubsystemBase {
     PhotonTrackedTarget target;
     double pitch;
 
-    target = m_camera.getLatestResult().getBestTarget();
+    target = vision_camera.getLatestResult().getBestTarget();
 
     if(SmartDashboard.getBoolean("Disable Vision", false) == true) {
       // possibly want different outcome
@@ -163,7 +171,7 @@ public class VisionTracking extends SubsystemBase {
   }
 
   public double LeftCatapultPitchToLim() {
-    //PhotonTrackedTarget target = m_camera.getLatestResult().getBestTarget();
+    //PhotonTrackedTarget target = vision_camera.getLatestResult().getBestTarget();
     double pitch = findPitchMedian();
 
     if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
