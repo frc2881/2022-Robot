@@ -27,8 +27,8 @@ public class PrettyLights extends SubsystemBase {
   private final double colorwave = -0.45;
   private final double sinelon = -0.77;
   private final PowerDistribution m_powerHub;
-  private final Spark m_lights0;
-  private final Spark m_lights1;
+  private final Spark m_feedback;
+  private final Spark m_vision;
   private boolean m_useDefault = true;
   private final DoubleLogEntry m_logOutput;
   private final DoubleLogEntry m_logCurrent;
@@ -39,11 +39,11 @@ public class PrettyLights extends SubsystemBase {
   public PrettyLights(PowerDistribution powerHub) {
     m_powerHub = powerHub;
 
-    m_lights0 = new Spark(0);
-    m_lights1 = new Spark(1);
+    m_feedback = new Spark(0);
+    m_vision = new Spark(1);
 
-    m_lights0.set(m_defaultColor);
-    m_lights1.set(m_defaultColor);
+    m_feedback.set(m_defaultColor);
+    m_vision.set(m_defaultColor);
 
     if(kEnableDetailedLogging) {
       DataLog log = DataLogManager.getLog();
@@ -61,15 +61,15 @@ public class PrettyLights extends SubsystemBase {
     if(m_useDefault == true) {
       if((DriverStation.getMatchTime() <= 35) &&
          (DriverStation.getMatchTime() > 25)) {
-        m_lights0.set(yellow);
+        m_feedback.set(yellow);
       } else {
-        m_lights0.set(m_defaultColor);
+        m_feedback.set(m_defaultColor);
       }
     }
 
     if(kEnableDetailedLogging) {
-      m_logOutput.append(m_lights0.get());
-      m_logOutput.append(m_lights1.get());
+      m_logOutput.append(m_feedback.get());
+      m_logOutput.append(m_vision.get());
       m_logCurrent.append(m_powerHub.getCurrent(11));
     }
   }
@@ -80,17 +80,17 @@ public class PrettyLights extends SubsystemBase {
 
   public void greenColor() {
     m_useDefault = false;
-    m_lights0.set(green);
+    m_feedback.set(green);
   }
 
   public void redColor() {
     m_useDefault = false;
-    m_lights0.set(red);
+    m_feedback.set(red);
   }
 
   public void partyColor() {
     m_useDefault = false;
-    m_lights0.set(rainbow);
+    m_feedback.set(rainbow);
   }
 
   public boolean isPartyColor(){
@@ -106,6 +106,6 @@ public class PrettyLights extends SubsystemBase {
 
   public void reset() {
     m_defaultColor = hotPink;
-    m_lights0.set(m_defaultColor);
+    m_feedback.set(m_defaultColor);
   }
 }
