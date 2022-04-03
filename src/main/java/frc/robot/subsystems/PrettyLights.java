@@ -12,6 +12,7 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.motorcontrol.PWMMotorController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -32,6 +33,7 @@ public class PrettyLights extends SubsystemBase {
   private final DoubleLogEntry m_logOutput;
   private final DoubleLogEntry m_logCurrent;
   private double m_defaultColor = hotPink;
+  PWMMotorController m_lights;
 
   /** Creates a new PrettyLights. */
   public PrettyLights(PowerDistribution powerHub) {
