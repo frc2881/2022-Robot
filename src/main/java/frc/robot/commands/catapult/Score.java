@@ -14,24 +14,37 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
-import static frc.robot.Constants.Catapult.kShootTimeDelay;
+import frc.robot.subsystems.VisionTracking;
+import static frc.robot.Constants.Catapult.kShootTimeDelayNear;
+import static frc.robot.Constants.Catapult.kShootTimeDelayFar;
 
 public class Score extends SequentialCommandGroup {
   public Score(LeftCatapult leftCatapult, RightCatapult rightCatapult,
                PrettyLights prettyLights,
-               XboxController manipulatorController, Intake intake) {
+               XboxController manipulatorController, Intake intake, VisionTracking vision) {
     if(intake != null){
       addCommands(new InstantCommand(() -> intake.extend(), intake));
     }
 
     addCommands(
       parallel(new ScoreLeft(leftCatapult),
-      sequence(new WaitCommand(kShootTimeDelay), 
+      sequence(
+      //new WaitCommand(kShootTimeDelay),
+      new ConditionalCommand(new WaitCommand(kShootTimeDelayNear), new WaitCommand(kShootTimeDelayFar), () -> smallLim(vision)),
       new ScoreRight(rightCatapult))),
       new RumbleYes(prettyLights, null, manipulatorController));
      
     if(intake != null){
        addCommands(new InstantCommand(() -> intake.retract(), intake));
+    }
+  }
+
+  public boolean smallLim(VisionTracking vision){
+    if(vision.LeftCatapultPitchToLim() < 5.4){
+      return true;
+    }
+    else{
+      return false;
     }
   }
 }

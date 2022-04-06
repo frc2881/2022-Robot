@@ -34,11 +34,11 @@ public class RotateByDegrees extends CommandBase {
     m_navx = navx;
     m_turn = turn;
     m_drive = drive;
-    kp = 0.07;
+    kp = 0.16;
     //SmartDashboard.putNumber("RotateByDegrees kp", kp);
-    ki = 0.0017;
-    //SmartDashboard.putNumber("RotateByDegrees ki", ki);
-    kd = 0.007;
+    ki = .001;
+    ///SmartDashboard.putNumber("RotateByDegrees ki", ki);
+    kd = 0.016;
     //SmartDashboard.putNumber("RotateByDegrees kd", kd);
     pid = new PIDController(kp, ki, kd);
 
@@ -63,15 +63,22 @@ public class RotateByDegrees extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(pidOn == false && target - m_navx.getAngle() > 7){
+    /*if(pidOn == false && target - m_navx.getAngle() > 7){
       m_drive.arcadeDrive(0, .5);} 
     else if(pidOn == false && target - m_navx.getAngle() < -7){
-      m_drive.arcadeDrive(0, -.5);}
-    else{
+      m_drive.arcadeDrive(0, -.5);}*/
     spin = pid.calculate(m_navx.getAngle());
-    m_drive.arcadeDrive(0, spin);
-    pidOn = true;}
-  }
+    if(spin > .5){
+      m_drive.arcadeDrive(0, .5);
+    }
+    else if(spin < -.5){
+      m_drive.arcadeDrive(0, -.5);
+    }
+    else{
+      m_drive.arcadeDrive(0, spin);
+    }
+    //pidOn = true;
+    }
 
   // Called once the command ends or is interrupted.
   @Override

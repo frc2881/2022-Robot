@@ -68,7 +68,7 @@ new WaitCommandNT(Auto.kStartingDel),
     new FollowTrajectory(drive, terminalToScore, false),
     new InstantCommand(() -> intake.run(0.0), intake),
     //new WaitCommand(0.1),
-    new Score(leftCatapult, rightCatapult, prettylights, null, null)
+    new Score(leftCatapult, rightCatapult, prettylights, null, null, null)
     );
   }
 }

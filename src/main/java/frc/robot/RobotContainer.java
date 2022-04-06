@@ -188,10 +188,10 @@ public class RobotContainer {
       whenPressed(new Eject(leftCatapult, rightCatapult));
 
     buttonFromDouble(() -> manipulatorController.getRightTriggerAxis()).
-      whenPressed(new Score(leftCatapult, rightCatapult, prettyLights, manipulatorController, intake));
+      whenPressed(new Score(leftCatapult, rightCatapult, prettyLights, manipulatorController, intake, visionTracking));
 
     buttonFromDouble(() -> manipulatorController.getLeftTriggerAxis()).
-      whenPressed(new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, manipulatorController, intake)); 
+      whenPressed(new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, manipulatorController, intake, visionTracking)); 
 
     new JoystickButton(manipulatorController, XboxController.Button.kStart.value).
       whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
