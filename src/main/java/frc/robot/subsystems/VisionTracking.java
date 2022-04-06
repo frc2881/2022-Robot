@@ -194,7 +194,7 @@ public class VisionTracking extends SubsystemBase {
                           { 6.5, -13.5 },//left:0.6 right:0.5
                           { 7.6, -18.4 },//0.5
                           { 8.6, -20.2 },//0.5
-                          { 8.1, -30.0 }};
+                          { 8.6, -30.0 }};
     for(int i = 1; i <= (pitches.length - 1); i++) {
       if(pitches[i][1] < savedPitch) {
         lowerPitch = pitches[i][1];
@@ -238,7 +238,7 @@ public class VisionTracking extends SubsystemBase {
                           { 6.25, -13.5 },
                           { 7.35, -18.4 },
                           { 8.45, -20.2 },
-                          { 8.0, -30.0}};
+                          { 8.45, -30.0}};
     for(int i = 1; i <= (pitches.length - 1); i++) {
       if(pitches[i][1] < pitch) {
         lowerPitch = pitches[i][1];
