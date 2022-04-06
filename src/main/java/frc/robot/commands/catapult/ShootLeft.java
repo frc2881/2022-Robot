@@ -17,7 +17,7 @@ public class ShootLeft extends CommandBase {
   }
 
   @Override
-  public void execute() {
+  public void initialize() {
     catapult.score();
   }
 

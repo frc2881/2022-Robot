@@ -20,6 +20,8 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -32,6 +34,8 @@ public class VisionTracking extends SubsystemBase {
   private final DoubleLogEntry m_logYaw;
   public ArrayList<Double> yawVals = new ArrayList<Double>();
   public ArrayList<Double> pitchVals = new ArrayList<Double>();
+  private double savedPitch; 
+  private double time;
 
   /** Creates a new VisionTracking. */
   public VisionTracking() {
@@ -172,24 +176,27 @@ public class VisionTracking extends SubsystemBase {
 
   public double LeftCatapultPitchToLim() {
     //PhotonTrackedTarget target = vision_camera.getLatestResult().getBestTarget();
-    double pitch = findPitchMedian();
+    savedPitch = findPitchMedian();
+    time = System.currentTimeMillis();
+
 
     if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
-       (pitch >= 1000)) {
+       (savedPitch >= 1000)) {
       return kForwardLimitLeft;}
 
     double lowerPitch = 0;
     double lowerLim = 0;
     double higherPitch = 0;
     double higherLim = 0;
-    double[][] pitches = {{ 4.2, 13.24 },
-                          { 4.9, 0.9 },
-                          { 5.4, -7.8 },
-                          { 5.9, -13.5 },
-                          { 7.1, -18.4 },
-                          { 8.1, -20.2 }};
+    double[][] pitches = {{ 4.7, 13.24 }, //0.75
+                          { 5.4, 0.9 },  //0.6
+                          { 5.9, -7.8 }, //0.6
+                          { 6.5, -13.5 },//left:0.6 right:0.5
+                          { 7.6, -18.4 },//0.5
+                          { 8.6, -20.2 },//0.5
+                          { 8.1, -30.0 }};
     for(int i = 1; i <= (pitches.length - 1); i++) {
-      if(pitches[i][1] < pitch) {
+      if(pitches[i][1] < savedPitch) {
         lowerPitch = pitches[i][1];
         lowerLim = pitches[i][0];
         higherPitch = pitches[i - 1][1];
@@ -198,14 +205,23 @@ public class VisionTracking extends SubsystemBase {
       }
     }
 
-    double limit = (pitch - lowerPitch) / (higherPitch - lowerPitch) * (higherLim - lowerLim) + lowerLim;
-    System.out.println("Left Limit: " + limit);
-    System.out.println("Left Pitch: " + pitch);
+    double limit = (savedPitch - lowerPitch) / (higherPitch - lowerPitch) * (higherLim - lowerLim) + lowerLim;
+    Log.log("Left Limit: " + limit);
+    Log.log("Left Pitch: " + savedPitch);
     return limit;
   }
 
   public double RightCatapultPitchToLim() {
-    double pitch = findPitchMedian();
+
+    double pitch; 
+
+    if(System.currentTimeMillis() < time + 500){
+      pitch = savedPitch;
+    }
+    else{
+      pitch = findPitchMedian();
+    }
+  
 
     if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
        (pitch >= 1000)) {
@@ -216,12 +232,13 @@ public class VisionTracking extends SubsystemBase {
     double lowerLim = 0;
     double higherPitch = 0;
     double higherLim = 0;
-    double[][] pitches = {{ 4.2, 13.24 },
-                          { 4.7, 0.9 },
-                          { 4.8, -7.8 }, //moved 5.15 to 5.1
-                          { 5.75, -13.5 },
-                          { 6.85, -18.4 },
-                          { 7.95, -20.2 }};
+    double[][] pitches = {{ 4.7, 13.24 },
+                          { 5.2, 0.9 },
+                          { 5.3, -7.8 }, //moved 5.15 to 5.1
+                          { 6.25, -13.5 },
+                          { 7.35, -18.4 },
+                          { 8.45, -20.2 },
+                          { 8.0, -30.0}};
     for(int i = 1; i <= (pitches.length - 1); i++) {
       if(pitches[i][1] < pitch) {
         lowerPitch = pitches[i][1];
@@ -233,8 +250,8 @@ public class VisionTracking extends SubsystemBase {
     }
 
     double limit = (pitch - lowerPitch) / (higherPitch - lowerPitch) * (higherLim - lowerLim) + lowerLim;
-    System.out.println("Right Limit: " + limit);
-    System.out.println("Right Pitch: " + pitch);
+    Log.log("Right Limit: " + limit);
+    Log.log("Right Pitch: " + pitch);
     return limit;
   }
 
