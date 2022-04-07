@@ -192,13 +192,13 @@ public class VisionTracking extends SubsystemBase {
     double lowerLim = 0;
     double higherPitch = 0;
     double higherLim = 0;
-    double[][] pitches = {{ 4.7-0.6, 13.24 }, //0.75
-                          { 5.4-0.6, 0.9 },  //0.6
-                          { 5.9-0.6, -7.8 }, //0.6
-                          { 6.5-0.4, -13.5 },//left:0.6 right:0.5
-                          { 7.6-0.4, -18.4 },//0.5
-                          { 8.6-0.4, -20.2 },//0.5
-                          { 8.6-0.4, -30.0 }};
+    double[][] pitches = {{ 4.7-0.4, 13.24 }, //0.75
+                          { 5.4-0.4, 0.9 },  //0.6
+                          { 5.9-0.4, -7.8 }, //0.6
+                          { 6.5-0.2, -13.5 },//left:0.6 right:0.5
+                          { 7.6-0.2, -18.4 },//0.5
+                          { 8.6-0.2, -20.2 },//0.5
+                          { 8.6-0.2, -30.0 }};
     for(int i = 1; i <= (pitches.length - 1); i++) {
       if(pitches[i][1] < savedPitch) {
         lowerPitch = pitches[i][1];
