@@ -180,6 +180,7 @@ public class VisionTracking extends SubsystemBase {
     time = System.currentTimeMillis();
 
     vision_camera.takeInputSnapshot();
+    vision_camera.takeOutputSnapshot();
 
 
     if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
