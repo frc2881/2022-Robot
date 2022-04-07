@@ -23,7 +23,7 @@ public class Score extends SequentialCommandGroup {
                PrettyLights prettyLights,
                XboxController manipulatorController, Intake intake, VisionTracking vision) {
     if(intake != null){
-      addCommands(new InstantCommand(() -> intake.extend(), intake));
+      addCommands(new InstantCommand(() -> intake.shootExtend(), intake));
     }
 
     addCommands(
@@ -35,7 +35,7 @@ public class Score extends SequentialCommandGroup {
       new RumbleYes(prettyLights, null, manipulatorController));
      
     if(intake != null){
-       addCommands(new InstantCommand(() -> intake.retract(), intake));
+       addCommands(new InstantCommand(() -> intake.shootRetract(), intake));
     }
   }
 

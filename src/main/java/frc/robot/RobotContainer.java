@@ -26,6 +26,7 @@ import frc.robot.commands.autonomous.AutoD;
 import frc.robot.commands.autonomous.RightR;
 import frc.robot.commands.catapult.CatapultOverrride;
 import frc.robot.commands.catapult.Eject;
+import frc.robot.commands.catapult.NoVision;
 import frc.robot.commands.catapult.Score;
 import frc.robot.commands.catapult.ScoreNoColor;
 import frc.robot.commands.climber.ClimberOverride;
@@ -167,6 +168,10 @@ public class RobotContainer {
     buttonFromDouble(() -> driverController.getLeftTriggerAxis() + driverController.getRightTriggerAxis()).
       whenHeld(new AimAtHub(navx, drive, () -> visionTracking.getYaw(), prettyLights, driverController, manipulatorController));
 
+    
+    new JoystickButton(driverController, XboxController.Button.kRightBumper.value).
+      whileHeld(new NoVision(visionTracking));
+      
     // Manipulator Xbox Controller
 
     new JoystickButton(manipulatorController, XboxController.Button.kX.value).
