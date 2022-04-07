@@ -179,6 +179,8 @@ public class VisionTracking extends SubsystemBase {
     savedPitch = findPitchMedian();
     time = System.currentTimeMillis();
 
+    vision_camera.takeInputSnapshot();
+
 
     if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
        (savedPitch >= 1000)) {
@@ -188,13 +190,13 @@ public class VisionTracking extends SubsystemBase {
     double lowerLim = 0;
     double higherPitch = 0;
     double higherLim = 0;
-    double[][] pitches = {{ 4.7, 13.24 }, //0.75
-                          { 5.4, 0.9 },  //0.6
-                          { 5.9, -7.8 }, //0.6
-                          { 6.5, -13.5 },//left:0.6 right:0.5
-                          { 7.6, -18.4 },//0.5
-                          { 8.6, -20.2 },//0.5
-                          { 8.6, -30.0 }};
+    double[][] pitches = {{ 4.7-0.6, 13.24 }, //0.75
+                          { 5.4-0.6, 0.9 },  //0.6
+                          { 5.9-0.6, -7.8 }, //0.6
+                          { 6.5-0.4, -13.5 },//left:0.6 right:0.5
+                          { 7.6-0.4, -18.4 },//0.5
+                          { 8.6-0.4, -20.2 },//0.5
+                          { 8.6-0.4, -30.0 }};
     for(int i = 1; i <= (pitches.length - 1); i++) {
       if(pitches[i][1] < savedPitch) {
         lowerPitch = pitches[i][1];
@@ -232,13 +234,13 @@ public class VisionTracking extends SubsystemBase {
     double lowerLim = 0;
     double higherPitch = 0;
     double higherLim = 0;
-    double[][] pitches = {{ 4.7, 13.24 },
-                          { 5.2, 0.9 },
-                          { 5.3, -7.8 }, //moved 5.15 to 5.1
-                          { 6.25, -13.5 },
-                          { 7.35, -18.4 },
-                          { 8.45, -20.2 },
-                          { 8.45, -30.0}};
+    double[][] pitches = {{ 4.7-0.6, 13.24 },
+                          { 5.2-0.6, 0.9 },
+                          { 5.3-0.6, -7.8 }, //moved 5.15 to 5.1
+                          { 6.25-0.4, -13.5 },
+                          { 7.35-0.4, -18.4 },
+                          { 8.45-0.4, -20.2 },
+                          { 8.45-0.4, -30.0}};
     for(int i = 1; i <= (pitches.length - 1); i++) {
       if(pitches[i][1] < pitch) {
         lowerPitch = pitches[i][1];

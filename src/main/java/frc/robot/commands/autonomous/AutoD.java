@@ -23,6 +23,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
+import frc.robot.subsystems.VisionTracking;
 import frc.robot.utils.NavX;
 import static frc.robot.Constants.Catapult.kShootTimeDelay;
 
@@ -42,7 +43,8 @@ public class AutoD extends SequentialCommandGroup {
     Trajectory autoD,
     Trajectory cargo2ToTerminal,
     Trajectory backUpTerminal,
-    Trajectory terminalToScore
+    Trajectory terminalToScore,
+    VisionTracking vision
   ) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
@@ -68,7 +70,7 @@ new WaitCommandNT(Auto.kStartingDel),
     new FollowTrajectory(drive, terminalToScore, false),
     new InstantCommand(() -> intake.run(0.0), intake),
     //new WaitCommand(0.1),
-    new Score(leftCatapult, rightCatapult, prettylights, null, null, null)
+    new Score(leftCatapult, rightCatapult, prettylights, null, null, vision)
     );
   }
 }
