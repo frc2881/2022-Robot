@@ -209,7 +209,6 @@ public class RobotContainer {
     if(robotResetState == true) {
       climber.reset();
       drive.reset();
-      intake.reset();
       leftCatapult.reset();
       rightCatapult.reset();
       powerHub.setSwitchableChannel(true);
@@ -220,7 +219,8 @@ public class RobotContainer {
 
   public void resetLights() {
     prettyLights.reset();
-  }
+    intake.reset();
+    }
 
   public void robotShouldReset() {
     robotResetState = true;
