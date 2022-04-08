@@ -17,7 +17,7 @@ public class EjectLeft extends CommandBase {
   }
 
   @Override
-  public void execute() {
+  public void initialize() {
     catapult.eject();
   }
 

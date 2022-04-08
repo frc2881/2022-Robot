@@ -140,6 +140,8 @@ public class RightCatapult extends SubsystemBase {
   }
 
   public void eject() {
+    limit = kForwardLimitRight;
+    m_catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) limit);
     run(kEjectVoltage);
   }
 
