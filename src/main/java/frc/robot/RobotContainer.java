@@ -71,6 +71,7 @@ public class RobotContainer {
   //Left Paths
   private final Trajectory autoB;
   private final Trajectory toStrategicCargo;
+  private final Trajectory straight;
 
   //Right Paths
   private final Trajectory rightPath;
@@ -107,6 +108,7 @@ public class RobotContainer {
 
     //Left Tarmac
     autoB = PathPlanner2.loadPath("AutoB", maxVelocity, maxAcceleration);
+    straight = PathPlanner2.loadPath("Straight", maxVelocity, maxAcceleration);
     toStrategicCargo = PathPlanner2.loadPath("ToStrategicCargo", maxVelocity, maxAcceleration, true);    
     backUpStrategic = PathPlanner2.loadPath("BackUpStrategic", maxVelocity, maxAcceleration, true);
 
