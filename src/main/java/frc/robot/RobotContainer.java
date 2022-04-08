@@ -130,7 +130,7 @@ public class RobotContainer {
     //m_chooser.addOption("Auto Right", new RightR(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightPath, toTerminal, terminalToScore));
     m_chooser.setDefaultOption("Auto D", new AutoD(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, autoD, cargo2ToTerminal, backUpTerminal, terminalToScore, visionTracking));
     m_chooser.addOption("Auto B", new AutoB(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, autoB, toStrategicCargo, backUpStrategic));
-    m_chooser.addOption("Auto Simple", new AutoSimple(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightL));
+    m_chooser.addOption("Auto Simple", new AutoSimple(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, straight));
     m_chooser.addOption("Do Nothing", null);
 
     //Delays between the Autonomouses

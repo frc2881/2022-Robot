@@ -37,7 +37,7 @@ public class AutoSimple extends SequentialCommandGroup {
   RightCatapult rightCatapult, 
   PrettyLights prettylights, 
   XboxController controller, 
-  Trajectory rightL) {
+  Trajectory straight) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -46,7 +46,7 @@ public class AutoSimple extends SequentialCommandGroup {
       new InstantCommand(() -> prettylights.lightShow(), prettylights),
       new WaitCommand(0.1),
       new InstantCommand(() -> intake.run(1.0), intake),
-      new FollowTrajectory(drive, rightL, true),
+      new FollowTrajectory(drive, straight, true),
       new WaitCommand(0.5),
       new InstantCommand(() -> intake.run(0), intake),
       new WaitCommand(0.50),
