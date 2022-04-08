@@ -236,10 +236,10 @@ public class VisionTracking extends SubsystemBase {
     double lowerLim = 0;
     double higherPitch = 0;
     double higherLim = 0;
-    double[][] pitches = {{ 4.7-0.6, 13.24 },
-                          { 5.2-0.6, 0.9 },
-                          { 5.3-0.6, -7.8 }, //moved 5.15 to 5.1
-                          { 6.25-0.4, -13.5 },
+    double[][] pitches = {{ 4.7-0.4, 13.24 },
+                          { 5.2-0.4, 0.9 },
+                          { 5.3-0.4, -7.8 }, //moved 5.15 to 5.1
+                          { 6.25-0.2, -13.5 },
                           { 7.35-0.4, -18.4 },
                           { 8.45-0.4, -20.2 },
                           { 8.45-0.4, -30.0}};
