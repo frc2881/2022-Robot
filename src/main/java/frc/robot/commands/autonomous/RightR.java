@@ -20,6 +20,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
+import frc.robot.subsystems.VisionTracking;
 import frc.robot.utils.NavX;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -37,7 +38,8 @@ public class RightR extends SequentialCommandGroup {
     XboxController driverController, 
     Trajectory rightPath,
     Trajectory toTerminal,
-    Trajectory terminalToScore) 
+    Trajectory terminalToScore,
+    VisionTracking vision) 
         {
     addCommands(  
 new WaitCommandNT(Auto.kStartingDel),
@@ -52,7 +54,7 @@ new WaitCommandNT(Auto.kSecondDel),
     new WaitCommand(0.5),
     new InstantCommand(() -> intake.extend(), intake),
     new WaitCommand(1.2),
-    new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, null, null, null),
+    new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, null, null, vision),
 new WaitCommandNT(Auto.kThirdDel),
     //new WaitCommand(0.1),
     new InstantCommand(() -> intake.run(1.0), intake),
@@ -62,7 +64,7 @@ new WaitCommandNT(Auto.kThirdDel),
     new InstantCommand(() -> intake.run(0.0), intake),
     //new RotateByDegrees(navx, drive, () -> visionTracking.getYaw())
     new WaitCommand(0.25),
-    new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, null, null, null)
+    new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, null, null, vision)
 );
   }
 }

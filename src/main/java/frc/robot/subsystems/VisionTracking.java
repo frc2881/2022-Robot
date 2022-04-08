@@ -36,6 +36,7 @@ public class VisionTracking extends SubsystemBase {
   public ArrayList<Double> pitchVals = new ArrayList<Double>();
   private double savedPitch; 
   private double time;
+  private boolean disableVis = false;
 
   /** Creates a new VisionTracking. */
   public VisionTracking() {
@@ -63,7 +64,7 @@ public class VisionTracking extends SubsystemBase {
 
     target = vision_camera.getLatestResult().getBestTarget();
 
-    if(SmartDashboard.getBoolean("Disable Vision", false) == true) {
+    if(SmartDashboard.getBoolean("Disable Vision", false) == true || disableVis == true) {
       // possibly want different outcome
       pitch = 1000;
       yaw = 0;
@@ -142,7 +143,7 @@ public class VisionTracking extends SubsystemBase {
 
     target = vision_camera.getLatestResult().getBestTarget();
 
-    if(SmartDashboard.getBoolean("Disable Vision", false) == true) {
+    if(SmartDashboard.getBoolean("Disable Vision", false) == true || disableVis == true) {
       // possibly want different outcome
       pitch = 1000;
     } else if(target == null) {
@@ -179,22 +180,25 @@ public class VisionTracking extends SubsystemBase {
     savedPitch = findPitchMedian();
     time = System.currentTimeMillis();
 
+    vision_camera.takeInputSnapshot();
+    vision_camera.takeOutputSnapshot();
+
 
     if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
-       (savedPitch >= 1000)) {
+       (savedPitch >= 1000) || disableVis == true) {
       return kForwardLimitLeft;}
 
     double lowerPitch = 0;
     double lowerLim = 0;
     double higherPitch = 0;
     double higherLim = 0;
-    double[][] pitches = {{ 4.7, 13.24 }, //0.75
-                          { 5.4, 0.9 },  //0.6
-                          { 5.9, -7.8 }, //0.6
-                          { 6.5, -13.5 },//left:0.6 right:0.5
-                          { 7.6, -18.4 },//0.5
-                          { 8.6, -20.2 },//0.5
-                          { 8.6, -30.0 }};
+    double[][] pitches = {{ 4.7-0.4, 13.24 }, //0.75
+                          { 5.4-0.4, 0.9 },  //0.6
+                          { 5.9-0.4, -7.8 }, //0.6
+                          { 6.5-0.2, -13.5 },//left:0.6 right:0.5
+                          { 7.6-0.2, -18.4 },//0.5
+                          { 8.6-0.2, -20.2 },//0.5
+                          { 8.6-0.2, -30.0 }};
     for(int i = 1; i <= (pitches.length - 1); i++) {
       if(pitches[i][1] < savedPitch) {
         lowerPitch = pitches[i][1];
@@ -224,7 +228,7 @@ public class VisionTracking extends SubsystemBase {
   
 
     if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
-       (pitch >= 1000)) {
+       (pitch >= 1000) || disableVis == true) {
       return kForwardLimitRight;
     }
     
@@ -232,13 +236,13 @@ public class VisionTracking extends SubsystemBase {
     double lowerLim = 0;
     double higherPitch = 0;
     double higherLim = 0;
-    double[][] pitches = {{ 4.7, 13.24 },
-                          { 5.2, 0.9 },
-                          { 5.3, -7.8 }, //moved 5.15 to 5.1
-                          { 6.25, -13.5 },
-                          { 7.35, -18.4 },
-                          { 8.45, -20.2 },
-                          { 8.45, -30.0}};
+    double[][] pitches = {{ 4.7-0.6, 13.24 },
+                          { 5.2-0.6, 0.9 },
+                          { 5.3-0.6, -7.8 }, //moved 5.15 to 5.1
+                          { 6.25-0.4, -13.5 },
+                          { 7.35-0.4, -18.4 },
+                          { 8.45-0.4, -20.2 },
+                          { 8.45-0.4, -30.0}};
     for(int i = 1; i <= (pitches.length - 1); i++) {
       if(pitches[i][1] < pitch) {
         lowerPitch = pitches[i][1];
@@ -263,7 +267,7 @@ public class VisionTracking extends SubsystemBase {
   public double getYaw() {
     double yaw = findYawMedian();
 
-    if(SmartDashboard.getBoolean("Disable Vision", false) == true) {
+    if(SmartDashboard.getBoolean("Disable Vision", false) == true || disableVis == true) {
       // possibly want different outcome
       yaw = 0;
     } else if(yaw >= 1000) {
@@ -273,5 +277,13 @@ public class VisionTracking extends SubsystemBase {
     }
 
     return -yaw;
+  }
+
+  public void disableVFromController(){
+    disableVis = true;
+  }
+
+  public void enableVFromController(){
+    disableVis = false;
   }
 }
