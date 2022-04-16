@@ -28,6 +28,7 @@ public class PrettyLights extends SubsystemBase {
   private final double twinkles = -0.55;
   private final double colorwave = -0.45;
   private final double sinelon = -0.77;
+  private final double strobe = -0.05; 
   private final PowerDistribution m_powerHub;
   private final Spark m_feedback;
   private final Spark m_vision;
@@ -106,8 +107,20 @@ public class PrettyLights extends SubsystemBase {
       firstSat -= 2;
       if(firstSat <= 0){
         while(firstSat <= 128){
-          System.out.println("I am doing this");
+          //System.out.println("I am doing this");
           firstSat += 2;
+        }
+      }
+      }
+    
+    private void strobe() {
+      for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setHSV(i, 0, 240, firstSat);
+      }
+      firstSat -= 10;
+      if(firstSat <= 0){
+        while(firstSat <= 128){
+          firstSat += 10;
         }
       }
       }
@@ -215,7 +228,7 @@ public class PrettyLights extends SubsystemBase {
       m_logCurrent.append(m_powerHub.getCurrent(11));
     }
 
-    rainbow();
+    loading();
     m_led.setData(m_ledBuffer);
   }
 
