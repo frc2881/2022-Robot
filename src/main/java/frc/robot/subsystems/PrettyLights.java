@@ -141,6 +141,60 @@ public class PrettyLights extends SubsystemBase {
         m_ledBuffer.setHSV(((m_offset / 8) + 16 + 1) % 16, 60, 225, 32); //g
         m_ledBuffer.setHSV(((m_offset / 8) + 16 + 2) % 16, 165, 225, 32); //p
     }
+    private void blueallince(){
+      m_offset++;
+      if(m_offset % 8 !=0){
+        return;
+      }
+      for(var i = 0; i < m_ledBuffer.getLength(); i++){
+        m_ledBuffer.setHSV(i, 0, 0, 0);
+      }
+      m_ledBuffer.setHSV((m_offset / 8) % 16, 120, 225, 32);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 2) % 16, 120, 225, 32);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 4) % 16, 120, 225, 32);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 6) % 16, 120, 225, 32);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 8) % 16, 120, 225, 32);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 10) % 16, 120, 225, 32);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 12) % 16, 120, 225, 32);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 14) % 16, 120, 225, 32);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 16) % 16, 120, 225, 32);
+    }
+    private void redallince(){
+      m_offset++;
+      if(m_offset % 8 !=0){
+        return;
+      }
+      for(var i = 0; i < m_ledBuffer.getLength(); i++){
+        m_ledBuffer.setHSV(i, 0, 0, 0);
+      }
+      m_ledBuffer.setHSV((m_offset / 8) % 16, 120, 225, 32);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 2) % 16, 0, 255, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 4) % 16, 0, 255, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 6) % 16, 0, 255, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 8) % 16, 0, 255, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 10) % 16, 0, 255, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 12) % 16, 0, 255, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 14) % 16, 0, 255, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 16) % 16, 0, 255, 64);
+    }
+    private void pink(){
+      m_offset++;
+      if(m_offset % 8 !=0){
+        return;
+      }
+      for(var i = 0; i < m_ledBuffer.getLength(); i++){
+        m_ledBuffer.setHSV(i, 0, 0, 0);
+      }
+      m_ledBuffer.setHSV((m_offset / 8) % 16, 120, 225, 32);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 2) % 16, 0, 250, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 4) % 16, 0, 250, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 6) % 16, 0, 250, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 8) % 16, 0, 250, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 10) % 16, 0, 250, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 12) % 16, 0, 250, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 14) % 16, 0, 250, 64);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 16) % 16, 0, 250, 64);
+    }
     
 
   @Override
