@@ -208,6 +208,25 @@ public class PrettyLights extends SubsystemBase {
       m_ledBuffer.setHSV(((m_offset / 8) + 16 + 14) % 16, 0, 250, 64);
       m_ledBuffer.setHSV(((m_offset / 8) + 16 + 16) % 16, 0, 250, 64);
     }
+    private void radioactive(){
+      m_offset++;
+      if(m_offset % 8 !=0){
+        return;
+      }
+      for(var i = 0; i < m_ledBuffer.getLength(); i++){
+        m_ledBuffer.setHSV(i, 0, 0, 0);
+      }
+      m_ledBuffer.setHSV((m_offset / 8) % 16, 60, 255, 16);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 1) % 16, 60, 255, 16);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 3) % 16, 60, 255, 16);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 4) % 16, 60, 255, 16);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 6) % 16, 60, 255, 16);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 7) % 16, 60, 255, 16);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 9) % 16, 60, 255, 16);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 10) % 16, 60, 255, 16);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 12) % 16, 60, 255, 16);
+      m_ledBuffer.setHSV(((m_offset / 8) + 16 + 13) % 16, 60, 255, 16);
+    }
     
 
   @Override
@@ -228,7 +247,7 @@ public class PrettyLights extends SubsystemBase {
       m_logCurrent.append(m_powerHub.getCurrent(11));
     }
 
-    loading();
+    radioactive();
     m_led.setData(m_ledBuffer);
   }
 
