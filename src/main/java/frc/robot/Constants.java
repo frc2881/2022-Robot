@@ -342,5 +342,5 @@ public final class Constants {
   /**
    * Controls the logging of detailed information about the robot.
    */
-  public static final boolean kEnableDetailedLogging = false;
+  public static final boolean kEnableDetailedLogging = true;
 }
