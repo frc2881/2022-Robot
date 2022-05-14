@@ -72,6 +72,11 @@ public class PrettyLights extends SubsystemBase {
     m_led.start();
   }
 
+  private void defaultPink(){
+    for(var i = 0; i < m_ledBuffer.getLength(); i++)
+    m_ledBuffer.setHSV(i, 0, 250, 255);
+  }
+
   private void rainbow(){
     for(var i=0; i < m_ledBuffer.getLength(); i++){
       final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
@@ -247,7 +252,7 @@ public class PrettyLights extends SubsystemBase {
       m_logCurrent.append(m_powerHub.getCurrent(11));
     }
 
-    radioactive();
+    defaultPink();
     m_led.setData(m_ledBuffer);
   }
 
