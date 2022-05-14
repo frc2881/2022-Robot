@@ -67,14 +67,14 @@ public final class Constants {
      * move in the forward direction.  Adjusting this limit adjusts the launch
      * angle of the shot.
      */
-    public static final double kForwardLimitLeft = 4.25;
+    public static final double kForwardLimitLeft = 3.9;
 
     /**
      * The maximum distance (in rotations) that the right catapult motor can
      * move in the forward direction.  Adjusting this limit adjusts the launch
      * angle of the shot.
      */
-    public static final double kForwardLimitRight = 4.0;
+    public static final double kForwardLimitRight = 3.65;
 
     /**
      * The minimum distance (in rotations) that the catapult motor can move in
@@ -108,7 +108,7 @@ public final class Constants {
 
     public static final double kShootTimeDelayNear = 0.3;
 
-    public static final double kShootTimeDelayFar = 0.15;
+    public static final double kShootTimeDelayFar = 0.2;
 
     public static final double kLeftLowDist = 10.767;
 

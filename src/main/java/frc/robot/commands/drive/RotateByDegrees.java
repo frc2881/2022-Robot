@@ -34,6 +34,7 @@ public class RotateByDegrees extends CommandBase {
     m_navx = navx;
     m_turn = turn;
     m_drive = drive;
+    addRequirements(m_drive);
     kp = 0.16;
     //SmartDashboard.putNumber("RotateByDegrees kp", kp);
     ki = .001;

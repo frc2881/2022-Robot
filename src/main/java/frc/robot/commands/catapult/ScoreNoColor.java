@@ -26,7 +26,7 @@ public class ScoreNoColor extends SequentialCommandGroup {
                       XboxController manipulatorController, Intake intake, VisionTracking vision) {
                         
    if(intake != null){
-        addCommands(new InstantCommand(() -> intake.extend(), intake));
+        addCommands(new InstantCommand(() -> intake.shootExtend(), intake));
     }
     
     addCommands(
@@ -37,7 +37,7 @@ public class ScoreNoColor extends SequentialCommandGroup {
     new RumbleYes(prettyLights, null, manipulatorController));
     
     if(intake != null){
-      addCommands(new InstantCommand(() -> intake.retract(), intake));
+      addCommands(new InstantCommand(() -> intake.shootRetract(), intake));
     }
   }
   public boolean smallLim(VisionTracking vision){

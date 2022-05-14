@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Log;
 
 public class Intake extends SubsystemBase {
   private final CANSparkMax m_intake;
@@ -31,7 +32,9 @@ public class Intake extends SubsystemBase {
   private final DoubleLogEntry m_logBusVoltage;
   private final DoubleLogEntry m_logCurrent;
   private final BooleanLogEntry m_logSolenoid;
-  private int counter = 0;
+  private boolean shootExtend = false;
+  private boolean buttonExtend = false;
+  //private int counter = 0;
 
   public Intake() {
     m_intake = new CANSparkMax(kMotor, MotorType.kBrushless);
@@ -67,7 +70,8 @@ public class Intake extends SubsystemBase {
 
   public void reset() {
     run(0.0);
-    counter = 1; 
+    shootExtend = false;
+    buttonExtend = false;
     retract();
   }
 
@@ -83,23 +87,35 @@ public class Intake extends SubsystemBase {
   }
 
   public void extend() {
-    System.out.println(counter);
-    if(counter == 0){
+    buttonExtend = true;
       m_solenoid.set(true);
       if(kEnableDetailedLogging) {
         m_logSolenoid.append(m_solenoid.get());
       }
-    }
-    counter++;
   }
 
   public void retract() {
-    System.out.println(counter);
-    if(counter > 0){
-    counter--;
+    buttonExtend = false;
+      if(shootExtend == false){
+              m_solenoid.set(false);
+      if(kEnableDetailedLogging) {
+        m_logSolenoid.append(m_solenoid.get());
+      }
     }
-    if(counter == 0){ 
-      m_solenoid.set(false);
+  }
+
+  public void shootExtend() {
+    shootExtend = true;
+      m_solenoid.set(true);
+      if(kEnableDetailedLogging) {
+        m_logSolenoid.append(m_solenoid.get());
+      }
+  }
+
+  public void shootRetract() {
+    shootExtend = false;
+      if(buttonExtend == false){
+              m_solenoid.set(false);
       if(kEnableDetailedLogging) {
         m_logSolenoid.append(m_solenoid.get());
       }
