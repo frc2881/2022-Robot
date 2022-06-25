@@ -105,7 +105,7 @@ public class VisionTracking extends SubsystemBase {
   public double computePitch(){
     for(int i = 0; i < 7; i++) {
       m_pitchCopy[i] = m_pitchHistory[i];
-    }
+    } 
     Arrays.sort(m_pitchCopy);
 
     double q1 = m_pitchCopy[1];
@@ -130,6 +130,7 @@ public class VisionTracking extends SubsystemBase {
     }
 
     return sum / count;
+    
   }
 
   public double computeYaw(){
@@ -162,13 +163,13 @@ public class VisionTracking extends SubsystemBase {
     return sum / count;
   }
 
-  private final double[][] m_leftPitchToLim = { { 13.24, 4.7-0.4 }, //0.75
-                                                { 0.9, 5.4-0.4 },  //0.6
-                                                { -7.8, 5.9-0.4 }, //0.6
-                                                { -13.5, 6.5-0.2 },//left:0.6 right:0.5
-                                                { -18.4, 7.6-0.2 },//0.5
-                                                { -20.2, 8.6-0.2 },//0.5
-                                                { -30.0, 8.6-0.2 } };
+  private final double[][] m_leftPitchToLim = { { 13.24, 4.7 }, 
+                                                { 0.9, 5.5 },  
+                                                { -7.8, 5.9 }, 
+                                                { -13.5, 6.8 },
+                                                { -18.4, 8.1 },
+                                                { -20.2, 8.8 },
+                                                { -30.0, 8.8 } };
 
   public double LeftCatapultPitchToLim() {
     double pitch;
@@ -209,13 +210,13 @@ public class VisionTracking extends SubsystemBase {
     return limit;
   }
 
-  private final double[][] m_rightPitchToLim = { { 13.24, 4.7-0.4 },
-                                                 { 0.9, 5.2-0.4 },
-                                                 { -7.8, 5.3-0.4 }, //moved 5.15 to 5.1
-                                                 { -13.5, 6.25-0.2 },
-                                                 { -18.4, 7.35-0.4 },
-                                                 { -20.2, 8.45-0.4 },
-                                                 { -30.0, 8.45-0.4 } };
+  private final double[][] m_rightPitchToLim = { { 13.24, 4.7 },
+                                                 { 0.9, 5.4 },
+                                                 { -7.8, 5.9 },
+                                                 { -13.5, 6.7 },
+                                                 { -18.4, 8 },
+                                                 { -20.2, 8.8 },
+                                                 { -30.0, 8.8 } };
 
   public double RightCatapultPitchToLim() {
     double pitch; 
