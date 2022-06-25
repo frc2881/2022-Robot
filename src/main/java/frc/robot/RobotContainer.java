@@ -8,7 +8,6 @@ package frc.robot;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -28,7 +27,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.commands.autonomous.AutoB;
 import frc.robot.commands.autonomous.AutoD;
 import frc.robot.commands.autonomous.AutoSimple;
-import frc.robot.commands.autonomous.RightR;
 import frc.robot.commands.catapult.CatapultOverrride;
 import frc.robot.commands.catapult.Eject;
 import frc.robot.commands.catapult.NoVision;
@@ -38,9 +36,8 @@ import frc.robot.commands.climber.ClimberOverride;
 import frc.robot.commands.climber.FirstClimberSequence;
 import frc.robot.commands.climber.RunArm;
 import frc.robot.commands.climber.SecondClimberSequence;
-import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.AimAtHub;
-import frc.robot.commands.drive.RotateByDegrees;
+import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.feedback.RumbleNo;
 import frc.robot.commands.feedback.RumbleYes;
 import frc.robot.commands.intake.ExtendIntake;
@@ -55,7 +52,7 @@ import frc.robot.subsystems.RightCatapult;
 import frc.robot.subsystems.VisionTracking;
 import frc.robot.utils.Log;
 import frc.robot.utils.NavX;
-import frc.robot.utils.PathPlanner.PathPlanner2;
+import frc.robot.utils.Trajectories;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -74,22 +71,6 @@ public class RobotContainer {
   private final RightCatapult rightCatapult = new RightCatapult(visionTracking);
   private final Drive drive = new Drive(navx);
  
-  //Left Paths
-  private final Trajectory autoB;
-  private final Trajectory toStrategicCargo;
-  private final Trajectory straight;
-  private final Trajectory rightL;
-
-  //Right Paths
-  private final Trajectory rightPath;
-  private final Trajectory toTerminal;
-  private final Trajectory terminalToScore;
-  private final Trajectory autoD;
-  private final Trajectory cargo2ToTerminal;
-  private final Trajectory backUpTerminal;
-  private final Trajectory backUpTerminalToScore;
-  private final Trajectory backUpStrategic;
-
   private final SendableChooser<Command> m_chooser;
 
   public boolean robotResetState = true;
@@ -106,35 +87,19 @@ public class RobotContainer {
     () -> applyDeadband(-manipulatorController.getLeftY())
     );
 
+    double[] m_temp = new double[7];
+  
   public RobotContainer() {
-
     powerHub.setSwitchableChannel(false);
-    
-    double maxVelocity = 3;
-    double maxAcceleration = 2;
 
-    //Left Tarmac
-    autoB = PathPlanner2.loadPath("AutoB", maxVelocity, maxAcceleration);
-    straight = PathPlanner2.loadPath("Straight", maxVelocity, maxAcceleration);
-    rightL = PathPlanner2.loadPath("RightL", maxVelocity, maxAcceleration);
-    toStrategicCargo = PathPlanner2.loadPath("ToStrategicCargo", maxVelocity, maxAcceleration, true);    
-    backUpStrategic = PathPlanner2.loadPath("BackUpStrategic", maxVelocity, maxAcceleration, true);
-
-    //Right Tarmac
-    rightPath = PathPlanner2.loadPath("RightR", maxVelocity, maxAcceleration);
-    toTerminal = PathPlanner2.loadPath("ToTerminal", 4, maxAcceleration);
-    terminalToScore = PathPlanner2.loadPath("TerminalToScore", 4, maxAcceleration, true);
-    autoD = PathPlanner2.loadPath("RightL", maxVelocity, maxAcceleration);
-    cargo2ToTerminal = PathPlanner2.loadPath("Cargo2ToTerminal", maxVelocity, maxAcceleration);
-    backUpTerminal = PathPlanner2.loadPath("BackUpTerminal", maxVelocity, maxAcceleration, true);
-    backUpTerminalToScore = PathPlanner2.loadPath("BackUpTerminalToScore", maxVelocity, maxAcceleration, true);
+    Trajectories.load();
 
     // A chooser for autonomous commands. This way we can choose between Paths for Autonomous Period.
     m_chooser = new SendableChooser<>();
-    //m_chooser.addOption("Auto Right", new RightR(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, rightPath, toTerminal, terminalToScore));
-    m_chooser.setDefaultOption("Auto D", new AutoD(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, autoD, cargo2ToTerminal, backUpTerminal, terminalToScore, visionTracking));
-    m_chooser.addOption("Auto B", new AutoB(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, autoB, toStrategicCargo, backUpStrategic));
-    m_chooser.addOption("Auto Simple", new AutoSimple(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, straight));
+    //m_chooser.addOption("Auto Right", new RightR(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController));
+    m_chooser.setDefaultOption("Auto D", new AutoD(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController, visionTracking));
+    m_chooser.addOption("Auto B", new AutoB(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController));
+    m_chooser.addOption("Auto Simple", new AutoSimple(drive, intake, navx, leftCatapult, rightCatapult, prettyLights, driverController));
     m_chooser.addOption("Do Nothing", null);
 
     //Delays between the Autonomouses
@@ -177,10 +142,12 @@ public class RobotContainer {
 
     buttonFromDouble(() -> driverController.getLeftTriggerAxis() + driverController.getRightTriggerAxis()).
       whenHeld(new AimAtHub(navx, drive, () -> visionTracking.getYaw(), prettyLights, driverController, manipulatorController));
-
     
     new JoystickButton(driverController, XboxController.Button.kRightBumper.value).
       whileHeld(new NoVision(visionTracking));
+
+    new JoystickButton(driverController, XboxController.Button.kY.value).
+      whenPressed(new InstantCommand(() -> prettyLights.enableRing()));
       
     // Manipulator Xbox Controller
 

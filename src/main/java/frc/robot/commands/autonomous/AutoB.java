@@ -4,7 +4,8 @@
 
 package frc.robot.commands.autonomous;
 
-import edu.wpi.first.math.trajectory.Trajectory;
+import static frc.robot.Constants.Catapult.kShootTimeDelay;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -22,7 +23,7 @@ import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
 import frc.robot.utils.NavX;
-import static frc.robot.Constants.Catapult.kShootTimeDelay;
+import frc.robot.utils.Trajectories;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -36,18 +37,13 @@ public class AutoB extends SequentialCommandGroup {
     LeftCatapult leftCatapult, 
     RightCatapult rightCatapult, 
     PrettyLights prettylights, 
-    XboxController controller, 
-    Trajectory autoB,
-    Trajectory toStrategicCargo,
-    Trajectory backUpStrategic
-  ) {
+    XboxController controller) {
     addCommands(
   new WaitCommandNT(Auto.kStartingDel),
       new InstantCommand(() -> intake.extend(), intake),
-      new InstantCommand(() -> prettylights.lightShow(), prettylights),
       new WaitCommand(0.1),
       new InstantCommand(() -> intake.run(1.0), intake),
-      new FollowTrajectory(drive, autoB, true),
+      new FollowTrajectory(drive, Trajectories.get(Trajectories.autoB), true),
       new WaitCommand(0.5),
       new InstantCommand(() -> intake.run(0), intake),
       new WaitCommand(0.50),
@@ -58,9 +54,9 @@ public class AutoB extends SequentialCommandGroup {
           new ResetLeft(leftCatapult),
           new ResetRight(rightCatapult),
           new InstantCommand(() -> intake.run(0.1), intake), 
-          new FollowTrajectory(drive, toStrategicCargo, false)),
+          new FollowTrajectory(drive, Trajectories.get(Trajectories.toStrategicCargo), false)),
       new InstantCommand(() -> intake.runReverse(0.8), intake),
-      new FollowTrajectory(drive, backUpStrategic, false)
+      new FollowTrajectory(drive, Trajectories.get(Trajectories.backupStrategic), false)
     );
   }
 }
