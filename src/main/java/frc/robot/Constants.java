@@ -20,6 +20,16 @@ import frc.robot.utils.GearRatio;
  * classes) wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static final class RobotInfo {
+    public static final int kTeamNumber = 2881;
+  }
+
+  public static final class NetworkTables {
+    public static final String kSmartDashboardTableName = "SmartDashboard";
+    public static final String kBatteryInfoEntryKey = "Battery Info";
+  }
+
   /**
    * Configuration of the catapult subsystems.
    */

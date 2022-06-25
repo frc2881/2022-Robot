@@ -21,6 +21,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.networktables.EntryListenerFlags;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.commands.autonomous.AutoB;
 import frc.robot.commands.autonomous.AutoD;
 import frc.robot.commands.autonomous.AutoSimple;
@@ -140,8 +144,6 @@ public class RobotContainer {
     SmartDashboard.putNumber("Fourth Delay", 0);
     SmartDashboard.putNumber("Fifth Delay", 0);
 
-
-
     // Configure the button bindings
     configureButtonBindings();
 
@@ -166,6 +168,8 @@ public class RobotContainer {
 
     SmartDashboard.putBoolean("Disable Vision", disableVision);
     SmartDashboard.putNumber("Catapult Soft Limit", 0);
+
+    logBatteryInfo();
   }
 
   private void configureButtonBindings() {
@@ -279,5 +283,19 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
+  }
+
+  private void logBatteryInfo() {
+    if (SmartDashboard.containsKey(Constants.NetworkTables.kBatteryInfoEntryKey)) {
+      Log.batteryInfo(SmartDashboard.getString(Constants.NetworkTables.kBatteryInfoEntryKey, ""));
+    } else {
+      NetworkTableInstance networkTables = NetworkTableInstance.getDefault();
+      NetworkTable smartDashboard = networkTables.getTable(Constants.NetworkTables.kSmartDashboardTableName);
+      networkTables.startClientTeam(Constants.RobotInfo.kTeamNumber);
+      smartDashboard.addEntryListener(Constants.NetworkTables.kBatteryInfoEntryKey, (table, key, entry, value, flags) -> {
+        Log.batteryInfo(value.getValue().toString());
+        networkTables.stopClient();
+      }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+    }
   }
 }

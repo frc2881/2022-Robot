@@ -87,4 +87,13 @@ public final class Log {
       log("--> End command: " + name);
     }
   }
+
+  /**
+   * Logs the current battery information.
+   *
+   * @param batteryInfo is current battery info (string encoded)
+   */
+  public static void batteryInfo(String batteryInfo) {
+    log(">".repeat(10) + " Battery Info: " + batteryInfo + " " + "<".repeat(10));
+  }
 }
