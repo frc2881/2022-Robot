@@ -4,10 +4,11 @@
 
 package frc.robot.commands.autonomous;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.math.trajectory.Trajectory;
+import static frc.robot.Constants.Catapult.kShootTimeDelay;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.Auto;
 import frc.robot.commands.catapult.ResetLeft;
@@ -22,7 +23,7 @@ import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
 import frc.robot.utils.NavX;
-import static frc.robot.Constants.Catapult.kShootTimeDelay;
+import frc.robot.utils.Trajectories;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -36,17 +37,15 @@ public class AutoSimple extends SequentialCommandGroup {
   LeftCatapult leftCatapult, 
   RightCatapult rightCatapult, 
   PrettyLights prettylights, 
-  XboxController controller, 
-  Trajectory straight) {
+  XboxController controller) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new WaitCommandNT(Auto.kStartingDel),
       new InstantCommand(() -> intake.extend(), intake),
-      new InstantCommand(() -> prettylights.lightShow(), prettylights),
       new WaitCommand(0.1),
       new InstantCommand(() -> intake.run(1.0), intake),
-      new FollowTrajectory(drive, straight, true),
+      new FollowTrajectory(drive, Trajectories.get(Trajectories.straight), true),
       new WaitCommand(0.5),
       new InstantCommand(() -> intake.run(0), intake),
       new WaitCommand(0.50),

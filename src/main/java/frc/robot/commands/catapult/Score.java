@@ -4,6 +4,9 @@
 
 package frc.robot.commands.catapult;
 
+import static frc.robot.Constants.Catapult.kShootTimeDelayFar;
+import static frc.robot.Constants.Catapult.kShootTimeDelayNear;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -15,8 +18,6 @@ import frc.robot.subsystems.LeftCatapult;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
 import frc.robot.subsystems.VisionTracking;
-import static frc.robot.Constants.Catapult.kShootTimeDelayNear;
-import static frc.robot.Constants.Catapult.kShootTimeDelayFar;
 
 public class Score extends SequentialCommandGroup {
   public Score(LeftCatapult leftCatapult, RightCatapult rightCatapult,

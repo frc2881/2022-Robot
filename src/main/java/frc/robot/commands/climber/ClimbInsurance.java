@@ -42,14 +42,14 @@ public class ClimbInsurance extends CommandBase {
         }
         else if(roll < largestVal - 3){
           if(largestVal < 23){
-            if(m_prettyLights.isPartyColor() == false){
+            //if(m_prettyLights.isPartyColor() == false){
             m_prettyLights.greenColor();
-            }
+            //}
             safe = true;
           } else{
-            if(m_prettyLights.isPartyColor() == false){
+            //if(m_prettyLights.isPartyColor() == false){
             m_prettyLights.redColor();
-            }
+            //}
             safe = false;
           }
           back = false;
@@ -62,14 +62,14 @@ public class ClimbInsurance extends CommandBase {
         }
         else if(roll > largestVal + 3){
           if(largestVal > -24){
-            if(m_prettyLights.isPartyColor() == false){
+            //if(m_prettyLights.isPartyColor() == false){
             m_prettyLights.greenColor();
-            }
+            //}
             safe = true;
           } else{
-            if(m_prettyLights.isPartyColor() == false){
+            //if(m_prettyLights.isPartyColor() == false){
             m_prettyLights.redColor();
-            }
+            //}
             safe = false;
           }
           back = true;

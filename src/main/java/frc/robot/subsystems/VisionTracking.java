@@ -8,11 +8,11 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.kEnableDetailedLogging;
 import static frc.robot.Constants.Catapult.kForwardLimitLeft;
 import static frc.robot.Constants.Catapult.kForwardLimitRight;
-import static frc.robot.Constants.Catapult.kLeftHighDist;
-import static frc.robot.Constants.Catapult.kLeftHighLim;
-import static frc.robot.Constants.Catapult.kLeftLowDist;
+
+import java.util.Arrays;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.util.datalog.DataLog;
@@ -22,24 +22,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Log;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 public class VisionTracking extends SubsystemBase {
-  private final PhotonCamera vision_camera = new PhotonCamera("photonvision");
-  private final PhotonCamera front_camera = new PhotonCamera("frontCamera");
+  private final PhotonCamera m_visionCamera = new PhotonCamera("photonvision");
+  private final PhotonCamera m_frontCamera = new PhotonCamera("frontCamera");
   private final DoubleLogEntry m_logArea;
   private final DoubleLogEntry m_logPitch;
   private final DoubleLogEntry m_logSkew;
   private final DoubleLogEntry m_logYaw;
-  public ArrayList<Double> yawVals = new ArrayList<Double>();
-  public ArrayList<Double> pitchVals = new ArrayList<Double>();
-  private double savedPitch; 
-  private double time;
-  private boolean disableVis = false;
+  private final double[] m_yawHistory = new double[7];
+  private final double[] m_yawCopy = new double[7];
+  private final double[] m_pitchHistory = new double[7];
+  private final double[] m_pitchCopy = new double[7];
+  private double m_savedPitch; 
+  private double m_savedTime;
+  private boolean m_disableVis = false;
 
   /** Creates a new VisionTracking. */
   public VisionTracking() {
+    //NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    //NetworkTable table = inst.getTable("test");
+    //NetworkTableEntry entry = table.getEntry("test");
+    //entry.getLastChange();
 
     if(kEnableDetailedLogging) {
       DataLog log = DataLogManager.getLog();
@@ -57,233 +60,222 @@ public class VisionTracking extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+    PhotonPipelineResult result;
     PhotonTrackedTarget target;
     double pitch;
     double yaw;
 
-    target = vision_camera.getLatestResult().getBestTarget();
-
-    if(SmartDashboard.getBoolean("Disable Vision", false) == true || disableVis == true) {
-      // possibly want different outcome
-      pitch = 1000;
-      yaw = 0;
-    } else if(target == null) {
-      pitch = 1000;
-      yaw = 0;
-    } else {
+    result = m_visionCamera.getLatestResult();
+    if(result.hasTargets()) {
+      target = result.getBestTarget();
       pitch = target.getPitch();
       yaw = target.getYaw();
-    }
 
+      if(kEnableDetailedLogging) {
+        m_logArea.append(target.getArea());
+        m_logPitch.append(pitch);
+        m_logSkew.append(target.getSkew());
+        m_logYaw.append(yaw);
+      }
+    } else {
+      pitch = 1000;
+      yaw = 0;
+    }
+    
     SmartDashboard.putNumber("Photon Vision Pitch", pitch);
     SmartDashboard.putNumber("Photon Vision Yaw", yaw);
-
-    if(kEnableDetailedLogging) {
-      if(target != null) {
-        m_logArea.append(target.getArea());
-        m_logPitch.append(target.getPitch());
-        m_logSkew.append(target.getSkew());
-        m_logYaw.append(target.getYaw());
-      }
-    }
   
-    yawVals.add(yaw);
-    pitchVals.add(pitch);
-    while(yawVals.size() > 5)
-    yawVals.remove(0);
-    while(pitchVals.size() > 5)
-    pitchVals.remove(0);
+    System.arraycopy(m_pitchHistory, 1, m_pitchHistory, 0, 6);
+    System.arraycopy(m_yawHistory, 1, m_yawHistory, 0, 6);
+
+    m_pitchHistory[6] = pitch;
+    m_yawHistory[6] = yaw;
   }
   
   public void reset(){
-    vision_camera.setDriverMode(false);
-    front_camera.setDriverMode(true);
-  }
+    m_visionCamera.setDriverMode(false);
+    m_frontCamera.setDriverMode(true);
 
-  public double findYawMedian(){
-    ArrayList<Double> yawValsCopy = (ArrayList<Double>)yawVals.clone();
-    Collections.sort(yawValsCopy);
-    if (yawVals.size() == 0)
-            return 0;
-    if (yawVals.size() % 2 == 1)
-            return yawValsCopy.get((yawValsCopy.size() + 1) / 2 - 1);
-        else{
-            double lower = yawValsCopy.get(yawValsCopy.size() / 2 - 1);
-            double upper = yawValsCopy.get(yawValsCopy.size() / 2);
-
-            return (lower + upper) / 2.0;
-        }
-    }
-
-  public double findPitchMedian(){
-    ArrayList<Double> pitchValsCopy = (ArrayList<Double>)pitchVals.clone();
-    Collections.sort(pitchValsCopy);
-
-    if (pitchVals.size() == 0)
-            return 0;
-    if (pitchVals.size() % 2 == 1)
-            return pitchValsCopy.get((pitchValsCopy.size() + 1) / 2 - 1);
-        else {
-            double lower = pitchValsCopy.get(pitchValsCopy.size() / 2 - 1);
-            double upper = pitchValsCopy.get(pitchValsCopy.size() / 2);
-
-            return (lower + upper) / 2.0;
+    for(int i = 0; i < 7; i++) {
+      m_yawHistory[i] = 0.0;
+      m_pitchHistory[i] = 1000.0;
     }
   }
 
-  public double CatapultDistToLim(double targetDist) {
-    double limit = ((targetDist - kLeftLowDist) / (kLeftHighDist - kLeftLowDist) * (kLeftHighLim - kForwardLimitLeft) + kForwardLimitLeft);
-    return limit;
-  }
+  public double computePitch(){
+    for(int i = 0; i < 7; i++) {
+      m_pitchCopy[i] = m_pitchHistory[i];
+    }
+    Arrays.sort(m_pitchCopy);
 
-  public void CatapultPitchToDist() {
-    PhotonTrackedTarget target;
-    double pitch;
+    double q1 = m_pitchCopy[1];
+    double q3 = m_pitchCopy[5];
 
-    target = vision_camera.getLatestResult().getBestTarget();
+    double iqr = q3 - q1;
 
-    if(SmartDashboard.getBoolean("Disable Vision", false) == true || disableVis == true) {
-      // possibly want different outcome
-      pitch = 1000;
-    } else if(target == null) {
-      pitch = 1000;
-    } else {
-      pitch = target.getPitch();
+    double sum = 0;
+    for(int i = 1; i < 6; i++) {
+      sum += m_pitchCopy[i];
+    }
+    int count = 5;
+
+    if(m_pitchCopy[6] < (q3 + (iqr * 1.5))) {
+      sum += m_pitchCopy[6];
+      count++;
     }
 
-    double lowerPitch = 0;
-    double lowerDist = 0;
-    double higherPitch = 0;
-    double higherDist = 0;
-    double[][] pitches = {{ 3.0, 13.1 },
-                          { 5.0, 0.78 },
-                          { 7.0, -7.8 },
-                          { 9.0, -13.75 },
-                          { 11.0, -18.1 },
-                          { 12, -20.45 }};
-    for(int i = 1; i <= (pitches.length - 1); i++) {
-      if(pitches[i][1] < pitch) {
-        lowerPitch = pitches[i][1];
-        lowerDist = pitches[i][0];
-        higherPitch = pitches[i - 1][1];
-        higherDist = pitches[i - 1][0];
-        break;
-      }
+    if(m_pitchCopy[0] > (q1 - (iqr * 1.5))) {
+      sum += m_pitchCopy[0];
+      count++;
     }
 
-    this.CatapultDistToLim(((pitch - lowerPitch) / (higherPitch - lowerPitch) * (higherDist - lowerDist) + lowerDist));
+    return sum / count;
   }
+
+  public double computeYaw(){
+    for(int i = 0; i < 7; i++) {
+      m_yawCopy[i] = m_yawHistory[i];
+    }
+    Arrays.sort(m_yawCopy);
+
+    double q1 = m_yawCopy[1];
+    double q3 = m_yawCopy[5];
+
+    double iqr = q3 - q1;
+
+    double sum = 0;
+    for(int i = 1; i < 6; i++) {
+      sum += m_yawCopy[i];
+    }
+    int count = 5;
+
+    if(m_yawCopy[6] < (q3 + (iqr * 1.5))) {
+      sum += m_yawCopy[6];
+      count++;
+    }
+
+    if(m_yawCopy[0] > (q1 - (iqr * 1.5))) {
+      sum += m_yawCopy[0];
+      count++;
+    }
+
+    return sum / count;
+  }
+
+  private final double[][] m_leftPitchToLim = { { 13.24, 4.7-0.4 }, //0.75
+                                                { 0.9, 5.4-0.4 },  //0.6
+                                                { -7.8, 5.9-0.4 }, //0.6
+                                                { -13.5, 6.5-0.2 },//left:0.6 right:0.5
+                                                { -18.4, 7.6-0.2 },//0.5
+                                                { -20.2, 8.6-0.2 },//0.5
+                                                { -30.0, 8.6-0.2 } };
 
   public double LeftCatapultPitchToLim() {
-    //PhotonTrackedTarget target = vision_camera.getLatestResult().getBestTarget();
-    savedPitch = findPitchMedian();
-    time = System.currentTimeMillis();
+    double pitch;
 
-    vision_camera.takeInputSnapshot();
-    vision_camera.takeOutputSnapshot();
+    pitch = computePitch();
 
+    m_savedPitch = pitch;
+    m_savedTime = System.currentTimeMillis();
+
+    m_visionCamera.takeInputSnapshot();
+    m_visionCamera.takeOutputSnapshot();
 
     if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
-       (savedPitch >= 1000) || disableVis == true) {
-      return kForwardLimitLeft;}
+       (pitch >= 1000) || m_disableVis == true) {
+      return kForwardLimitLeft;
+    }
 
     double lowerPitch = 0;
     double lowerLim = 0;
     double higherPitch = 0;
     double higherLim = 0;
-    double[][] pitches = {{ 4.7-0.4, 13.24 }, //0.75
-                          { 5.4-0.4, 0.9 },  //0.6
-                          { 5.9-0.4, -7.8 }, //0.6
-                          { 6.5-0.2, -13.5 },//left:0.6 right:0.5
-                          { 7.6-0.2, -18.4 },//0.5
-                          { 8.6-0.2, -20.2 },//0.5
-                          { 8.6-0.2, -30.0 }};
-    for(int i = 1; i <= (pitches.length - 1); i++) {
-      if(pitches[i][1] < savedPitch) {
-        lowerPitch = pitches[i][1];
-        lowerLim = pitches[i][0];
-        higherPitch = pitches[i - 1][1];
-        higherLim = pitches[i - 1][0];
-        break;
-      }
-    }
 
-    double limit = (savedPitch - lowerPitch) / (higherPitch - lowerPitch) * (higherLim - lowerLim) + lowerLim;
-    Log.log("Left Limit: " + limit);
-    Log.log("Left Pitch: " + savedPitch);
-    return limit;
-  }
-
-  public double RightCatapultPitchToLim() {
-
-    double pitch; 
-
-    if(System.currentTimeMillis() < time + 500){
-      pitch = savedPitch;
-    }
-    else{
-      pitch = findPitchMedian();
-    }
-  
-
-    if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
-       (pitch >= 1000) || disableVis == true) {
-      return kForwardLimitRight;
-    }
-    
-    double lowerPitch = 0;
-    double lowerLim = 0;
-    double higherPitch = 0;
-    double higherLim = 0;
-    double[][] pitches = {{ 4.7-0.4, 13.24 },
-                          { 5.2-0.4, 0.9 },
-                          { 5.3-0.4, -7.8 }, //moved 5.15 to 5.1
-                          { 6.25-0.2, -13.5 },
-                          { 7.35-0.4, -18.4 },
-                          { 8.45-0.4, -20.2 },
-                          { 8.45-0.4, -30.0}};
-    for(int i = 1; i <= (pitches.length - 1); i++) {
-      if(pitches[i][1] < pitch) {
-        lowerPitch = pitches[i][1];
-        lowerLim = pitches[i][0];
-        higherPitch = pitches[i - 1][1];
-        higherLim = pitches[i - 1][0];
+    for(int i = 1; i <= (m_leftPitchToLim.length - 1); i++) {
+      if(m_leftPitchToLim[i][0] < pitch) {
+        lowerPitch = m_leftPitchToLim[i][0];
+        lowerLim = m_leftPitchToLim[i][1];
+        higherPitch = m_leftPitchToLim[i - 1][0];
+        higherLim = m_leftPitchToLim[i - 1][1];
         break;
       }
     }
 
     double limit = (pitch - lowerPitch) / (higherPitch - lowerPitch) * (higherLim - lowerLim) + lowerLim;
-    Log.log("Right Limit: " + limit);
-    Log.log("Right Pitch: " + pitch);
+
+    Log.log("Left Pitch: " + pitch);
+    Log.log("Left Limit: " + limit);
+
     return limit;
   }
 
-  //directly change the pitch :)
-  public double shuffleboardPitch(double limit) {
-    return limit + SmartDashboard.getNumber("Catapult Soft Limit", 0);
+  private final double[][] m_rightPitchToLim = { { 13.24, 4.7-0.4 },
+                                                 { 0.9, 5.2-0.4 },
+                                                 { -7.8, 5.3-0.4 }, //moved 5.15 to 5.1
+                                                 { -13.5, 6.25-0.2 },
+                                                 { -18.4, 7.35-0.4 },
+                                                 { -20.2, 8.45-0.4 },
+                                                 { -30.0, 8.45-0.4 } };
+
+  public double RightCatapultPitchToLim() {
+    double pitch; 
+
+    if(System.currentTimeMillis() < (m_savedTime + 500)) {
+      pitch = m_savedPitch;
+    } else {
+      pitch = computePitch();
+
+      m_visionCamera.takeInputSnapshot();
+      m_visionCamera.takeOutputSnapshot();
+    }
+
+    if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
+       (pitch >= 1000) || (m_disableVis == true)) {
+      return kForwardLimitRight;
+    }
+
+    double lowerPitch = 0;
+    double lowerLim = 0;
+    double higherPitch = 0;
+    double higherLim = 0;
+
+    for(int i = 1; i <= (m_rightPitchToLim.length - 1); i++) {
+      if(m_rightPitchToLim[i][0] < pitch) {
+        lowerPitch = m_rightPitchToLim[i][0];
+        lowerLim = m_rightPitchToLim[i][1];
+        higherPitch = m_rightPitchToLim[i - 1][0];
+        higherLim = m_rightPitchToLim[i - 1][1];
+        break;
+      }
+    }
+
+    double limit = (pitch - lowerPitch) / (higherPitch - lowerPitch) * (higherLim - lowerLim) + lowerLim;
+
+    Log.log("Right Pitch: " + pitch);
+    Log.log("Right Limit: " + limit);
+
+    return limit;
   }
 
   public double getYaw() {
-    double yaw = findYawMedian();
+    double yaw = computeYaw();
 
-    if(SmartDashboard.getBoolean("Disable Vision", false) == true || disableVis == true) {
+    if((SmartDashboard.getBoolean("Disable Vision", false) == true) ||
+       (m_disableVis == true)) {
       // possibly want different outcome
       yaw = 0;
     } else if(yaw >= 1000) {
       yaw = 0;
-    } else {
-      yaw = yaw - 2;
     }
 
     return -yaw;
   }
 
-  public void disableVFromController(){
-    disableVis = true;
+  public void disableVFromController() {
+    m_disableVis = true;
   }
 
-  public void enableVFromController(){
-    disableVis = false;
+  public void enableVFromController() {
+    m_disableVis = false;
   }
 }

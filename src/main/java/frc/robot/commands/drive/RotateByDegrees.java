@@ -6,8 +6,8 @@ package frc.robot.commands.drive;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 import frc.robot.utils.NavX;
@@ -27,20 +27,17 @@ public class RotateByDegrees extends CommandBase {
   private double spin;
   private PIDController pid;
 
-  private boolean pidOn = false;
-
-
   public RotateByDegrees(NavX navx, Drive drive, DoubleSupplier turn) {
     m_navx = navx;
     m_turn = turn;
     m_drive = drive;
     addRequirements(m_drive);
-    kp = 0.16;
-    //SmartDashboard.putNumber("RotateByDegrees kp", kp);
-    ki = .001;
-    ///SmartDashboard.putNumber("RotateByDegrees ki", ki);
-    kd = 0.016;
-    //SmartDashboard.putNumber("RotateByDegrees kd", kd);
+    kp = 0.12;
+    //SmartDashboard.setDefaultNumber("RotateByDegrees kp", kp);
+    ki = 0.0;
+    //SmartDashboard.setDefaultNumber("RotateByDegrees ki", ki);
+    kd = 0.007;
+    //SmartDashboard.setDefaultNumber("RotateByDegrees kd", kd);
     pid = new PIDController(kp, ki, kd);
 
     //SmartDashboard.putNumber("RotateByDegrees Turn Amount", 0);
@@ -54,8 +51,7 @@ public class RotateByDegrees extends CommandBase {
     target = m_navx.getAngle() - m_turn.getAsDouble();
     pid.reset();
     pid.setSetpoint(target);
-    pid.setTolerance(.5);
-    pidOn = false;
+    pid.setTolerance(1.0, 0.5);
     //pid.setP(SmartDashboard.getNumber("RotateByDegrees kp", kp));
     //pid.setI(SmartDashboard.getNumber("RotateByDegrees ki", ki));
     //pid.setD(SmartDashboard.getNumber("RotateByDegrees kd", kd));
@@ -64,22 +60,13 @@ public class RotateByDegrees extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    /*if(pidOn == false && target - m_navx.getAngle() > 7){
-      m_drive.arcadeDrive(0, .5);} 
-    else if(pidOn == false && target - m_navx.getAngle() < -7){
-      m_drive.arcadeDrive(0, -.5);}*/
     spin = pid.calculate(m_navx.getAngle());
-    if(spin > .5){
-      m_drive.arcadeDrive(0, .5);
+    if(Math.abs(spin) < 0.05) {
+      spin = Math.copySign(0.05, spin);
     }
-    else if(spin < -.5){
-      m_drive.arcadeDrive(0, -.5);
-    }
-    else{
-      m_drive.arcadeDrive(0, spin);
-    }
-    //pidOn = true;
-    }
+    spin = MathUtil.clamp(spin, -0.3, 0.3);
+    m_drive.arcadeDrive(0, spin);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

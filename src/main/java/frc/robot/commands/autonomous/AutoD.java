@@ -4,7 +4,8 @@
 
 package frc.robot.commands.autonomous;
 
-import edu.wpi.first.math.trajectory.Trajectory;
+import static frc.robot.Constants.Catapult.kShootTimeDelay;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -14,7 +15,6 @@ import frc.robot.commands.catapult.ResetLeft;
 import frc.robot.commands.catapult.ResetRight;
 import frc.robot.commands.catapult.Score;
 import frc.robot.commands.catapult.ShootLeft;
-import frc.robot.commands.catapult.ShootRight;
 import frc.robot.commands.catapult.ShootRightConditional;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.feedback.WaitCommandNT;
@@ -25,7 +25,7 @@ import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
 import frc.robot.subsystems.VisionTracking;
 import frc.robot.utils.NavX;
-import static frc.robot.Constants.Catapult.kShootTimeDelay;
+import frc.robot.utils.Trajectories;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -39,21 +39,15 @@ public class AutoD extends SequentialCommandGroup {
     LeftCatapult leftCatapult, 
     RightCatapult rightCatapult, 
     PrettyLights prettylights, 
-    XboxController driverController, 
-    Trajectory autoD,
-    Trajectory cargo2ToTerminal,
-    Trajectory backUpTerminal,
-    Trajectory terminalToScore,
-    VisionTracking vision
-  ) {
+    XboxController driverController,
+    VisionTracking vision) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
 new WaitCommandNT(Auto.kStartingDel),
     new InstantCommand(() -> intake.extend(), intake),
-    new InstantCommand(() -> prettylights.lightShow(), prettylights),
     new InstantCommand(() -> intake.run(1.0), intake),
-    new FollowTrajectory(drive, autoD, true),
+    new FollowTrajectory(drive, Trajectories.get(Trajectories.rightL), true),
     new WaitCommand(0.25),
     new InstantCommand(() -> intake.run(0.0), intake),
     new WaitCommand(0.25),
@@ -64,10 +58,10 @@ new WaitCommandNT(Auto.kStartingDel),
       new ResetLeft(leftCatapult),
       new ResetRight(rightCatapult),
       new InstantCommand(() -> intake.run(1.0), intake),
-      new FollowTrajectory(drive, cargo2ToTerminal, false)
+      new FollowTrajectory(drive, Trajectories.get(Trajectories.cargo2ToTerminal), false)
     ),
     new WaitCommand(0.4),
-    new FollowTrajectory(drive, terminalToScore, false),
+    new FollowTrajectory(drive, Trajectories.get(Trajectories.terminalToScore), false),
     new InstantCommand(() -> intake.run(0.0), intake),
     //new WaitCommand(0.1),
     new Score(leftCatapult, rightCatapult, prettylights, null, null, vision)

@@ -4,6 +4,7 @@
 // license file in the root directory of this project.
 package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.feedback.RumbleYes;
@@ -15,6 +16,7 @@ import frc.robot.utils.NavX;
 public class FirstClimberSequence extends SequentialCommandGroup {
   public FirstClimberSequence(Climber climber, PrettyLights prettylights, NavX navx, XboxController manipulatorController) {
     addCommands(
+        new InstantCommand(() -> prettylights.disableRing(), prettylights),
         new ArmToLength(climber, -1.0, 1.5),
         new ArmToLength(climber, -0.4, 0.0),
         //new WaitCommand(1.0),
