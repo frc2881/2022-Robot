@@ -251,14 +251,18 @@ public class RobotContainer {
   }
 
   private void logBatteryInfo() {
-    if (SmartDashboard.containsKey(Constants.NetworkTables.kBatteryInfoEntryKey)) {
-      Log.batteryInfo(SmartDashboard.getString(Constants.NetworkTables.kBatteryInfoEntryKey, ""));
+    NetworkTableInstance networkTables = NetworkTableInstance.getDefault();
+    NetworkTable smartDashboard = networkTables.getTable(Constants.NetworkTables.kSmartDashboardTableName);
+    networkTables.startClientTeam(Constants.RobotInfo.kTeamNumber);
+    if (smartDashboard.containsKey(Constants.NetworkTables.kBatteryInfoEntryKey)) {
+      String batteryInfo = smartDashboard.getEntry(Constants.NetworkTables.kBatteryInfoEntryKey).getString("");
+      Log.batteryInfo(batteryInfo);
+      SmartDashboard.putString(Constants.NetworkTables.kBatteryInfoEntryKey, batteryInfo);
     } else {
-      NetworkTableInstance networkTables = NetworkTableInstance.getDefault();
-      NetworkTable smartDashboard = networkTables.getTable(Constants.NetworkTables.kSmartDashboardTableName);
-      networkTables.startClientTeam(Constants.RobotInfo.kTeamNumber);
       smartDashboard.addEntryListener(Constants.NetworkTables.kBatteryInfoEntryKey, (table, key, entry, value, flags) -> {
-        Log.batteryInfo(value.getValue().toString());
+        String batteryInfo = value.getValue().toString();
+        Log.batteryInfo(batteryInfo);
+        SmartDashboard.putString(Constants.NetworkTables.kBatteryInfoEntryKey, batteryInfo);
         networkTables.stopClient();
       }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
     }
