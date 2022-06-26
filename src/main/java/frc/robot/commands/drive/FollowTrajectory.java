@@ -20,7 +20,8 @@ public class FollowTrajectory extends CommandBase {
   private final RamseteCommand m_ramsete;
   public boolean m_resetodometry;
 
-  public FollowTrajectory(Drive drive, Trajectory trajectory, boolean resetodometry) {
+  public FollowTrajectory(Drive drive, Trajectory trajectory,
+                          boolean resetodometry) {
     m_drive = drive;
     m_trajectory = trajectory;
     m_resetodometry = resetodometry;
@@ -33,7 +34,7 @@ public class FollowTrajectory extends CommandBase {
     PIDController pidright = new PIDController(Constants.Drive.kPDriveVel, 0, Constants.Drive.kDDriveVel);
 
     m_ramsete = new RamseteCommand(trajectory, drive::getPose, ramsetecontroller, feedforward, Constants.Drive.kKinematics,
-    drive::getWheelSpeeds, pidleft, pidright, drive::driveTankVolts, drive);
+                                   drive::getWheelSpeeds, pidleft, pidright, drive::driveTankVolts, drive);
   }
 
   // Called when the command is initially scheduled.
@@ -43,7 +44,7 @@ public class FollowTrajectory extends CommandBase {
     if (m_resetodometry == true) {
       m_drive.resetOdometry(m_trajectory.getInitialPose());
     }
-    
+
     m_ramsete.initialize();
   }
 

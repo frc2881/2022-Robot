@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Log;
 
 public class Intake extends SubsystemBase {
   private final CANSparkMax m_intake;

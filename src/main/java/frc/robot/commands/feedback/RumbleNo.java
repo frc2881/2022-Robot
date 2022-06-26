@@ -17,7 +17,8 @@ public class RumbleNo extends CommandBase {
   double time = 0;
 
   /** Creates a new RumbleNo. */
-  public RumbleNo(PrettyLights prettylights, XboxController driverController, XboxController manipulatorController) {
+  public RumbleNo(PrettyLights prettylights, XboxController driverController,
+                  XboxController manipulatorController) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_driverController = driverController;
     m_manipulatorController = manipulatorController;
@@ -43,9 +44,8 @@ public class RumbleNo extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_driverController != null){
+    if(m_driverController != null) {
       if((System.currentTimeMillis() - time) >= 400) {
-       
          m_driverController.setRumble(RumbleType.kLeftRumble, 1);
          m_driverController.setRumble(RumbleType.kRightRumble, 1);
         prettylights.redColor();
@@ -55,7 +55,7 @@ public class RumbleNo extends CommandBase {
         prettylights.defaultColor();
       }
     }
-    if(m_manipulatorController != null){
+    if(m_manipulatorController != null) {
       if((System.currentTimeMillis() - time) >= 400) {
         m_manipulatorController.setRumble(RumbleType.kLeftRumble, 1);
         m_manipulatorController.setRumble(RumbleType.kRightRumble, 1);
@@ -71,13 +71,13 @@ public class RumbleNo extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if(m_driverController != null){
-    m_driverController.setRumble(RumbleType.kLeftRumble, 0);
-    m_driverController.setRumble(RumbleType.kRightRumble, 0);
+    if(m_driverController != null) {
+      m_driverController.setRumble(RumbleType.kLeftRumble, 0);
+      m_driverController.setRumble(RumbleType.kRightRumble, 0);
     }
-    if(m_manipulatorController != null){
-    m_manipulatorController.setRumble(RumbleType.kLeftRumble, 0);
-    m_manipulatorController.setRumble(RumbleType.kRightRumble, 0);
+    if(m_manipulatorController != null) {
+      m_manipulatorController.setRumble(RumbleType.kLeftRumble, 0);
+      m_manipulatorController.setRumble(RumbleType.kRightRumble, 0);
     }
 
     prettylights.defaultColor();

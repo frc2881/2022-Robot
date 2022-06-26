@@ -33,7 +33,7 @@ public class VisionTracking extends SubsystemBase {
   private final double[] m_yawCopy = new double[7];
   private final double[] m_pitchHistory = new double[7];
   private final double[] m_pitchCopy = new double[7];
-  private double m_savedPitch; 
+  private double m_savedPitch;
   private double m_savedTime;
   private boolean m_disableVis = false;
 
@@ -81,17 +81,17 @@ public class VisionTracking extends SubsystemBase {
       pitch = 1000;
       yaw = 0;
     }
-    
+
     SmartDashboard.putNumber("Photon Vision Pitch", pitch);
     SmartDashboard.putNumber("Photon Vision Yaw", yaw);
-  
+
     System.arraycopy(m_pitchHistory, 1, m_pitchHistory, 0, 6);
     System.arraycopy(m_yawHistory, 1, m_yawHistory, 0, 6);
 
     m_pitchHistory[6] = pitch;
     m_yawHistory[6] = yaw;
   }
-  
+
   public void reset(){
     m_visionCamera.setDriverMode(false);
     m_frontCamera.setDriverMode(true);
@@ -105,7 +105,7 @@ public class VisionTracking extends SubsystemBase {
   public double computePitch(){
     for(int i = 0; i < 7; i++) {
       m_pitchCopy[i] = m_pitchHistory[i];
-    } 
+    }
     Arrays.sort(m_pitchCopy);
 
     double q1 = m_pitchCopy[1];
@@ -130,7 +130,6 @@ public class VisionTracking extends SubsystemBase {
     }
 
     return sum / count;
-    
   }
 
   public double computeYaw(){
@@ -163,9 +162,9 @@ public class VisionTracking extends SubsystemBase {
     return sum / count;
   }
 
-  private final double[][] m_leftPitchToLim = { { 13.24, 4.7 }, 
-                                                { 0.9, 5.5 },  
-                                                { -7.8, 5.9 }, 
+  private final double[][] m_leftPitchToLim = { { 13.24, 4.7 },
+                                                { 0.9, 5.5 },
+                                                { -7.8, 5.9 },
                                                 { -13.5, 6.8 },
                                                 { -18.4, 8.1 },
                                                 { -20.2, 8.8 },
@@ -219,7 +218,7 @@ public class VisionTracking extends SubsystemBase {
                                                  { -30.0, 8.8 } };
 
   public double RightCatapultPitchToLim() {
-    double pitch; 
+    double pitch;
 
     if(System.currentTimeMillis() < (m_savedTime + 500)) {
       pitch = m_savedPitch;

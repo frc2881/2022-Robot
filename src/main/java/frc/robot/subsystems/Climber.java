@@ -39,13 +39,12 @@ public class Climber extends SubsystemBase {
   private final DoubleLogEntry m_logBusVoltage;
   private final DoubleLogEntry m_logCurrent;
   private final BooleanLogEntry m_logSolenoid;
-  private PrettyLights m_prettyLights;
   private final NavX m_navx;
   private float largestVal = 0;
   private boolean safe;
   private boolean back = true;
 
-  public Climber(NavX navx, PrettyLights prettyLights) {
+  public Climber(NavX navx) {
     m_arm = new CANSparkMax(kMotor, MotorType.kBrushless);
     m_arm.restoreFactoryDefaults();
     m_arm.setInverted(false);
@@ -63,7 +62,6 @@ public class Climber extends SubsystemBase {
 
     m_solenoid = new Solenoid(PneumaticsModuleType.REVPH, kSolenoid);
 
-    m_prettyLights = prettyLights;
     m_navx = navx;
 
     if(kEnableDetailedLogging) {
@@ -93,58 +91,36 @@ public class Climber extends SubsystemBase {
 
     float roll = m_navx.getRoll();
 
-    if(back == true){
-      if(roll > largestVal){
+    if(back == true) {
+      if(roll > largestVal) {
         largestVal = roll;
       }
-      else if(roll < largestVal - 3){
-        if(largestVal < 19){
-          /*
-          if(m_prettyLights.isPartyColor() == false){
-          m_prettyLights.greenColor();
-          }
-          */
+      else if(roll < largestVal - 3) {
+        if(largestVal < 19) {
           safe = true;
         } else{
-          /*
-          if(m_prettyLights.isPartyColor() == false){
-          m_prettyLights.redColor();
-          }
-          */
           safe = false;
         }
         back = false;
       }
-    }
-    else{
-      if(roll < largestVal){
+    } else {
+      if(roll < largestVal) {
         largestVal = roll;
       }
-      else if(roll > largestVal + 3){
-        if(largestVal > -24){
-          /*
-          if(m_prettyLights.isPartyColor() == false){
-          m_prettyLights.greenColor();
-          }
-          */
+      else if(roll > largestVal + 3) {
+        if(largestVal > -24) {
           safe = true;
-        } else{
-          /*
-          if(m_prettyLights.isPartyColor() == false){
-          m_prettyLights.redColor();
-          }
-          */
+        } else {
           safe = false;
         }
         back = true;
       }
     }
-  
-}
+  }
 
-public void setBackTrue(){
-  back = true;
-}
+  public void setBackTrue() {
+    back = true;
+  }
 
   public void reset() {
     moveArm(0.0);

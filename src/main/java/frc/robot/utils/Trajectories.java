@@ -54,7 +54,7 @@ public class Trajectories {
     load(autoB, m_maxVelocity, m_maxAcceleration);
     load(straight, m_maxVelocity, m_maxAcceleration);
     load(rightL, m_maxVelocity, m_maxAcceleration);
-    load(toStrategicCargo, m_maxVelocity, m_maxAcceleration, true);    
+    load(toStrategicCargo, m_maxVelocity, m_maxAcceleration, true);
     load(backupStrategic, m_maxVelocity, m_maxAcceleration, true);
 
     //Right Tarmac

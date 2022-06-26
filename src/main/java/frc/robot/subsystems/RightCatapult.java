@@ -51,11 +51,11 @@ public class RightCatapult extends SubsystemBase {
   private final DoubleLogEntry m_logOutput;
   private final DoubleLogEntry m_logBusVoltage;
   private final DoubleLogEntry m_logCurrent;
-  private final VisionTracking m_vision; 
+  private final VisionTracking m_vision;
   public double limit;
 
   public RightCatapult(VisionTracking vision) {
-    m_vision = vision; 
+    m_vision = vision;
     m_catapult = new CANSparkMax(kRightMotor, MotorType.kBrushless);
     m_catapult.restoreFactoryDefaults();
     m_catapult.setInverted(true);
@@ -93,8 +93,6 @@ public class RightCatapult extends SubsystemBase {
       m_logBusVoltage = null;
       m_logCurrent = null;
     }
-  
-
   }
 
   public void reset() {
@@ -130,7 +128,7 @@ public class RightCatapult extends SubsystemBase {
   public void run(double voltage) {
     m_catapult.setVoltage(voltage);
   }
-  
+
   public void score() {
     limit = m_vision.RightCatapultPitchToLim();
     limit += SmartDashboard.getNumber("Catapult Soft Limit", 0);
@@ -218,7 +216,7 @@ public class RightCatapult extends SubsystemBase {
     }
 
     if(m_colorSensor.isConnected() && m_colorSensor.hasReset()) {
-      m_colorSensor = new ColorSensorV3(Port.kOnboard);   
+      m_colorSensor = new ColorSensorV3(Port.kOnboard);
     }
 
     if(kEnableDetailedLogging) {

@@ -24,8 +24,6 @@ public class ScoreRight extends SequentialCommandGroup {
                                    withTimeout(kResetTimeout));
     addCommands(new ConditionalCommand(score, new WaitCommand(0.001),
                                        () -> Shoot(rightCatapult)));
-
-                
   }
 
   public boolean Shoot(RightCatapult rightCatapult) {

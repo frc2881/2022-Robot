@@ -61,12 +61,12 @@ public class RobotContainer {
   private final VisionTracking visionTracking = new VisionTracking();
 
   private final PrettyLights prettyLights = new PrettyLights(powerHub);
-  private final Climber climber = new Climber(navx, prettyLights);
+  private final Climber climber = new Climber(navx);
   private final Intake intake = new Intake();
   private final LeftCatapult leftCatapult = new LeftCatapult(visionTracking);
   private final RightCatapult rightCatapult = new RightCatapult(visionTracking);
   private final Drive drive = new Drive(navx);
- 
+
   private final SendableChooser<Command> m_chooser;
 
   public boolean robotResetState = true;
@@ -83,8 +83,6 @@ public class RobotContainer {
     () -> applyDeadband(-manipulatorController.getLeftY())
     );
 
-    double[] m_temp = new double[7];
-  
   public RobotContainer() {
     powerHub.setSwitchableChannel(false);
 
@@ -136,13 +134,13 @@ public class RobotContainer {
 
     buttonFromDouble(() -> driverController.getLeftTriggerAxis() + driverController.getRightTriggerAxis()).
       whenHeld(new AimAtHub(navx, drive, () -> visionTracking.getYaw(), prettyLights, driverController, manipulatorController));
-    
+
     new JoystickButton(driverController, XboxController.Button.kRightBumper.value).
       whileHeld(new NoVision(visionTracking));
 
     new JoystickButton(driverController, XboxController.Button.kY.value).
       whenPressed(new InstantCommand(() -> prettyLights.enableRing()));
-      
+
     // Manipulator Xbox Controller
 
     new JoystickButton(manipulatorController, XboxController.Button.kX.value).
@@ -167,7 +165,7 @@ public class RobotContainer {
       whenPressed(new Score(leftCatapult, rightCatapult, prettyLights, manipulatorController, intake, visionTracking));
 
     buttonFromDouble(() -> manipulatorController.getLeftTriggerAxis()).
-      whenPressed(new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, manipulatorController, intake, visionTracking)); 
+      whenPressed(new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, manipulatorController, intake, visionTracking));
 
     new JoystickButton(manipulatorController, XboxController.Button.kStart.value).
       whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
