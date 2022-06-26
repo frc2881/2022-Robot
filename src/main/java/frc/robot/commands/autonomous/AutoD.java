@@ -1,6 +1,7 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2022 FRC Team 2881 - The Lady Cans
+//
+// Open Source Software; you can modify and/or share it under the terms of BSD
+// license file in the root directory of this project.
 
 package frc.robot.commands.autonomous;
 
@@ -27,44 +28,30 @@ import frc.robot.subsystems.VisionTracking;
 import frc.robot.utils.NavX;
 import frc.robot.utils.Trajectories;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoD extends SequentialCommandGroup {
   /** Creates a new RightL. */
-  public AutoD(
-    Drive drive, 
-    Intake intake, 
-    NavX navx,
-    LeftCatapult leftCatapult, 
-    RightCatapult rightCatapult, 
-    PrettyLights prettylights, 
-    XboxController driverController,
-    VisionTracking vision) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-new WaitCommandNT(Auto.kStartingDel),
-    new InstantCommand(() -> intake.extend(), intake),
-    new InstantCommand(() -> intake.run(1.0), intake),
-    new FollowTrajectory(drive, Trajectories.get(Trajectories.rightL), true),
-    new WaitCommand(0.25),
-    new InstantCommand(() -> intake.run(0.0), intake),
-    new WaitCommand(0.25),
-    new ShootLeft(leftCatapult),
-    new WaitCommand(kShootTimeDelay),
-    new ShootRightConditional(rightCatapult),
-    parallel(
-      new ResetLeft(leftCatapult),
-      new ResetRight(rightCatapult),
-      new InstantCommand(() -> intake.run(1.0), intake),
-      new FollowTrajectory(drive, Trajectories.get(Trajectories.cargo2ToTerminal), false)
-    ),
-    new WaitCommand(0.4),
-    new FollowTrajectory(drive, Trajectories.get(Trajectories.terminalToScore), false),
-    new InstantCommand(() -> intake.run(0.0), intake),
-    //new WaitCommand(0.1),
-    new Score(leftCatapult, rightCatapult, prettylights, null, null, vision)
-    );
+  public AutoD(Drive drive, Intake intake, NavX navx,
+               LeftCatapult leftCatapult, RightCatapult rightCatapult,
+               PrettyLights prettylights, XboxController driverController,
+               VisionTracking vision) {
+    addCommands(new WaitCommandNT(Auto.kStartingDel),
+                new InstantCommand(() -> intake.extend(), intake),
+                new InstantCommand(() -> intake.run(1.0), intake),
+                new FollowTrajectory(drive, Trajectories.get(Trajectories.rightL), true),
+                new WaitCommand(0.25),
+                new InstantCommand(() -> intake.run(0.0), intake),
+                new WaitCommand(0.25),
+                new ShootLeft(leftCatapult),
+                new WaitCommand(kShootTimeDelay),
+                new ShootRightConditional(rightCatapult),
+                parallel(new ResetLeft(leftCatapult),
+                         new ResetRight(rightCatapult),
+                         new InstantCommand(() -> intake.run(1.0), intake),
+                         new FollowTrajectory(drive, Trajectories.get(Trajectories.cargo2ToTerminal), false)),
+                new WaitCommand(0.4),
+                new FollowTrajectory(drive, Trajectories.get(Trajectories.terminalToScore), false),
+                new InstantCommand(() -> intake.run(0.0), intake),
+                //new WaitCommand(0.1),
+                new Score(leftCatapult, rightCatapult, prettylights, null, null, vision));
   }
 }

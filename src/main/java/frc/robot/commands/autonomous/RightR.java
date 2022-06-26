@@ -23,45 +23,34 @@ import frc.robot.subsystems.VisionTracking;
 import frc.robot.utils.NavX;
 import frc.robot.utils.Trajectories;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class RightR extends SequentialCommandGroup {
   /** Creates a new RightR. */
-  public RightR(
-    Drive drive, 
-    Intake intake, 
-    NavX navx,
-    LeftCatapult leftCatapult, 
-    RightCatapult rightCatapult, 
-    PrettyLights prettyLights, 
-    XboxController driverController, 
-    VisionTracking vision) 
-        {
-    addCommands(  
-new WaitCommandNT(Auto.kStartingDel),
-    new InstantCommand(() -> intake.extend(), intake),
-    new WaitCommand(1),
-    new ScoreRightNoColor(rightCatapult),
-new WaitCommandNT(Auto.kSecondDel),
-    new InstantCommand(() -> intake.run(1.0), intake),
-    new FollowTrajectory(drive, Trajectories.get(Trajectories.rightR), true),
-    new InstantCommand(() -> intake.run(0.0), intake),
-    new InstantCommand(() -> intake.retract(), intake),
-    new WaitCommand(0.5),
-    new InstantCommand(() -> intake.extend(), intake),
-    new WaitCommand(1.2),
-    new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, null, null, vision),
-new WaitCommandNT(Auto.kThirdDel),
-    //new WaitCommand(0.1),
-    new InstantCommand(() -> intake.run(1.0), intake),
-    new FollowTrajectory(drive, Trajectories.get(Trajectories.toTerminal), false),
-    new WaitCommand(1),
-    new FollowTrajectory(drive, Trajectories.get(Trajectories.terminalToScore), false),
-    new InstantCommand(() -> intake.run(0.0), intake),
-    //new RotateByDegrees(navx, drive, () -> visionTracking.getYaw())
-    new WaitCommand(0.25),
-    new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, null, null, vision)
-);
+  public RightR(Drive drive, Intake intake, NavX navx,
+                LeftCatapult leftCatapult, RightCatapult rightCatapult,
+                PrettyLights prettyLights, XboxController driverController,
+                VisionTracking vision) {
+    addCommands(new WaitCommandNT(Auto.kStartingDel),
+                new InstantCommand(() -> intake.extend(), intake),
+                new WaitCommand(1),
+                new ScoreRightNoColor(rightCatapult),
+                new WaitCommandNT(Auto.kSecondDel),
+                new InstantCommand(() -> intake.run(1.0), intake),
+                new FollowTrajectory(drive, Trajectories.get(Trajectories.rightR), true),
+                new InstantCommand(() -> intake.run(0.0), intake),
+                new InstantCommand(() -> intake.retract(), intake),
+                new WaitCommand(0.5),
+                new InstantCommand(() -> intake.extend(), intake),
+                new WaitCommand(1.2),
+                new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, null, null, vision),
+                new WaitCommandNT(Auto.kThirdDel),
+                //new WaitCommand(0.1),
+                new InstantCommand(() -> intake.run(1.0), intake),
+                new FollowTrajectory(drive, Trajectories.get(Trajectories.toTerminal), false),
+                new WaitCommand(1),
+                new FollowTrajectory(drive, Trajectories.get(Trajectories.terminalToScore), false),
+                new InstantCommand(() -> intake.run(0.0), intake),
+                //new RotateByDegrees(navx, drive, () -> visionTracking.getYaw())
+                new WaitCommand(0.25),
+                new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, null, null, vision));
   }
 }

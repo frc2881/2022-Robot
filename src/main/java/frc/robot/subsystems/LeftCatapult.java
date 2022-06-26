@@ -50,7 +50,7 @@ public class LeftCatapult extends SubsystemBase {
   private final DoubleLogEntry m_logOutput;
   private final DoubleLogEntry m_logBusVoltage;
   private final DoubleLogEntry m_logCurrent;
-  private final VisionTracking m_vision; 
+  private final VisionTracking m_vision;
   public double limit;
 
   public LeftCatapult(VisionTracking vision) {
@@ -79,9 +79,6 @@ public class LeftCatapult extends SubsystemBase {
 
     m_correctDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
     m_incorrectDebouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
-
-
-
 
     if(kEnableDetailedLogging) {
       DataLog log = DataLogManager.getLog();
@@ -117,7 +114,6 @@ public class LeftCatapult extends SubsystemBase {
 
   public boolean reachedUpperSoftLimit() {
     double position = m_encoder.getPosition();
-    
     boolean difference = (limit - position) < 0.25;
     SmartDashboard.putNumber("L Encoder Position", position);
     SmartDashboard.putBoolean("L Upper Soft Limit Reached", difference);
@@ -133,13 +129,11 @@ public class LeftCatapult extends SubsystemBase {
   }
 
   public void score() {
- 
     limit = m_vision.LeftCatapultPitchToLim();
     limit += SmartDashboard.getNumber("Catapult Soft Limit", 0);
     m_catapult.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float) limit);
     SmartDashboard.putNumber("left limit at score", limit);
     run(kShootVoltage);
-
   }
 
   public void eject() {
@@ -151,7 +145,7 @@ public class LeftCatapult extends SubsystemBase {
   public void stop() {
     run(0);
   }
-  
+
   public void down() {
     run(kResetVoltage);
   }
@@ -227,7 +221,7 @@ public class LeftCatapult extends SubsystemBase {
     }
 
     if(m_colorSensor.isConnected() && m_colorSensor.hasReset()) {
-      m_colorSensor = new ColorSensorV3(Port.kMXP);   
+      m_colorSensor = new ColorSensorV3(Port.kMXP);
     }
 
     if(kEnableDetailedLogging) {

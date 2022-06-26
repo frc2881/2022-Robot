@@ -88,7 +88,7 @@ public class PrettyLights extends SubsystemBase {
   };
 
   private final PowerDistribution m_powerHub;
-  private final AddressableLED m_led; 
+  private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
   private final AddressableLEDBuffer m_ledBuffer2;
   private final DoubleLogEntry m_logCurrent;

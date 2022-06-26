@@ -1,6 +1,7 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2022 FRC Team 2881 - The Lady Cans
+//
+// Open Source Software; you can modify and/or share it under the terms of BSD
+// license file in the root directory of this project.
 
 package frc.robot.commands.autonomous;
 
@@ -25,38 +26,28 @@ import frc.robot.subsystems.RightCatapult;
 import frc.robot.utils.NavX;
 import frc.robot.utils.Trajectories;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoB extends SequentialCommandGroup {
   /** Creates a new LeftL. */
-  public AutoB(
-    Drive drive, 
-    Intake intake, 
-    NavX navx,
-    LeftCatapult leftCatapult, 
-    RightCatapult rightCatapult, 
-    PrettyLights prettylights, 
-    XboxController controller) {
-    addCommands(
-  new WaitCommandNT(Auto.kStartingDel),
-      new InstantCommand(() -> intake.extend(), intake),
-      new WaitCommand(0.1),
-      new InstantCommand(() -> intake.run(1.0), intake),
-      new FollowTrajectory(drive, Trajectories.get(Trajectories.autoB), true),
-      new WaitCommand(0.5),
-      new InstantCommand(() -> intake.run(0), intake),
-      new WaitCommand(0.50),
-      new ShootLeft(leftCatapult),
-      new WaitCommand(kShootTimeDelay),
-      new ShootRightConditional(rightCatapult),
-      parallel(
-          new ResetLeft(leftCatapult),
-          new ResetRight(rightCatapult),
-          new InstantCommand(() -> intake.run(0.1), intake), 
-          new FollowTrajectory(drive, Trajectories.get(Trajectories.toStrategicCargo), false)),
-      new InstantCommand(() -> intake.runReverse(0.8), intake),
-      new FollowTrajectory(drive, Trajectories.get(Trajectories.backupStrategic), false)
+  public AutoB(Drive drive, Intake intake, NavX navx,
+               LeftCatapult leftCatapult, RightCatapult rightCatapult,
+               PrettyLights prettylights, XboxController controller) {
+  addCommands(new WaitCommandNT(Auto.kStartingDel),
+              new InstantCommand(() -> intake.extend(), intake),
+              new WaitCommand(0.1),
+              new InstantCommand(() -> intake.run(1.0), intake),
+              new FollowTrajectory(drive, Trajectories.get(Trajectories.autoB), true),
+              new WaitCommand(0.5),
+              new InstantCommand(() -> intake.run(0), intake),
+              new WaitCommand(0.50),
+              new ShootLeft(leftCatapult),
+              new WaitCommand(kShootTimeDelay),
+              new ShootRightConditional(rightCatapult),
+              parallel(new ResetLeft(leftCatapult),
+                       new ResetRight(rightCatapult),
+                       new InstantCommand(() -> intake.run(0.1), intake),
+                       new FollowTrajectory(drive, Trajectories.get(Trajectories.toStrategicCargo), false)),
+              new InstantCommand(() -> intake.runReverse(0.8), intake),
+              new FollowTrajectory(drive, Trajectories.get(Trajectories.backupStrategic), false)
     );
   }
 }
