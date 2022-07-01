@@ -5,6 +5,7 @@
 
 package frc.robot.commands.catapult;
 
+import static frc.robot.Constants.Catapult.kShootThreshold;
 import static frc.robot.Constants.Catapult.kShootTimeDelayFar;
 import static frc.robot.Constants.Catapult.kShootTimeDelayNear;
 
@@ -42,7 +43,7 @@ public class Score extends SequentialCommandGroup {
   }
 
   public boolean smallLim(VisionTracking vision) {
-    if(vision.LeftCatapultPitchToLim() < 5.4) {
+    if(vision.LeftCatapultPitchToLim() < kShootThreshold) {
       return true;
     } else {
       return false;

@@ -20,13 +20,28 @@ import frc.robot.utils.GearRatio;
  * classes) wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
+  /**
+   * Configuration of the overall robot.
+   */
   public static final class RobotInfo {
+    /**
+     * The team number.
+     */
     public static final int kTeamNumber = 2881;
   }
 
+  /**
+   * Configuration of the network table entities.
+   */
   public static final class NetworkTables {
+    /**
+     * The name of the SmartDashboard table.
+     */
     public static final String kSmartDashboardTableName = "SmartDashboard";
+
+    /**
+     * The name of the entry that contains the battery information.
+     */
     public static final String kBatteryInfoEntryKey = "Battery Info";
   }
 
@@ -97,6 +112,9 @@ public final class Constants {
      */
     public static final double kShootTimeout = 1.0;
 
+    /**
+     * The voltage used to shoot the cargo.
+     */
     public static final double kShootVoltage = 11;
 
     /**
@@ -104,6 +122,9 @@ public final class Constants {
      */
     public static final double kEjectTimeout = 0.25;
 
+    /**
+     * The voltage used to eject the cargo.
+     */
     public static final double kEjectVoltage = 5.5;
 
     /**
@@ -111,25 +132,34 @@ public final class Constants {
      */
     public static final double kResetTimeout = 2.0;
 
+    /**
+     * The voltage used to reset the catapults after shooting or ejecting a
+     * cargo.
+     */
     public static final double kResetVoltage = -1.0;
 
+    /**
+     * The time delay between the left and right catapult for autonomous.
+     */
     public static final double kShootTimeDelay = 0.2;
 
+    /**
+     * The time delay between the left and right catapult when close to the
+     * hub.
+     */
     public static final double kShootTimeDelayNear = 0.3;
 
+    /**
+     * The time delay between the left and right catapult when far from the
+     * hub.
+     */
     public static final double kShootTimeDelayFar = 0.2;
 
-    public static final double kLeftLowDist = 10.767;
-
-    public static final double kLeftHighDist = 16.433;
-
-    public static final double kLeftHighLim =  8.25;
-
-    public static final double kRightLowDist = 6.483;
-
-    public static final double kRightHighDist = 19.25;
-
-    public static final double kRightHighLim =  8.00;
+    /**
+     * The threshold below which the robot is considered to be close to the
+     * hub, resulting in the close to the hub time delay between shots.
+     */
+    public static final double kShootThreshold = 5.9;
   }
 
   /**
@@ -197,7 +227,7 @@ public final class Constants {
     public static final int kRightFrontMotor = 13;
 
     /**
-     * The CAN ID of the right rear motorl.
+     * The CAN ID of the right rear motor.
      */
     public static final int kRightRearMotor = 14;
 
