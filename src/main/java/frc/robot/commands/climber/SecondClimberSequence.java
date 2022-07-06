@@ -31,7 +31,7 @@ public class SecondClimberSequence extends SequentialCommandGroup {
                 new ArmBack(climber),
                 //new ArmWaitToExtend(navx),
                 new ArmToLength(climber, .9, 25.5),
-                new ArmUp(climber),
+                //new ArmUp(climber),
                 new WaitCommand(0.15),
                 new RumbleYes(prettylights, null, manipulatorController),
                 new InstantCommand(() -> prettylights.partyColor(), prettylights));
