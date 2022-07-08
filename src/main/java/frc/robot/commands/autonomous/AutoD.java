@@ -27,6 +27,7 @@ import frc.robot.subsystems.RightCatapult;
 import frc.robot.subsystems.VisionTracking;
 import frc.robot.utils.NavX;
 import frc.robot.utils.Trajectories;
+import frc.robot.commands.catapult.CatapultOverrride;
 
 public class AutoD extends SequentialCommandGroup {
   /** Creates a new RightL. */
@@ -35,6 +36,7 @@ public class AutoD extends SequentialCommandGroup {
                PrettyLights prettylights, XboxController driverController,
                VisionTracking vision) {
     addCommands(new WaitCommandNT(Auto.kStartingDel),
+                new CatapultOverrride(leftCatapult, rightCatapult).withTimeout(0.25),
                 new InstantCommand(() -> intake.extend(), intake),
                 new InstantCommand(() -> intake.run(1.0), intake),
                 new FollowTrajectory(drive, Trajectories.get(Trajectories.rightL), true),

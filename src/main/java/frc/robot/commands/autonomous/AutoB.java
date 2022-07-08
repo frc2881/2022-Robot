@@ -25,6 +25,7 @@ import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.RightCatapult;
 import frc.robot.utils.NavX;
 import frc.robot.utils.Trajectories;
+import frc.robot.commands.catapult.CatapultOverrride;
 
 public class AutoB extends SequentialCommandGroup {
   /** Creates a new LeftL. */
@@ -32,6 +33,7 @@ public class AutoB extends SequentialCommandGroup {
                LeftCatapult leftCatapult, RightCatapult rightCatapult,
                PrettyLights prettylights, XboxController controller) {
   addCommands(new WaitCommandNT(Auto.kStartingDel),
+              new CatapultOverrride(leftCatapult, rightCatapult).withTimeout(0.25),
               new InstantCommand(() -> intake.extend(), intake),
               new WaitCommand(0.1),
               new InstantCommand(() -> intake.run(1.0), intake),
