@@ -151,13 +151,13 @@ public final class Constants {
      * The time delay between the left and right catapult when close to the
      * hub.
      */
-    public static final double kShootTimeDelayNear = 0.4;
+    public static final double kShootTimeDelayNear = 0.5;
 
     /**
      * The time delay between the left and right catapult when far from the
      * hub.
      */
-    public static final double kShootTimeDelayFar = 0.3;
+    public static final double kShootTimeDelayFar = 0.4;
 
     /**
      * The threshold below which the robot is considered to be close to the
