@@ -252,18 +252,9 @@ public class RobotContainer {
   private void logBatteryInfo() {
     NetworkTableInstance networkTables = NetworkTableInstance.getDefault();
     NetworkTable smartDashboard = networkTables.getTable(Constants.NetworkTables.kSmartDashboardTableName);
-    networkTables.startClientTeam(Constants.RobotInfo.kTeamNumber);
-    if (smartDashboard.containsKey(Constants.NetworkTables.kBatteryInfoEntryKey)) {
-      String batteryInfo = smartDashboard.getEntry(Constants.NetworkTables.kBatteryInfoEntryKey).getString("");
-      Log.batteryInfo(batteryInfo);
-      SmartDashboard.putString(Constants.NetworkTables.kBatteryInfoEntryKey, batteryInfo);
-    } else {
-      smartDashboard.addEntryListener(Constants.NetworkTables.kBatteryInfoEntryKey, (table, key, entry, value, flags) -> {
-        String batteryInfo = value.getValue().toString();
-        Log.batteryInfo(batteryInfo);
-        SmartDashboard.putString(Constants.NetworkTables.kBatteryInfoEntryKey, batteryInfo);
-        networkTables.stopClient();
-      }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
-    }
+    networkTables.startClient(Constants.RobotInfo.kServerName);
+    smartDashboard.addEntryListener(Constants.NetworkTables.kBatteryInfoEntryKey, (table, key, entry, value, flags) -> {
+      Log.batteryInfo(value.getValue().toString());
+    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
   }
 }

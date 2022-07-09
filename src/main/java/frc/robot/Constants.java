@@ -28,6 +28,10 @@ public final class Constants {
      * The team number.
      */
     public static final int kTeamNumber = 2881;
+    /**
+     * The server name or address of the roboRIO
+     */
+    public static final String kServerName = "10.28.81.2";
   }
 
   /**
