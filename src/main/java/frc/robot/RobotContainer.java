@@ -131,7 +131,7 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Disable Vision", disableVision);
     SmartDashboard.putNumber("Catapult Soft Limit", 0);
 
-    logBatteryInfo();
+    // logBatteryInfo();
   }
 
   private void configureButtonBindings() {
