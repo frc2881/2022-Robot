@@ -8,9 +8,6 @@ package frc.robot;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.networktables.EntryListenerFlags;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -130,8 +127,6 @@ public class RobotContainer {
 
     SmartDashboard.putBoolean("Disable Vision", disableVision);
     SmartDashboard.putNumber("Catapult Soft Limit", 0);
-
-    // logBatteryInfo();
   }
 
   private void configureButtonBindings() {
@@ -247,23 +242,5 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
-  }
-
-  private void logBatteryInfo() {
-    NetworkTableInstance networkTables = NetworkTableInstance.getDefault();
-    NetworkTable smartDashboard = networkTables.getTable(Constants.NetworkTables.kSmartDashboardTableName);
-    networkTables.startClientTeam(Constants.RobotInfo.kTeamNumber);
-    if (smartDashboard.containsKey(Constants.NetworkTables.kBatteryInfoEntryKey)) {
-      String batteryInfo = smartDashboard.getEntry(Constants.NetworkTables.kBatteryInfoEntryKey).getString("");
-      Log.batteryInfo(batteryInfo);
-      SmartDashboard.putString(Constants.NetworkTables.kBatteryInfoEntryKey, batteryInfo);
-    } else {
-      smartDashboard.addEntryListener(Constants.NetworkTables.kBatteryInfoEntryKey, (table, key, entry, value, flags) -> {
-        String batteryInfo = value.getValue().toString();
-        Log.batteryInfo(batteryInfo);
-        SmartDashboard.putString(Constants.NetworkTables.kBatteryInfoEntryKey, batteryInfo);
-        networkTables.stopClient();
-      }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
-    }
   }
 }
