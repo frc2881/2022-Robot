@@ -8,9 +8,6 @@ package frc.robot;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.networktables.EntryListenerFlags;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -130,8 +127,6 @@ public class RobotContainer {
 
     SmartDashboard.putBoolean("Disable Vision", disableVision);
     SmartDashboard.putNumber("Catapult Soft Limit", 0);
-
-    logBatteryInfo();
   }
 
   private void configureButtonBindings() {
@@ -249,12 +244,10 @@ public class RobotContainer {
     return m_chooser.getSelected();
   }
 
-  private void logBatteryInfo() {
-    NetworkTableInstance networkTables = NetworkTableInstance.getDefault();
-    NetworkTable smartDashboard = networkTables.getTable(Constants.NetworkTables.kSmartDashboardTableName);
-    networkTables.startClient(Constants.RobotInfo.kServerName);
-    smartDashboard.addEntryListener(Constants.NetworkTables.kBatteryInfoEntryKey, (table, key, entry, value, flags) -> {
-      Log.batteryInfo(value.getValue().toString());
-    }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+  public void updateMatchTime() {
+    double matchTime = Math.floor(DriverStation.getMatchTime());
+    if (matchTime != -1) {
+      SmartDashboard.putNumber("Match Time", matchTime);
+    }
   }
 }

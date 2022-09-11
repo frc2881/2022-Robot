@@ -21,35 +21,6 @@ import frc.robot.utils.GearRatio;
  */
 public final class Constants {
   /**
-   * Configuration of the overall robot.
-   */
-  public static final class RobotInfo {
-    /**
-     * The team number.
-     */
-    public static final int kTeamNumber = 2881;
-    /**
-     * The server name or address of the roboRIO
-     */
-    public static final String kServerName = "10.28.81.2";
-  }
-
-  /**
-   * Configuration of the network table entities.
-   */
-  public static final class NetworkTables {
-    /**
-     * The name of the SmartDashboard table.
-     */
-    public static final String kSmartDashboardTableName = "SmartDashboard";
-
-    /**
-     * The name of the entry that contains the battery information.
-     */
-    public static final String kBatteryInfoEntryKey = "Battery Info";
-  }
-
-  /**
    * Configuration of the catapult subsystems.
    */
   public static final class Catapult {
