@@ -247,7 +247,7 @@ public class RobotContainer {
   public void updateMatchTime() {
     double matchTime = Math.floor(DriverStation.getMatchTime());
     if (matchTime != -1) {
-      SmartDashboard.putNumber("Match Time", matchTime);
+      SmartDashboard.putNumber("MatchTime", matchTime);
     }
   }
 }
