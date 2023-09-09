@@ -61,7 +61,7 @@ public class RobotContainer {
   private final VisionTracking visionTracking = new VisionTracking();
 
   private final PrettyLights prettyLights = new PrettyLights(powerHub);
-  private final Climber climber = new Climber(navx);
+  // private final Climber climber = new Climber(navx);
   private final Intake intake = new Intake();
   private final LeftCatapult leftCatapult = new LeftCatapult(visionTracking);
   private final RightCatapult rightCatapult = new RightCatapult(visionTracking);
@@ -78,10 +78,10 @@ public class RobotContainer {
     () -> applyDeadband(driverController.getRightX())
     );
 
-  private final RunArm runArm = new RunArm(
-    climber,
-    () -> applyDeadband(-manipulatorController.getLeftY())
-    );
+  // private final RunArm runArm = new RunArm(
+  //   climber,
+  //   () -> applyDeadband(-manipulatorController.getLeftY())
+  //   );
 
   public RobotContainer() {
     powerHub.setSwitchableChannel(false);
@@ -107,7 +107,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     drive.setDefaultCommand(driveWithJoysticks);
-    climber.setDefaultCommand(runArm);
+    //climber.setDefaultCommand(runArm);
 
     // Use the scheduler to log the scheduling and execution of commands.
     // This way we don't need to put logging in every command.
@@ -138,40 +138,40 @@ public class RobotContainer {
     new JoystickButton(driverController, XboxController.Button.kRightBumper.value).
       whileHeld(new NoVision(visionTracking));
 
-    new JoystickButton(driverController, XboxController.Button.kY.value).
-      whenPressed(new InstantCommand(() -> prettyLights.enableRing()));
+      // new JoystickButton(driverController, XboxController.Button.kY.value).
+      //   whenPressed(new InstantCommand(() -> prettyLights.enableRing()));
 
     // Manipulator Xbox Controller
 
-    new JoystickButton(manipulatorController, XboxController.Button.kX.value).
+    new JoystickButton(driverController, XboxController.Button.kX.value). // manipulator controller
       whileHeld(new RunIntake(intake));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kY.value).
-      whenPressed(new InstantCommand(() -> climber.armToggle()));
+      // new JoystickButton(manipulatorController, XboxController.Button.kY.value).
+      //   whenPressed(new InstantCommand(() -> climber.armToggle()));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kA.value).
+    new JoystickButton(driverController, XboxController.Button.kA.value). // manipulator controller
       whileHeld(new ExtendIntake(intake));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).
-      whenHeld(new FirstClimberSequence(climber, prettyLights, navx, manipulatorController));
+      // new JoystickButton(manipulatorController, XboxController.Button.kLeftBumper.value).
+      //   whenHeld(new FirstClimberSequence(climber, prettyLights, navx, manipulatorController));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).
-      whenHeld(new SecondClimberSequence(climber, prettyLights, navx, manipulatorController));
+      // new JoystickButton(manipulatorController, XboxController.Button.kRightBumper.value).
+      //   whenHeld(new SecondClimberSequence(climber, prettyLights, navx, manipulatorController));
 
-    buttonFromDPad(manipulatorController).
-      whenPressed(new Eject(leftCatapult, rightCatapult));
+    // buttonFromDPad(manipulatorController).
+    //   whenPressed(new Eject(leftCatapult, rightCatapult));
 
-    buttonFromDouble(() -> manipulatorController.getRightTriggerAxis()).
-      whenPressed(new Score(leftCatapult, rightCatapult, prettyLights, manipulatorController, intake, visionTracking));
+    // buttonFromDouble(() -> manipulatorController.getRightTriggerAxis()).
+    //   whenPressed(new Score(leftCatapult, rightCatapult, prettyLights, manipulatorController, intake, visionTracking));
 
-    buttonFromDouble(() -> manipulatorController.getLeftTriggerAxis()).
-      whenPressed(new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, manipulatorController, intake, visionTracking));
+    // buttonFromDouble(() -> manipulatorController.getLeftTriggerAxis()).
+    //   whenPressed(new ScoreNoColor(leftCatapult, rightCatapult, prettyLights, manipulatorController, intake, visionTracking));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kStart.value).
-      whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
+      // new JoystickButton(manipulatorController, XboxController.Button.kStart.value).
+      //   whenHeld(new ClimberOverride(climber, () -> applyDeadband(-manipulatorController.getLeftY())));
 
-    new JoystickButton(manipulatorController, XboxController.Button.kBack.value).
-      whenHeld(new CatapultOverrride(leftCatapult, rightCatapult));
+      // new JoystickButton(manipulatorController, XboxController.Button.kBack.value).
+      //   whenHeld(new CatapultOverrride(leftCatapult, rightCatapult));
 
     buttonFromBoolean(() -> leftCatapult.isCorrectCargo()).whenPressed(new RumbleYes(prettyLights, driverController, manipulatorController));
     buttonFromBoolean(() -> leftCatapult.isIncorrectCargo()).whenPressed(new RumbleNo(prettyLights, driverController, manipulatorController));
@@ -181,7 +181,7 @@ public class RobotContainer {
 
   public void resetRobot() {
     if(robotResetState == true) {
-      climber.reset();
+      //climber.reset();
       drive.reset();
       leftCatapult.reset();
       rightCatapult.reset();

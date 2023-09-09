@@ -25,7 +25,7 @@ public class DriveWithJoysticks extends CommandBase {
 
   @Override
   public void execute() {
-    m_drive.arcadeDrive(m_speed.getAsDouble(), m_rotation.getAsDouble());
+    m_drive.arcadeDrive(m_speed.getAsDouble() / 2.0, m_rotation.getAsDouble());
   }
 
   @Override
